@@ -9,7 +9,9 @@ namespace Player.Core
         [SerializeField] private KeyCode jumpKey;
         [SerializeField] private KeyCode crouchKey;
         [SerializeField] private KeyCode sprintKey;
+        [SerializeField] private KeyCode inventoryKey;
 
+        
         public UnityAction OnJumpPress;
         public UnityAction OnJumpRelease;
         
@@ -18,6 +20,14 @@ namespace Player.Core
         
         public UnityAction OnSprintPress;
         public UnityAction OnSprintRelease;
+
+        public UnityAction OnInventoryOpenKeyPressed;
+        public UnityAction OnInventoryCloseKeyPressed;
+
+        public bool CanLookRotation => !isInventoryOpen;
+
+        private bool isInventoryOpen = false;
+        
         
         private void Update()
         {
@@ -29,6 +39,34 @@ namespace Player.Core
             
             if (Input.GetKeyDown(sprintKey)) OnSprintPress?.Invoke();
             if (Input.GetKeyUp(sprintKey)) OnSprintRelease?.Invoke();
+
+            if (Input.GetKeyDown(inventoryKey))
+            {
+                if (isInventoryOpen)
+                    CloseInventory();
+                else
+                    OpenInventory();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                if (isInventoryOpen)
+                    CloseInventory();
+            }
+        }
+
+        void OpenInventory()
+        {
+            isInventoryOpen = true;
+            Cursor.lockState = CursorLockMode.None;
+            OnInventoryOpenKeyPressed?.Invoke();
+        }
+
+        void CloseInventory()
+        {
+            isInventoryOpen = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            OnInventoryCloseKeyPressed?.Invoke();
         }
     }
 }

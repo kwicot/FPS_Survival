@@ -5,6 +5,8 @@ namespace Player.Core
 {
     public class PlayerLook : MonoBehaviour
     {
+        [SerializeField] private PlayerController playerController;
+        
         [SerializeField] private float mouseSensitivity = 100f;
         [SerializeField] private float maxAngleX;
         [SerializeField] private float minAngleX;
@@ -21,6 +23,8 @@ namespace Player.Core
 
         private void Update()
         {
+            if(!playerController.Input.CanLookRotation) return;
+            
             var mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
             var mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 

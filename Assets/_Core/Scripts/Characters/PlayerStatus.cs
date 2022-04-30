@@ -27,6 +27,12 @@ namespace Player.Core
 
         public bool CanSprint => Stamina > 0;
         public bool CanJump => Stamina > jumpBaseUseStamina;
+
+        public enum PlayerWindow
+        {
+            Game,
+            Inventory
+        }
         
 
         private void Start()
