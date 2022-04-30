@@ -1,6 +1,7 @@
 using System;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Player.Core
 {
@@ -32,9 +33,12 @@ namespace Player.Core
         private float speed;
         
         
-        private bool isGrounded => Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        private bool isSprint => speed == sprintSpeed;
-        private bool isCrouch => controller.height == crouchHeight;
+        public bool isGrounded => Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        public bool isSprint => speed == sprintSpeed;
+        public bool isCrouch => controller.height == crouchHeight;
+
+        public UnityAction OnSprint;
+        public UnityAction OnJump;
         
 
         private void Start()
@@ -90,6 +94,7 @@ namespace Player.Core
             if(isCrouch) return;
 
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            OnJump?.Invoke();
         }
 
         private void Update()
@@ -103,9 +108,13 @@ namespace Player.Core
             if (isGrounded && velocity.y < 0)
                 velocity.y = -2f;
             
+            if(isSprint && playerController.Status.Stamina <= 0)
+                StopSprint();
             
             velocity.y += gravity * Time.deltaTime;
             controller.Move(velocity * Time.deltaTime);
+            
+            if(isSprint) OnSprint?.Invoke();
         }
         
     }
