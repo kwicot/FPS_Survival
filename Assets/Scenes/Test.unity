@@ -993,6 +993,7 @@ MonoBehaviour:
   tollBarSize: 9
   rows: 5
   columns: 10
+  addStartItems: 1
   startItems:
   - item: {fileID: 11400000, guid: a10f90b4dd876d847bd04334aeae6021, type: 2}
     count: 150
@@ -1001,6 +1002,8 @@ MonoBehaviour:
   - item: {fileID: 11400000, guid: 6d11175c05f62b14a86986caecccf5f3, type: 2}
     count: 220
   - item: {fileID: 11400000, guid: 52b0c941300f1ca4f96952e50a619772, type: 2}
+    count: 10
+  - item: {fileID: 11400000, guid: a10f90b4dd876d847bd04334aeae6021, type: 2}
     count: 10
 --- !u!1 &868673212
 GameObject:
@@ -1310,6 +1313,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b37127a802594553871ff0aac5fbba9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerController: {fileID: 854328662}
   mouseSensitivity: 100
   maxAngleX: 90
   minAngleX: -90

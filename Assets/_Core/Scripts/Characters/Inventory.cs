@@ -12,6 +12,14 @@ namespace Player.Core
         public ItemSO item;
         public int count;
     }
+
+    public enum MoveResult
+    {
+        MoveToEmpty,
+        MoveToExist,
+        Fail,
+        Part
+    }
     public class Inventory : MonoBehaviour
     {
         [SerializeField] private int tollBarSize;
@@ -29,15 +37,18 @@ namespace Player.Core
         {
             items = new Item[rows, columns];
             if (addStartItems)
-            {
-                foreach (var startItem in startItems)
-                {
-                    var item = startItem.item.Model;
-                    item.Count += startItem.count;
-                    AddItem(item);
-                }
-            }
+                AddStartItems();
             
+        }
+
+        void AddStartItems()
+        {
+            foreach (var startItem in startItems)
+            {
+                var item = startItem.item.Model;
+                item.Count = startItem.count;
+                AddItem(item);
+            }
         }
 
         public bool AddItem(Item item)
@@ -58,7 +69,7 @@ namespace Player.Core
             return false;
         }
 
-        public bool Move(Vector2Int from, Vector2Int to)
+        public MoveResult Move(Vector2Int from, Vector2Int to)
         {
             var fromRow = from.x;
             var fromColumn = from.y;
@@ -71,13 +82,29 @@ namespace Player.Core
                 var item = Items[fromRow, fromColumn];
                 items[fromRow, fromColumn] = null;
                 items[toRow, toColumn] = item;
+                return MoveResult.MoveToEmpty;
             }
             else if (items[toRow, toColumn].ID == items[fromRow, fromColumn].ID) //Add to exist item
             {
-                
+                var itemFrom = items[fromRow, fromColumn];
+                var itemTo = items[toRow, toColumn];
+                if (itemFrom.Count < itemTo.CanAdd) //Add all
+                {
+                    itemTo.Count += itemFrom.Count;
+                    items[fromRow, fromColumn] = null;
+                    return MoveResult.MoveToExist;
+                }
+                else // Add part
+                {
+                    var canAdd = itemTo.CanAdd;
+                    itemTo.Count += canAdd;
+                    itemFrom.Count -= canAdd;
+                    return MoveResult.Part;
+                }
+
             }
 
-            return true;
+            return MoveResult.Fail;
         }
         
 

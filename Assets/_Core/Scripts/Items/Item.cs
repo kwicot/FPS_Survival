@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace _Core.Scripts.Items
 {
@@ -20,14 +21,21 @@ namespace _Core.Scripts.Items
         public string Name => name;
         public float BasePrice => basePrice;
         public int MaxCount => maxCount;
+        public int CanAdd => maxCount - count;
 
         public int Count
         {
             get => count;
-            set => count = value;
+            set
+            {
+                count = value;
+                OnCountChanged?.Invoke(count);
+            }
         }
         public Sprite Image => image;
-        
+
+        public UnityAction<int> OnCountChanged;
+
         public object Clone() => new Item(id, name, basePrice,maxCount, image, category);
 
         public Item(string id, string name, float basePrice,int maxCount, Sprite image, ItemCategory category)

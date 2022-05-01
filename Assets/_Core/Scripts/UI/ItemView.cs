@@ -9,7 +9,7 @@ namespace _Core.Scripts.UI
     public class ItemView : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
     {
         [SerializeField] private Image itemImage;
-        [SerializeField] private TextMeshProUGUI count;
+        [SerializeField] private TextMeshProUGUI countText;
 
         private Item currentItem;
         private InventoryView invetoryView;
@@ -17,7 +17,7 @@ namespace _Core.Scripts.UI
         private RectTransform rectTransform;
         private CanvasGroup canvasGroup;
 
-        public ItemSlot currentSlot;
+        public ItemSlot currentSlot { get; set; }
         
         public void Init(Item item)
         {
@@ -25,6 +25,15 @@ namespace _Core.Scripts.UI
             rectTransform = GetComponent<RectTransform>();
             canvasGroup = GetComponent<CanvasGroup>();
             currentSlot = transform.parent.GetComponent<ItemSlot>();
+            
+            item.OnCountChanged += delegate(int arg0) { UpdateText(); };
+            UpdateText();
+        }
+
+
+        void UpdateText()
+        {
+            countText.text = currentItem.Count.ToString();
         }
 
         public void OnPointerDown(PointerEventData eventData)
@@ -48,6 +57,8 @@ namespace _Core.Scripts.UI
             
             canvasGroup.blocksRaycasts = true;
             canvasGroup.alpha = 1;
+            
+            UpdateText();
         }
 
         public void OnDrag(PointerEventData eventData)

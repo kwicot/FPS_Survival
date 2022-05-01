@@ -1,3 +1,4 @@
+using Player.Core;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -18,9 +19,12 @@ namespace _Core.Scripts.UI
             {
                 var obj = eventData.pointerDrag;
                 var parent = obj.transform.parent;
-                obj.GetComponent<ItemView>().currentSlot = this;
                 
-                view.Move(parent.GetComponent<ItemSlot>(), this);
+                var moveResult = view.Move(parent.GetComponent<ItemSlot>(), this);
+                
+                if(moveResult == MoveResult.MoveToEmpty)
+                    obj.GetComponent<ItemView>().currentSlot = this;
+                if(moveResult == MoveResult.MoveToExist) Destroy(obj);
             }
         }
     }

@@ -107,13 +107,13 @@ namespace _Core.Scripts.UI
             }
         }
 
-        public void Move(ItemSlot from, ItemSlot to)
+        public MoveResult Move(ItemSlot from, ItemSlot to)
         {
             Debug.Log($"Move from {from.gameObject.name}, to {to.gameObject.name}");
-            if(GetSlotIndex(from,out var fromIndex) == false) return;
-            if(GetSlotIndex(to,out var toIndex) == null) return;
+            if(GetSlotIndex(from,out var fromIndex) == false) return MoveResult.Fail;
+            if(GetSlotIndex(to,out var toIndex) == null) return MoveResult.Fail;
 
-            playerController.Inventory.Move(fromIndex, toIndex);
+            return (playerController.Inventory.Move(fromIndex, toIndex));
         }
 
         bool GetSlotIndex(ItemSlot slot, out Vector2Int index)
