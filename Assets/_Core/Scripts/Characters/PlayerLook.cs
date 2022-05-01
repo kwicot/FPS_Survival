@@ -19,15 +19,14 @@ namespace Player.Core
         private void Start()
         {
             Cursor.lockState = CursorLockMode.Locked;
+            playerController.Input.PlayerInput.OnRotationInput += Rotate;
         }
 
-        private void Update()
+        private void Rotate(float x, float y)
         {
-            if(!playerController.Input.CanLookRotation) return;
+            var mouseX = x * mouseSensitivity * Time.deltaTime;
+            var mouseY = y * mouseSensitivity * Time.deltaTime;
             
-            var mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-            var mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
-
             xRotation -= mouseY;
             xRotation = Mathf.Clamp(xRotation, minAngleX, maxAngleX);
             

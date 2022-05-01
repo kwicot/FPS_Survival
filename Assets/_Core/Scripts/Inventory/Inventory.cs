@@ -33,12 +33,12 @@ namespace Player.Core
 
 
         public Item[,] Items => items;
-        private void Start()
+
+        private void Awake()
         {
             items = new Item[rows, columns];
             if (addStartItems)
                 AddStartItems();
-            
         }
 
         void AddStartItems()

@@ -6,9 +6,9 @@ namespace _Core.Scripts.UI
 {
     public class ItemSlot : MonoBehaviour, IDropHandler
     {
-        private InventoryView view;
+        private PlayerItemsView view;
         
-        public void Init(InventoryView view)
+        public void Init(PlayerItemsView view)
         {
             this.view = view;
         }

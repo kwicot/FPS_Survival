@@ -45,13 +45,21 @@ namespace Player.Core
         {
             controller = GetComponent<CharacterController>();
             
-            playerController.Input.OnJumpPress += Jump;
-            playerController.Input.OnCrouchPress += StartCrouch;
-            playerController.Input.OnCrouchRelease += StopCrouch;
-            playerController.Input.OnSprintPress += StartSprint;
-            playerController.Input.OnSprintRelease += StopSprint;
+            playerController.Input.PlayerInput.OnJumpPress += Jump;
+            playerController.Input.PlayerInput.OnCrouchPress += StartCrouch;
+            playerController.Input.PlayerInput.OnCrouchRelease += StopCrouch;
+            playerController.Input.PlayerInput.OnSprintPress += StartSprint;
+            playerController.Input.PlayerInput.OnSprintRelease += StopSprint;
+            
+            playerController.Input.PlayerInput.OnMoveInput += Move;
 
             speed = moveSpeed;
+        }
+
+        private void Move(float horizontal, float vertical)
+        {
+            Vector3 move = transform.right * horizontal + transform.forward * vertical;
+            controller.Move(move * speed * Time.deltaTime);
         }
 
         private void StopSprint()
@@ -99,12 +107,6 @@ namespace Player.Core
 
         private void Update()
         {
-            float x = Input.GetAxis("Horizontal");
-            float z = Input.GetAxis("Vertical");
-            
-            Vector3 move = transform.right * x + transform.forward * z;
-            controller.Move(move * speed * Time.deltaTime);
-
             if (isGrounded && velocity.y < 0)
                 velocity.y = -2f;
             

@@ -12,7 +12,7 @@ namespace _Core.Scripts.UI
         [SerializeField] private TextMeshProUGUI countText;
 
         private Item currentItem;
-        private InventoryView invetoryView;
+        private PlayerItemsView invetoryView;
 
         private RectTransform rectTransform;
         private CanvasGroup canvasGroup;

@@ -8,12 +8,11 @@ using UnityEngine.UIElements;
 
 namespace _Core.Scripts.UI
 {
-    public class InventoryView : MonoBehaviour
+    public class PlayerItemsView : Window
     {
         [SerializeField] private PlayerController playerController;
-        [SerializeField] private GridLayoutGroup gridLayoutGroup;
+        [SerializeField] private GridLayoutGroup playerGridLayoutGroup;
 
-        [SerializeField] private GameObject panel;
         
         [SerializeField] private GameObject slotPrefab;
         [SerializeField] private GameObject itemPrefab;
@@ -28,32 +27,36 @@ namespace _Core.Scripts.UI
 
         private void Start()
         {
-            playerController.Input.OnInventoryOpenKeyPressed += Open;
-            playerController.Input.OnInventoryCloseKeyPressed += Close;
+            //playerController.Input.OnInventoryOpenKeyPressed += Open;
+           // playerController.Input.OnInventoryCloseKeyPressed += Close;
             rectTransform = cellsParent.GetComponent<RectTransform>();
-            panel.SetActive(false);
         }
 
-        public void Open()
+        public override void Init()
         {
-            if(!initialized)
-                InitSlots();
-                
-            panel.SetActive(true);
-            InitItems();
+            InitSlots();
+        }
+
+        public override void Open()
+        {
+            base.Open();
             
+            InitItems();
+            targetPanel.SetActive(true);
             isOpen = true;
         }
 
-        void Close()
+        public override void Close()
         {
-            panel.SetActive(false);
             //Destroy items
             foreach (var cell in slots)
                 if(cell.transform.childCount > 0)
                     Destroy(cell.transform.GetChild(0).gameObject);
 
+            targetPanel.SetActive(false);
             isOpen = false;
+            
+            base.Close();
         }
 
         void InitSlots()
@@ -63,18 +66,18 @@ namespace _Core.Scripts.UI
             var columns = items.GetLength(1);
 
             var panelWidth = rectTransform.rect.width;
-            var spacingX = gridLayoutGroup.spacing.x;
-            var paddingLeft = gridLayoutGroup.padding.left;
-            var paddingRight = gridLayoutGroup.padding.right;
+            var spacingX = playerGridLayoutGroup.spacing.x;
+            var paddingLeft = playerGridLayoutGroup.padding.left;
+            var paddingRight = playerGridLayoutGroup.padding.right;
             var totalSpacing = spacingX * (columns - 1);
             var widthWithoutSpacing = panelWidth - totalSpacing - paddingLeft - paddingRight;
             var cellSize = widthWithoutSpacing / columns;
 
             Debug.Log($"Width = {panelWidth}, columns = {columns}, spacingX = {spacingX}, total spacing = {totalSpacing}");
 
-            gridLayoutGroup.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-            gridLayoutGroup.constraintCount = columns;
-            gridLayoutGroup.cellSize = new Vector2(cellSize, cellSize);
+            playerGridLayoutGroup.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+            playerGridLayoutGroup.constraintCount = columns;
+            playerGridLayoutGroup.cellSize = new Vector2(cellSize, cellSize);
 
             slots = new ItemSlot[rows, columns];
             for (int row = 0; row < rows; row++)
