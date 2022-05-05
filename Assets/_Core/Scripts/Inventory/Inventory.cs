@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using _Core.Scripts;
 using _Core.Scripts.Items;
-using _Core.Scripts.UI;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Player.Core
 {
@@ -20,9 +21,8 @@ namespace Player.Core
         Fail,
         Part
     }
-    public class Inventory : MonoBehaviour
+    public class Inventory : MonoBehaviour, IInteractable
     {
-        [SerializeField] private int tollBarSize;
         [SerializeField] private int rows;
         [SerializeField] private int columns;
 
@@ -31,8 +31,25 @@ namespace Player.Core
 
         private Item[,] items;
 
+        public UnityAction OnStateChanged;
+        public Item[,] Items
+        {
+            get
+            {
+                if (items == null) return null;
+                
+                for (int row = 0; row < rows; row++)
+                {
+                    for (int column = 0; column < columns; column++)
+                    {
+                        if (items[row,column] != null && items[row, column].Count <= 0)
+                            items[row, column] = null;
+                    }
+                }
 
-        public Item[,] Items => items;
+                return items;
+            }
+        }
 
         private void Awake()
         {
@@ -60,6 +77,8 @@ namespace Player.Core
                     if (items[row, column] == null)
                     {
                         items[row, column] = item;
+                        OnStateChanged?.Invoke();
+                        Debug.Log($"Added {item.Name} {item.Count}");
                         return true;
                     }
                     
@@ -69,29 +88,77 @@ namespace Player.Core
             return false;
         }
 
-        public MoveResult Move(Vector2Int from, Vector2Int to)
+        public bool RemoveItem(Item item)
         {
-            var fromRow = from.x;
-            var fromColumn = from.y;
+            if (GetIndex(item, out var index))
+            {
+                items[index.x, index.y] = null;
+                Debug.Log($"Removed {item.Name}");
+                return true;
+            }
 
-            var toRow = to.x;
-            var toColumn = to.y;
+            return false;
+        }
+
+        public bool ContainsItem(Item item)
+        {
+            foreach (var item1 in items)
+                if (item == item1)
+                    return true;
+            
+            return false;
+        }
+
+        bool GetIndex(Item item, out Vector2Int index)
+        {
+            index = Vector2Int.zero;
+            if (!ContainsItem(item)) return false;
+            
+            for (int row = 0; row < rows; row++)
+            {
+                for (int columnn = 0; columnn < columns; columnn++)
+                {
+                    if (items[row, columnn] == item)
+                    {
+                        index = new Vector2Int(row, columnn);
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public MoveResult Move(Item targetItem, Vector2Int toIndex)
+        {
+            
+            var toRow = toIndex.x;
+            var toColumn = toIndex.y;
 
             if (items[toRow, toColumn] == null ) //Move to free place
             {
-                var item = Items[fromRow, fromColumn];
-                items[fromRow, fromColumn] = null;
-                items[toRow, toColumn] = item;
+                if(GetIndex(targetItem,out var index))
+                    items[index.x, index.y] = null;
+
+                items[toRow, toColumn] = targetItem;
+                OnStateChanged?.Invoke();
                 return MoveResult.MoveToEmpty;
             }
-            else if (items[toRow, toColumn].ID == items[fromRow, fromColumn].ID) //Add to exist item
+            else if (targetItem.ID == items[toRow, toColumn].ID) //Add to exist item
             {
-                var itemFrom = items[fromRow, fromColumn];
+                if (GetIndex(targetItem, out var index))
+                {
+
+                }
+
+                var itemFrom = targetItem;
                 var itemTo = items[toRow, toColumn];
                 if (itemFrom.Count < itemTo.CanAdd) //Add all
                 {
                     itemTo.Count += itemFrom.Count;
-                    items[fromRow, fromColumn] = null;
+                    if (GetIndex(itemFrom, out var indexFrom))
+                        items[indexFrom.x, indexFrom.y] = null;
+
                     return MoveResult.MoveToExist;
                 }
                 else // Add part
@@ -99,8 +166,11 @@ namespace Player.Core
                     var canAdd = itemTo.CanAdd;
                     itemTo.Count += canAdd;
                     itemFrom.Count -= canAdd;
+
                     return MoveResult.Part;
                 }
+
+                OnStateChanged?.Invoke();
 
             }
 

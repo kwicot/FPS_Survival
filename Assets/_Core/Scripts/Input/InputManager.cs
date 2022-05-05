@@ -31,6 +31,8 @@ namespace _Core.Scripts.Input
         private void Start()
         {
             SelectInput(playerInput);
+            playerInput.OnInteractPress += delegate { SelectInput(inventoryInput); };
+            playerInput.OnInteractPress += delegate { SelectInput(inventoryInput); };
         }
 
         void SelectInput<T>(T inputBase) where T : InputBase

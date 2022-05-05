@@ -17,5 +17,5 @@ MonoBehaviour:
     name: Scrap
     basePrice: 8
     maxCount: 1000
-    image: {fileID: 0}
+    image: {fileID: 21300000, guid: 41cbcb850e3cc6f4ca9ce9c2388f6f5d, type: 3}
     category: 0

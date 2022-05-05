@@ -1,46 +1,45 @@
-using System;
-using System.Security.Cryptography;
+using _Core.Scripts.Items;
 using Player.Core;
-using UnityEditor.MemoryProfiler;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 namespace _Core.Scripts.UI
 {
-    public class PlayerItemsView : Window
+    public class InventoryView : Window
     {
-        [SerializeField] private PlayerController playerController;
-        [SerializeField] private GridLayoutGroup playerGridLayoutGroup;
-
+        [SerializeField] protected GameObject slotPrefab;
+        [SerializeField] protected GameObject itemPrefab;
         
-        [SerializeField] private GameObject slotPrefab;
-        [SerializeField] private GameObject itemPrefab;
+        [SerializeField] protected Transform cellsParent;
+
+        protected Inventory targetInventory;
         
-        [SerializeField] private Transform cellsParent;
+        protected RectTransform rectTransform;
+        protected ItemSlot[,] slots = new ItemSlot[1,1];
 
-        private RectTransform rectTransform;
-        private ItemSlot[,] slots;
-
-        private bool isOpen;
-        private bool initialized;
+        protected bool isOpen;
+        protected bool initialized;
 
         private void Start()
         {
             //playerController.Input.OnInventoryOpenKeyPressed += Open;
-           // playerController.Input.OnInventoryCloseKeyPressed += Close;
+            //playerController.Input.OnInventoryCloseKeyPressed += Close;
             rectTransform = cellsParent.GetComponent<RectTransform>();
         }
 
         public override void Init()
         {
-            InitSlots();
+            
         }
 
+        public void SetInventory(Inventory target)
+        {
+            targetInventory = target;
+            Debug.Log($"Set inventory {targetInventory.gameObject.name} to view {targetPanel.name}");
+            InitSlots();
+        }
         public override void Open()
         {
             base.Open();
-            
             InitItems();
             targetPanel.SetActive(true);
             isOpen = true;
@@ -50,7 +49,7 @@ namespace _Core.Scripts.UI
         {
             //Destroy items
             foreach (var cell in slots)
-                if(cell.transform.childCount > 0)
+                if(cell != null && cell.transform.childCount > 0)
                     Destroy(cell.transform.GetChild(0).gameObject);
 
             targetPanel.SetActive(false);
@@ -59,25 +58,15 @@ namespace _Core.Scripts.UI
             base.Close();
         }
 
-        void InitSlots()
+        private void InitSlots()
         {
-            var items = playerController.Inventory.Items;
+            var childs = cellsParent.childCount;
+            for (int i = childs - 1; i >= 0; i--)
+                Destroy(cellsParent.GetChild(i).gameObject);
+            
+            var items = targetInventory.Items;
             var rows = items.GetLength(0);
             var columns = items.GetLength(1);
-
-            var panelWidth = rectTransform.rect.width;
-            var spacingX = playerGridLayoutGroup.spacing.x;
-            var paddingLeft = playerGridLayoutGroup.padding.left;
-            var paddingRight = playerGridLayoutGroup.padding.right;
-            var totalSpacing = spacingX * (columns - 1);
-            var widthWithoutSpacing = panelWidth - totalSpacing - paddingLeft - paddingRight;
-            var cellSize = widthWithoutSpacing / columns;
-
-            Debug.Log($"Width = {panelWidth}, columns = {columns}, spacingX = {spacingX}, total spacing = {totalSpacing}");
-
-            playerGridLayoutGroup.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-            playerGridLayoutGroup.constraintCount = columns;
-            playerGridLayoutGroup.cellSize = new Vector2(cellSize, cellSize);
 
             slots = new ItemSlot[rows, columns];
             for (int row = 0; row < rows; row++)
@@ -94,9 +83,9 @@ namespace _Core.Scripts.UI
             initialized = true;
         }
 
-        void InitItems()
+        private void InitItems()
         {
-            var items = playerController.Inventory.Items;
+            var items = targetInventory.Items;
             for (int row = 0; row < items.GetLength(0); row++)
             {
                 for (int column = 0; column < items.GetLength(1); column++)
@@ -104,20 +93,24 @@ namespace _Core.Scripts.UI
                     if (items[row, column] != null)
                     {
                         var itemObject = Instantiate(itemPrefab, slots[row, column].transform);
-                        itemObject.GetComponent<ItemView>().Init(items[row,column]);
+                        itemObject.GetComponent<ItemView>().Init(items[row,column],this);
                     }
                 }
             }
         }
 
-        public MoveResult Move(ItemSlot from, ItemSlot to)
+        public MoveResult Move(Item item,ItemSlot to)
         {
-            Debug.Log($"Move from {from.gameObject.name}, to {to.gameObject.name}");
-            if(GetSlotIndex(from,out var fromIndex) == false) return MoveResult.Fail;
             if(GetSlotIndex(to,out var toIndex) == null) return MoveResult.Fail;
 
-            return (playerController.Inventory.Move(fromIndex, toIndex));
+            return (targetInventory.Move(item, toIndex));
         }
+
+        public bool Remove(Item item)
+        {
+            return targetInventory.RemoveItem(item);
+        }
+        
 
         bool GetSlotIndex(ItemSlot slot, out Vector2Int index)
         {

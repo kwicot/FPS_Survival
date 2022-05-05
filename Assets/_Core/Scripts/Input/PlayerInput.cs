@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using _Core.Scripts.Input;
 using _Core.Scripts.UI;
 using UnityEngine;
@@ -9,6 +10,7 @@ namespace Player.Core
     public class PlayerInput : InputBase
     {
         [SerializeField] private bool isWindowsBlockMovement;
+        [SerializeField] private float interactHoldTime;
         [SerializeField] private KeyCode jumpKey;
         [SerializeField] private KeyCode crouchKey;
         [SerializeField] private KeyCode sprintKey;
@@ -36,14 +38,15 @@ namespace Player.Core
         public UnityAction OnReloadRelease;
 
         public UnityAction OnInteractPress;
-        public UnityAction OnInteractRelease;
+        public UnityAction OnInteractHold;
 
         public UnityAction<float,float> OnMoveInput;
         public UnityAction<float, float> OnRotationInput;
 
         private bool isInventoryOpen = false;
-        
-        
+        private bool isInteractHold;
+        private float interactTime;
+
         private void Update()
         {
             if (IsEnable)
@@ -66,6 +69,8 @@ namespace Player.Core
             if (Input.GetKeyDown(sprintKey)) OnSprintPress?.Invoke();
             if (Input.GetKeyUp(sprintKey)) OnSprintRelease?.Invoke();
 
+            if (Input.GetKeyDown(interactKey)) isInteractHold = true;
+            if (Input.GetKeyUp(interactKey)) isInteractHold = false;
             
             //Move input
             var horizontal = Input.GetAxis("Horizontal");
@@ -78,6 +83,27 @@ namespace Player.Core
             var mouseY = Input.GetAxis("Mouse Y");
             if(mouseX != 0 || mouseY != 0)
                 OnRotationInput?.Invoke(mouseX,mouseY);
+
+            if (isInteractHold)
+            {
+                interactTime += Time.deltaTime;
+                if (interactTime > interactHoldTime)
+                {
+                    isInteractHold = false;
+                    Debug.Log("Interact hold");
+                    OnInteractHold?.Invoke();
+                }
+            }
+
+            if (!isInteractHold && interactTime > 0)
+            {
+                if (interactTime < interactHoldTime)
+                {
+                    Debug.Log("Interact press");
+                    OnInteractPress?.Invoke();
+                }
+                interactTime = 0;
+            }
         }
 
         void UpdateInput()
@@ -90,10 +116,8 @@ namespace Player.Core
             
             if (Input.GetKeyDown(reloadKey)) OnReloadPress?.Invoke();
             if (Input.GetKeyUp(reloadKey)) OnReloadRelease?.Invoke();
-            
-            if(Input.GetKeyDown(interactKey)) OnInteractPress?.Invoke();
-            if (Input.GetKeyUp(interactKey)) OnInteractRelease?.Invoke();
         }
+
 
         protected override void Enable()
         {

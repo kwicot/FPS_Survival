@@ -1,4 +1,5 @@
 using _Core.Scripts.Items;
+using Player.Core;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,19 +13,22 @@ namespace _Core.Scripts.UI
         [SerializeField] private TextMeshProUGUI countText;
 
         private Item currentItem;
-        private PlayerItemsView invetoryView;
+        private InventoryView invetoryView;
 
         private RectTransform rectTransform;
         private CanvasGroup canvasGroup;
 
-        public ItemSlot currentSlot { get; set; }
+        public ItemSlot Slot { get; set; }
+        public Item Item => currentItem;
         
-        public void Init(Item item)
+        public void Init(Item item,InventoryView inventoryView)
         {
+            this.invetoryView = inventoryView;
             this.currentItem = item;
+            itemImage.sprite = item.Image;
             rectTransform = GetComponent<RectTransform>();
             canvasGroup = GetComponent<CanvasGroup>();
-            currentSlot = transform.parent.GetComponent<ItemSlot>();
+            Slot = transform.parent.GetComponent<ItemSlot>();
             
             item.OnCountChanged += delegate(int arg0) { UpdateText(); };
             UpdateText();
@@ -51,7 +55,7 @@ namespace _Core.Scripts.UI
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            transform.SetParent(currentSlot.transform);
+            transform.SetParent(Slot.transform);
             transform.localPosition = Vector3.zero;
 
             
@@ -64,6 +68,12 @@ namespace _Core.Scripts.UI
         public void OnDrag(PointerEventData eventData)
         {
             rectTransform.anchoredPosition += eventData.delta;
+        }
+
+        public void ChangeInventory(InventoryView inventory)
+        {
+            invetoryView.Remove(currentItem);
+            this.invetoryView = inventory;
         }
     }
 }

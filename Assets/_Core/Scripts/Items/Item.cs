@@ -38,9 +38,9 @@ namespace _Core.Scripts.Items
 
         public object Clone() => new Item(id, name, basePrice,maxCount, image, category);
 
-        public Item(string id, string name, float basePrice,int maxCount, Sprite image, ItemCategory category)
+        public Item(string id, string name, float basePrice,int maxCount, Sprite image, ItemCategory category,int count =1)
         {
-            count = 1;
+            this.Count = 1;
             this.id = id;
             this.name = name;
             this.basePrice = basePrice;
