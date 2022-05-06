@@ -12,6 +12,9 @@ namespace Player.Core
         [SerializeField] private float minAngleX;
         [SerializeField] private Transform playerBody;
 
+        [SerializeField] private float normalHeight;
+        [SerializeField] private float crouchHeight;
+
 
         private float xRotation = 0;
 
@@ -20,6 +23,14 @@ namespace Player.Core
         {
             Cursor.lockState = CursorLockMode.Locked;
             playerController.Input.PlayerInput.OnRotationInput += Rotate;
+        }
+
+        private void Update()
+        {
+            if (playerController.Movement.isCrouch)
+                transform.localPosition = new Vector3(0, crouchHeight, 0);
+            else
+                transform.localPosition = new Vector3(0, normalHeight, 0);
         }
 
         private void Rotate(float x, float y)
