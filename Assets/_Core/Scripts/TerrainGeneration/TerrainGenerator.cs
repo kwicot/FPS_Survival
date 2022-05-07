@@ -25,7 +25,7 @@ namespace _Core.Scripts.TerrainGeneration
 
         void Init()
         {
-            chunkGenerator.Generate();
+            //chunkGenerator.Generate();
         }
 
 

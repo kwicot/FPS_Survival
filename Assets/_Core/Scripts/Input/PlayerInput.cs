@@ -105,6 +105,7 @@ namespace Player.Core
                 interactTime = 0;
             }
         }
+        
 
         void UpdateInput()
         {

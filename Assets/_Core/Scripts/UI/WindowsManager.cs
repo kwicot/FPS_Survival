@@ -18,6 +18,8 @@ namespace _Core.Scripts.UI
 
         private Window currentWindow;
         
+        
+        
         public bool IsOpen => currentWindow != null;
         
 
@@ -30,6 +32,10 @@ namespace _Core.Scripts.UI
             playerController.Input.OnInventoryKeyPress += OnInventoryKeyPress;
         }
 
+        public void ShowInteractWindow()
+        {
+            
+        }
 
         public void ShowInventory(Inventory inventory)
         {
@@ -37,11 +43,6 @@ namespace _Core.Scripts.UI
             inventoryWindow.SetInventory(playerController.Inventory);
             
             OpenWindow(storageItemsWindow);
-        }
-
-        public void ShowInteractWindow()
-        {
-            
         }
 
 
@@ -69,6 +70,7 @@ namespace _Core.Scripts.UI
             currentWindow.Open();
             
             playerDot.SetActive(false);
+            EventManager.OnWindowOpen?.Invoke();
             Cursor.lockState = CursorLockMode.None;
         }
         private void InitWindows()

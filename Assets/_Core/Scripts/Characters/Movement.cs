@@ -1,4 +1,5 @@
 using System;
+using _Core.Scripts;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Events;
@@ -67,6 +68,7 @@ namespace Player.Core
             if(!isSprint) return;
 
             speed = moveSpeed;
+            EventManager.OnStopSprint?.Invoke();
         }
 
         private void StartSprint()
@@ -75,6 +77,7 @@ namespace Player.Core
             if(!playerController.Status.CanSprint) return;
             
             speed = sprintSpeed;
+            EventManager.OnStartSprint?.Invoke();
         }
 
         private void StopCrouch()
@@ -84,6 +87,7 @@ namespace Player.Core
             controller.height = normalHeight;
             controller.center = new Vector3(0, normalHeight / 2, 0);
             speed = moveSpeed;
+            EventManager.OnStopCrouch?.Invoke();
         }
 
         private void StartCrouch()
@@ -93,6 +97,7 @@ namespace Player.Core
             controller.height = crouchHeight;
             controller.center = new Vector3(0, crouchHeight / 2, 0);
             speed = crouchSpeed;
+            EventManager.OnStartCrouch?.Invoke();
         }
 
         private void Jump()

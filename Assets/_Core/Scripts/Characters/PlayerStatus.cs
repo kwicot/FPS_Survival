@@ -1,4 +1,5 @@
 using System;
+using _Core.Scripts;
 using UnityEngine;
 
 namespace Player.Core
@@ -27,6 +28,10 @@ namespace Player.Core
 
         public bool CanSprint => Stamina > 0;
         public bool CanJump => Stamina > jumpBaseUseStamina;
+        
+        public bool InCar { get; set; }
+        
+        public CarController currentCar { get; set; }
 
         public enum PlayerWindow
         {
@@ -39,9 +44,23 @@ namespace Player.Core
         {
             playerController.Movement.OnSprint += OnSprint;
             playerController.Movement.OnJump += OnJump;
+            EventManager.OnEnterCar += OnEnterCar;
+            EventManager.OnExitCar += OnExitCar;
 
             Stamina = MaxStamina;
             Health = MaxHealth;
+        }
+
+        private void OnExitCar(CarController car)
+        {
+            InCar = false;
+            currentCar = null;
+        }
+
+        private void OnEnterCar(CarController car)
+        {
+            currentCar = car;
+            InCar = true;
         }
 
         private void OnJump()

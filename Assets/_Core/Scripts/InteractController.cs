@@ -12,8 +12,11 @@ namespace _Core.Scripts
         [SerializeField] private float interactDistance;
         [SerializeField] private PlayerController playerController;
         [SerializeField] private WindowsManager windowsManager;
+        [SerializeField] private LayerMask interactLayer;
         
         [SerializeField] private Text interactText;
+        
+        [SerializeField] private GameObject carInteractMenu;
 
         private void Start()
         {
@@ -41,8 +44,23 @@ namespace _Core.Scripts
 
         private void OnInteractPress()
         {
+            if (playerController.Status.InCar)
+            {
+                EventManager.OnExitCar?.Invoke(playerController.Status.currentCar);
+                Debug.Log("Exit car");
+                return;
+            }
             if (GetRayObject(out var obj))
             {
+                
+                if (obj.TryGetComponent(out CarController controller))
+                {
+                    EventManager.OnEnterCar?.Invoke(controller);
+                    Debug.Log("Enter car");
+                    return;
+                }
+                
+                
                 if(obj.TryGetComponent(out Inventory inv))
                     windowsManager.ShowInventory(inv);
             }
@@ -52,7 +70,7 @@ namespace _Core.Scripts
         {
             var ray = new Ray(lookCamera.transform.position, lookCamera.transform.forward);
 
-            if (Physics.Raycast(ray, out var hit, interactDistance))
+            if (Physics.Raycast(ray, out var hit, interactDistance,interactLayer))
             {
                 obj = hit.transform.gameObject;
                 return true;

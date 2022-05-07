@@ -10,6 +10,7 @@ namespace _Core.Scripts.Input
     {
         [SerializeField] private PlayerInput playerInput;
         [SerializeField] private InventoryInput inventoryInput;
+        [SerializeField] private CarInput carInput;
 
         [SerializeField] private KeyCode inventoryKey;
         [SerializeField] private KeyCode craftKey;
@@ -31,9 +32,13 @@ namespace _Core.Scripts.Input
         private void Start()
         {
             SelectInput(playerInput);
-            playerInput.OnInteractPress += delegate { SelectInput(inventoryInput); };
-            playerInput.OnInteractPress += delegate { SelectInput(inventoryInput); };
+            
+            //playerInput.OnInteractPress += delegate { SelectInput(inventoryInput); };
+            //playerInput.OnInteractPress += delegate { SelectInput(inventoryInput); };
+            
+            EventManager.OnWindowOpen += delegate { SelectInput(inventoryInput); };
         }
+
 
         void SelectInput<T>(T inputBase) where T : InputBase
         {
@@ -43,6 +48,7 @@ namespace _Core.Scripts.Input
             currentInput = inputBase;
             currentInput.EnableInput();
         }
+        
 
         private void Update()
         {
@@ -73,6 +79,7 @@ namespace _Core.Scripts.Input
                     //Open menu
                 }
             }
+            
         }
     }
 }
