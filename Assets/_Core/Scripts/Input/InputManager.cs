@@ -8,6 +8,7 @@ namespace _Core.Scripts.Input
 {
     public class InputManager : MonoBehaviour
     {
+        [SerializeField] private PlayerController playerController;
         [SerializeField] private PlayerInput playerInput;
         [SerializeField] private InventoryInput inventoryInput;
         [SerializeField] private CarInput carInput;
@@ -37,6 +38,7 @@ namespace _Core.Scripts.Input
             //playerInput.OnInteractPress += delegate { SelectInput(inventoryInput); };
             
             EventManager.OnWindowOpen += delegate { SelectInput(inventoryInput); };
+            EventManager.OnWindowClose += delegate { SelectInput(playerInput); };
         }
 
 

@@ -16,7 +16,9 @@ namespace _Core.Scripts
         
         [SerializeField] private Text interactText;
         
-        [SerializeField] private GameObject carInteractMenu;
+
+        private CarController targetCar;
+        private Inventory targetInventory;
 
         private void Start()
         {
@@ -39,7 +41,17 @@ namespace _Core.Scripts
 
         private void OnInteractHold()
         {
-            
+            if (GetRayObject(out var obj))
+            {
+                if (obj.TryGetComponent(out CarController controller))
+                {
+                    targetCar = controller;
+                    if (obj.TryGetComponent(out Inventory inventory))
+                        targetInventory = inventory;
+                    
+                    windowsManager.ShowCarInteractWindow();
+                }
+            }
         }
 
         private void OnInteractPress()
@@ -55,14 +67,13 @@ namespace _Core.Scripts
                 
                 if (obj.TryGetComponent(out CarController controller))
                 {
-                    EventManager.OnEnterCar?.Invoke(controller);
-                    Debug.Log("Enter car");
+                    EnterInCar(controller);
                     return;
                 }
                 
                 
                 if(obj.TryGetComponent(out Inventory inv))
-                    windowsManager.ShowInventory(inv);
+                    windowsManager.ShowStorageInventory(inv);
             }
         }
 
@@ -78,6 +89,20 @@ namespace _Core.Scripts
 
             obj = null;
             return false;
+        }
+
+        public void EnterInCar(CarController controller)
+        {
+            EventManager.OnEnterCar?.Invoke(controller);
+            windowsManager.CloseWindows();
+            Debug.Log("Enter car");
+        }
+
+        public void EnterInCar() => EnterInCar(targetCar);
+
+        public void ShowCarInventory()
+        {
+            windowsManager.ShowStorageInventory(targetInventory);
         }
     }
 }

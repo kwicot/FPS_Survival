@@ -1,5 +1,6 @@
 using System;
 using _Core.Scripts.Input;
+using _Core.Scripts.UI.InteractWindows;
 using Player.Core;
 using UnityEngine;
 using UnityEngine.Events;
@@ -13,13 +14,12 @@ namespace _Core.Scripts.UI
         
         [SerializeField] private InventoryView inventoryWindow;
         [SerializeField] private StorageInventoryView storageItemsWindow;
-        [SerializeField] private Window interactWindow;
+        [SerializeField] private CarInteractWindow carInteractWindow;
+        
         
 
         private Window currentWindow;
-        
-        
-        
+
         public bool IsOpen => currentWindow != null;
         
 
@@ -32,12 +32,14 @@ namespace _Core.Scripts.UI
             playerController.Input.OnInventoryKeyPress += OnInventoryKeyPress;
         }
 
-        public void ShowInteractWindow()
+        public void ShowCarInteractWindow()
         {
-            
+            OpenWindow(carInteractWindow);
         }
 
-        public void ShowInventory(Inventory inventory)
+
+
+        public void ShowStorageInventory(Inventory inventory)
         {
             storageItemsWindow.SetInventory(inventory);
             inventoryWindow.SetInventory(playerController.Inventory);
@@ -78,14 +80,19 @@ namespace _Core.Scripts.UI
             inventoryWindow.Init();
             storageItemsWindow.Init();
         }
-        private void CloseWindows()
+        public void CloseWindows()
         {
+            if(currentWindow)
+                currentWindow.Close();
+            
             inventoryWindow.Close();
             storageItemsWindow.Close();
+            carInteractWindow.Close();
 
             currentWindow = null;
             Cursor.lockState = CursorLockMode.Locked;
             playerDot.SetActive(true);
+            EventManager.OnWindowClose?.Invoke();
         }
     }
 }

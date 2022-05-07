@@ -12,7 +12,9 @@ namespace _Core.Scripts.UI
 
         public virtual void Open()
         {
-            rootPanel.gameObject.SetActive(true);
+            if(rootPanel) 
+                rootPanel.gameObject.SetActive(true);
+            
             targetPanel.SetActive(true);
             
             foreach (var additionalPanel in additionalPanels)
@@ -24,8 +26,11 @@ namespace _Core.Scripts.UI
             foreach (var additionalPanel in additionalPanels)
                 additionalPanel.SetActive(false);
             
+            if(rootPanel)
+                rootPanel.SetActive(false);
+            
             targetPanel.SetActive(false);
-            rootPanel.SetActive(false);
+            
         }
     }
 }
