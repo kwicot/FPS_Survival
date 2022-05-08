@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using _Core.Scripts.InventorySystem;
 using _Core.Scripts.Items;
 using UnityEngine;
+using UnityEngine.UI;
 
 #pragma warning disable 0472
 
@@ -10,16 +12,17 @@ namespace _Core.Scripts.UI
     {
         [SerializeField] protected GameObject slotPrefab;
         [SerializeField] protected GameObject itemPrefab;
-        
         [SerializeField] protected Transform cellsParent;
+
+        [SerializeField] private InventoryView additionalInventoryView;
+        
+        [SerializeField] private Text currentWeightText;
+        [SerializeField] private Text maxWeightText;
 
         protected Inventory targetInventory;
         
         protected RectTransform rectTransform;
-        protected ItemSlot[,] slots = new ItemSlot[1,1];
-
-        protected bool isOpen;
-        protected bool initialized;
+        protected List<ItemSlot> slots = new List<ItemSlot>();
 
         private void Start()
         {
@@ -37,14 +40,20 @@ namespace _Core.Scripts.UI
         {
             targetInventory = target;
             Debug.Log($"Set inventory {targetInventory.gameObject.name} to view {targetPanel.name}");
-            InitSlots();
         }
+
+        private void OnInventoryStateChanged()
+        {
+            if (IsOpen)
+                UpdateSlots();
+        }
+
         public override void Open()
         {
             base.Open();
-            InitItems();
+            
+            UpdateSlots();
             targetPanel.SetActive(true);
-            isOpen = true;
         }
 
         public override void Close()
@@ -55,58 +64,119 @@ namespace _Core.Scripts.UI
                     Destroy(cell.transform.GetChild(0).gameObject);
 
             targetPanel.SetActive(false);
-            isOpen = false;
             
             base.Close();
         }
 
-        private void InitSlots()
+        protected void UpdateSlots()
         {
-            var childs = cellsParent.childCount;
-            for (int i = childs - 1; i >= 0; i--)
-                Destroy(cellsParent.GetChild(i).gameObject);
+            // var childs = cellsParent.childCount;
+            // for (int i = childs - 1; i >= 0; i--)
+            //     Destroy(cellsParent.GetChild(i).gameObject);
+            if (slots != null)
+            {
+                foreach (var itemSlot in slots)
+                    Destroy(itemSlot.gameObject);
+            }
             
             var items = targetInventory.Items;
-            var rows = items.GetLength(0);
-            var columns = items.GetLength(1);
 
-            slots = new ItemSlot[rows, columns];
-            for (int row = 0; row < rows; row++)
+            slots = new List<ItemSlot>();
+            for (int index = 0; index < items.Count; index++)
             {
-                for (int column = 0; column < columns; column++)
+                //Create slot
+                var slotObject = Instantiate(slotPrefab, cellsParent);
+                var slotController = slotObject.GetComponent<ItemSlot>();
+                //Create item
+                var itemObject = Instantiate(itemPrefab, slotObject.transform);
+                var itemController = itemObject.GetComponent<ItemView>();
+                
+                //Init item
+                itemController.Init(items[index],this);
+                //Init slot
+                slotController.Init(this, itemController);
+                slots.Add(slotController);
+            }
+            
+            // //Add additional slot
+            // var additionalSlotObject = Instantiate(slotPrefab, cellsParent);
+            // var additionalSlotController = additionalSlotObject.GetComponent<ItemSlot>();
+            // additionalSlotController.Init(this,null);
+            // slots.Add(additionalSlotController);
+
+            currentWeightText.text = targetInventory.Weight.ToString();
+            maxWeightText.text = targetInventory.MaxWeight.ToString();
+        }
+
+        public bool AddItem(Item item,out AddResult result)
+        {
+            var isAdd = targetInventory.AddItem(item,out var res);
+            result = res;
+            UpdateSlots();
+            return isAdd;
+        }
+        
+        public void MoveToAdditional(ItemView itemView)
+        {
+            if(additionalInventoryView.IsOpen && additionalInventoryView.AddItem(itemView.Item,out var result))
+            {
+                if (result == AddResult.All)
                 {
-                    var cellObject = Instantiate(slotPrefab, cellsParent);
-                    var slotController = cellObject.GetComponent<ItemSlot>();
-                    slotController.Init(this);
-                    slots[row, column] = slotController;
+                    Destroy(itemView.gameObject);
+                    Remove(itemView.Item);
                 }
             }
-
-            initialized = true;
+            
+            UpdateSlots();
         }
 
-        private void InitItems()
+        public void MoveAllToAdditional()
         {
-            var items = targetInventory.Items;
-            for (int row = 0; row < items.GetLength(0); row++)
+            if(additionalInventoryView.IsOpen == false) return;
+
+            List<Item> toRemove = new List<Item>();
+            foreach (var inventoryItem in targetInventory.Items)
             {
-                for (int column = 0; column < items.GetLength(1); column++)
+                if (additionalInventoryView.AddItem(inventoryItem, out var result))
                 {
-                    if (items[row, column] != null)
-                    {
-                        var itemObject = Instantiate(itemPrefab, slots[row, column].transform);
-                        itemObject.GetComponent<ItemView>().Init(items[row,column],this);
-                    }
+                    if (result == AddResult.All)
+                        toRemove.Add(inventoryItem);
                 }
+                else break;
             }
+
+            foreach (var item in toRemove)
+                Remove(item);
+            
+            UpdateSlots();
         }
 
-        public MoveResult Move(Item item,ItemSlot to)
+        public void Sort()
         {
-            if(GetSlotIndex(to,out var toIndex) == null) return MoveResult.Fail;
-
-            return (targetInventory.Move(item, toIndex));
+            
         }
+        
+        // public bool AddNewItem(Item item, ItemSlot targetSlot, out AddResult result)
+        // {
+        //     if (GetSlotIndex(targetSlot, out var slot))
+        //     {
+        //         
+        //     }
+        // }
+
+        // public bool Move(Item item, ItemSlot targetSlot, out MoveResult moveResult)
+        // {
+        //     
+        // }
+
+
+
+        // public MoveResult Move(Item item,ItemSlot to)
+        // {
+        //     if(GetSlotIndex(to,out var toIndex) == null) return MoveResult.Fail;
+        //
+        //     return (targetInventory.Move(item, toIndex));
+        // }
 
         public bool Remove(Item item)
         {
@@ -114,21 +184,18 @@ namespace _Core.Scripts.UI
         }
         
 
-        bool GetSlotIndex(ItemSlot slot, out Vector2Int index)
+        bool GetSlotIndex(ItemSlot slot, out int index)
         {
-            for (int row = 0; row < slots.GetLength(0); row++)
-            {
-                for (int column = 0; column < slots.GetLength(1); column++)
+                for (int i = 0; i < slots.Count; i++)
                 {
-                    if (slots[row, column] == slot)
+                    if (slots[i] == slot)
                     {
-                        index = new Vector2Int(row, column);
+                        index = i;
                         return true;
                     }
                 }
-            }
 
-            index = Vector2Int.zero;
+            index = 0;
             return false;
         }
     }

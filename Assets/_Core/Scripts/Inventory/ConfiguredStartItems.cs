@@ -21,9 +21,9 @@ namespace _Core.Scripts.InventorySystem
                 return;
             }
 
-                var items = startItemsConfig.GetItems();
+            var items = startItemsConfig.GetItems();
             foreach (var item in items)
-                targetInventory.AddItem(item);
+                targetInventory.AddItem(item, out var _);
 
         }
     }

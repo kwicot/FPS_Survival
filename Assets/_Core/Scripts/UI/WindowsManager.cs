@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using _Core.Scripts.InventorySystem;
 using _Core.Scripts.Player;
 using _Core.Scripts.UI.InteractWindows;
@@ -9,20 +10,29 @@ namespace _Core.Scripts.UI
     {
         [SerializeField] private PlayerController playerController;
         [SerializeField] private GameObject playerDot;
+
+        [SerializeField] private InventoryView playerInventoryWindow;
+        [SerializeField] private InventoryView StorageInventoryWindow;
+        [SerializeField] private Window PlayerEquipmentWindow;
         
-        [SerializeField] private InventoryView inventoryWindow;
-        [SerializeField] private StorageInventoryView storageItemsWindow;
         [SerializeField] private CarInteractWindow carInteractWindow;
         
         
 
-        private Window currentWindow;
+        private List<Window> lastOpenWindows;
+        
 
-        public bool IsOpen => currentWindow != null;
+        public bool IsOpen => lastOpenWindows.Count > 0;
         
 
         private void Start()
         {
+            lastOpenWindows = new List<Window>();
+            lastOpenWindows.Add(playerInventoryWindow);
+            lastOpenWindows.Add(StorageInventoryWindow);
+            lastOpenWindows.Add(carInteractWindow);
+            lastOpenWindows.Add(PlayerEquipmentWindow);
+            
             InitWindows();
             CloseWindows();
 
@@ -35,59 +45,59 @@ namespace _Core.Scripts.UI
             OpenWindow(carInteractWindow);
         }
 
+        void OpenWindow(Window window)
+        {
+            playerDot.SetActive(false);
+            Cursor.lockState = CursorLockMode.None;
+
+            window.Open();
+            lastOpenWindows.Add(window);
+            EventManager.OnWindowOpen?.Invoke();
+            
+        }
 
 
         public void ShowStorageInventory(Inventory inventory)
         {
-            storageItemsWindow.SetInventory(inventory);
-            inventoryWindow.SetInventory(playerController.Inventory);
+            CloseWindows();
             
-            OpenWindow(storageItemsWindow);
+            StorageInventoryWindow.SetInventory(inventory);
+            playerInventoryWindow.SetInventory(playerController.Inventory);
+            
+            OpenWindow(playerInventoryWindow);
+            OpenWindow(StorageInventoryWindow);
         }
 
 
         private void OnInventoryKeyPress()
         {
-            if (currentWindow == inventoryWindow)
+            CloseWindows();
+            
+            if (playerInventoryWindow.IsOpen)
             {
                 CloseWindows();
                 return;
             }
             
-            inventoryWindow.SetInventory(playerController.Inventory);
-            OpenWindow(inventoryWindow);
+            playerInventoryWindow.SetInventory(playerController.Inventory);
+            OpenWindow(playerInventoryWindow);
+            OpenWindow(PlayerEquipmentWindow);
         }
         private void OnCloseWindowPress()
         {
             CloseWindows();
         }
-        void OpenWindow<T>(T window) where T : Window
-        {
-            if(currentWindow)
-                currentWindow.Close();
-
-            currentWindow = window;
-            currentWindow.Open();
-            
-            playerDot.SetActive(false);
-            EventManager.OnWindowOpen?.Invoke();
-            Cursor.lockState = CursorLockMode.None;
-        }
         private void InitWindows()
         {
-            inventoryWindow.Init();
-            storageItemsWindow.Init();
+            playerInventoryWindow.Init();
+            StorageInventoryWindow.Init();
         }
         public void CloseWindows()
         {
-            if(currentWindow)
-                currentWindow.Close();
+            foreach (var lastOpenWindow in lastOpenWindows)
+                lastOpenWindow.Close();
+            lastOpenWindows.Clear();
             
-            inventoryWindow.Close();
-            storageItemsWindow.Close();
-            carInteractWindow.Close();
-
-            currentWindow = null;
             Cursor.lockState = CursorLockMode.Locked;
             playerDot.SetActive(true);
             EventManager.OnWindowClose?.Invoke();

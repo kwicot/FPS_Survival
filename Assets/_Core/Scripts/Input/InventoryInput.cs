@@ -11,11 +11,13 @@ namespace _Core.Scripts.Input
 
         public UnityAction OnTakeAllKeyPress;
 
+
         private void Update()
         {
             if(!IsEnable) return;
             
             if(UnityEngine.Input.GetKeyDown(takeAllKey)) OnTakeAllKeyPress?.Invoke();
+            
         }
 
         protected override void Enable()

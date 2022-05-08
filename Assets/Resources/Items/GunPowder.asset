@@ -16,6 +16,7 @@ MonoBehaviour:
     id: 0007
     name: Gun Powder
     basePrice: 10
-    maxCount: 1000
+    canStack: 1
     image: {fileID: 21300000, guid: b87456c641a94a044a19417c4a979992, type: 3}
+    weight: 1
     category: 0

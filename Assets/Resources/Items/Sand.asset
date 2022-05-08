@@ -16,6 +16,7 @@ MonoBehaviour:
     id: 0006
     name: Sand
     basePrice: 6
-    maxCount: 1000
+    canStack: 1
     image: {fileID: 21300000, guid: f6669f4c09c7d9e47818204410f503da, type: 3}
+    weight: 1
     category: 0

@@ -41,6 +41,6 @@ MonoBehaviour:
     minCount: 10
     maxCount: 50
     change: 70
-  minItems: 7
-  maxItems: 7
+  minItems: 1
+  maxItems: 3
   mixCount: 1

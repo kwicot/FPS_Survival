@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using _Core.Scripts.Items;
 using UnityEngine;
 using UnityEngine.Events;
@@ -8,77 +9,159 @@ namespace _Core.Scripts.InventorySystem
     
     public class Inventory : MonoBehaviour, IInteractable
     {
-        [SerializeField] protected int rows;
-        [SerializeField] protected int columns;
+        [SerializeField] private float baseMaxWeight;
 
-        protected Item[,] items;
+        public float MaxWeight => baseMaxWeight;
 
-        public UnityAction OnStateChanged;
-        public Item[,] Items
+        public float Weight
         {
             get
             {
-                if (items == null) return null;
+                var weight = 0f;
+                foreach (var item in itemsList)
+                    weight += item.TotalWeight;
                 
-                for (int row = 0; row < rows; row++)
-                {
-                    for (int column = 0; column < columns; column++)
-                    {
-                        if (items[row,column] != null && items[row, column].Count <= 0)
-                            items[row, column] = null;
-                    }
-                }
+                return weight;
+            }
+        }
 
-                return items;
+        private float FreeWeight => MaxWeight - Weight;
+        
+        
+
+        protected List<Item> itemsList;
+
+        public UnityAction OnStateChanged;
+
+        public List<Item> Items
+        {
+            get
+            {
+                if (itemsList == null) return null;
+                ClearNulls();
+                return itemsList;
+            }
+        }
+
+        void ClearNulls()
+        {
+            for (int i = itemsList.Count - 1; i >= 0; i--)
+            {
+                if(itemsList[i].Count <= 0)
+                    itemsList.RemoveAt(i);
             }
         }
 
         private void Awake()
         {
-            items = new Item[rows, columns];
+            itemsList = new List<Item>();
         }
 
-        public bool AddItem(Item item)
+        public bool AddItem(Item newItem, out AddResult addResult)
         {
-            if (FindItem(item.ID, out var inventoryItem))
+            Debug.Log($"max weight {MaxWeight}. Free weight {FreeWeight}. newItem weight {newItem.Weight}. newItem total weight {newItem.TotalWeight}");
+            if (FreeWeight < newItem.Weight)
             {
-                var canAdd = inventoryItem.CanAdd;
-                if (canAdd >= item.Count)
+                addResult = AddResult.Fail;
+                Debug.Log($"Cant add {newItem.Name}");
+                return false;
+            }
+            //Unstackable item
+            if (newItem.CanStack == false)
+            {
+                if (FreeWeight >=  newItem.TotalWeight)
                 {
-                    inventoryItem.Count += item.Count;
+                    itemsList.Add(newItem);
+                    addResult = AddResult.All;
+                    Debug.Log($"Add item {newItem.Name}");
+                    OnStateChanged?.Invoke();
                     return true;
                 }
-                else if (canAdd > 0)
-                {
-                    inventoryItem.Count += canAdd;
-                    item.Count -= canAdd;
-                }
-            }
-            for (int row = 0; row < rows; row++)
-            {
-                for (int column = 0; column < columns; column++)
-                {
-                    
-                    if (items[row, column] == null)
-                    {
-                        items[row, column] = item;
-                        OnStateChanged?.Invoke();
-                        Debug.Log($"Added {item.Name} {item.Count}");
-                        return true;
-                    }
-                    
-                }
-            }
 
-            return false;
+                addResult = AddResult.Fail;
+                Debug.Log($"Cant add item {newItem.Name}");
+                return false;
+            }
+            //Stackable item
+            else
+            {
+                //Can add all items
+                if (newItem.TotalWeight <= FreeWeight)
+                {
+                    //Add to exist item model
+                    if (GetItem(newItem.ID, out var inventoryItem))
+                        inventoryItem.Count += newItem.Count;
+                    
+                    //Add new item model
+                    else
+                        itemsList.Add(newItem);
+
+                    addResult = AddResult.All;
+                    Debug.Log($"Add item {newItem.Name}");
+                    OnStateChanged?.Invoke();
+                    return true;
+                }
+                //Can add part
+                else
+                {
+                    float addWeight = 0f;
+                    int canAdd = 0;
+                    
+                    for (int i = 0; i < newItem.Count; i++)
+                    {
+                        addWeight += newItem.Weight;
+                        canAdd++;
+                        
+                        if((addWeight + newItem.Weight) > FreeWeight) break;
+                    }
+
+                    if (GetItem(newItem.ID, out var targetItem))
+                    {
+                        targetItem.Count += canAdd;
+                    }
+                    else
+                    {
+                        var model = newItem.Clone() as Item;
+                        model.Count += canAdd;
+                        itemsList.Add(model);
+                    }
+                    newItem.Count -= canAdd;
+                    addResult = AddResult.Part;
+                    Debug.Log($"Add item {newItem.Name}");
+                    OnStateChanged?.Invoke();
+                    return true;
+                }
+            }
+            
         }
+
+        // public bool AddItem(Item newItem, int targetIndex, out AddResult addResult)
+        // {
+        //     if (FreeWeight < newItem.Weight)
+        //     {
+        //         addResult = AddResult.Fail;
+        //         return false;
+        //     }
+        //     
+        //     //In last slot
+        //     if (targetIndex >= itemsList.Count)
+        //     {
+        //         //Add all
+        //         if (FreeWeight <= newItem.TotalWeight)
+        //         {
+        //             itemsList.Add(newItem);
+        //             addResult = AddResult.All;
+        //             return true;
+        //         } 
+        //     }
+        // }
 
 
         public bool RemoveItem(Item item)
         {
-            if (GetIndex(item, out var index))
+            if (GetIndex(item, out int index))
             {
-                items[index.x, index.y] = null;
+                itemsList.RemoveAt(index);
                 Debug.Log($"Removed {item.Name}");
                 return true;
             }
@@ -86,40 +169,52 @@ namespace _Core.Scripts.InventorySystem
             return false;
         }
 
-        public bool ContainsItem(Item item)
+        public bool ContainsItem(Item targetItem)
         {
-            foreach (var item1 in items)
-                if (item == item1)
+            foreach (var item in itemsList)
+                if (targetItem == item)
                     return true;
             
             return false;
         }
 
-        protected bool GetIndex(Item item, out Vector2Int index)
+        protected bool GetIndex(Item targetItem, out int index)
         {
-            index = Vector2Int.zero;
-            if (!ContainsItem(item)) return false;
-            
-            for (int row = 0; row < rows; row++)
+            index = 0;
+            if (!ContainsItem(targetItem)) return false;
+
+            for (int i = 0; i < itemsList.Count; i++)
             {
-                for (int columnn = 0; columnn < columns; columnn++)
+                if (itemsList[i] == targetItem)
                 {
-                    if (items[row, columnn] == item)
-                    {
-                        index = new Vector2Int(row, columnn);
-                        return true;
-                    }
+                    index = i;
+                    return true;
                 }
             }
 
             return false;
         }
 
-        bool FindItem(string id, out Item item)
+        bool GetItem(Item targetItem, out Item inventoryItem)
         {
-            foreach (var inventoryItem in items)
+            foreach (var item in itemsList)
             {
-                if (inventoryItem != null && inventoryItem.ID == id)
+                if (item == targetItem)
+                {
+                    inventoryItem = item;
+                    return true;
+                }
+            }
+
+            inventoryItem = null;
+            return false;
+        }
+
+        protected bool GetItem(string id, out Item item)
+        {
+            foreach (var inventoryItem in itemsList)
+            {
+                if (inventoryItem.ID == id)
                 {
                     item = inventoryItem;
                     return true;
@@ -130,53 +225,67 @@ namespace _Core.Scripts.InventorySystem
             return false;
         }
 
-        public MoveResult Move(Item targetItem, Vector2Int toIndex)
-        {
-            
-            var toRow = toIndex.x;
-            var toColumn = toIndex.y;
-
-            if (items[toRow, toColumn] == null ) //Move to free place
-            {
-                if(GetIndex(targetItem,out var index))
-                    items[index.x, index.y] = null;
-
-                items[toRow, toColumn] = targetItem;
-                OnStateChanged?.Invoke();
-                return MoveResult.MoveToEmpty;
-            }
-            else if (targetItem.ID == items[toRow, toColumn].ID) //Add to exist item
-            {
-                if (GetIndex(targetItem, out var index))
-                {
-
-                }
-
-                var itemFrom = targetItem;
-                var itemTo = items[toRow, toColumn];
-                if (itemFrom.Count < itemTo.CanAdd) //Add all
-                {
-                    itemTo.Count += itemFrom.Count;
-                    if (GetIndex(itemFrom, out var indexFrom))
-                        items[indexFrom.x, indexFrom.y] = null;
-
-                    return MoveResult.MoveToExist;
-                }
-                else // Add part
-                {
-                    var canAdd = itemTo.CanAdd;
-                    itemTo.Count += canAdd;
-                    itemFrom.Count -= canAdd;
-
-                    return MoveResult.Part;
-                }
-
-                OnStateChanged?.Invoke();
-
-            }
-
-            return MoveResult.Fail;
-        }
+        // public MoveResult Move(Item targetItem, int toIndex)
+        // {
+        //     //Return fail if its new item and free space less than item weight
+        //     bool isNew = ContainsItem(targetItem);
+        //     if (FreeWeight < targetItem.Weight && !isNew) return MoveResult.Fail;
+        //
+        //     //New item
+        //     if (isNew)
+        //     {
+        //         
+        //     }
+        //     //Exist item
+        //     else
+        //     {
+        //         //Move to free place
+        //         if (toIndex >= itemsList.Count)
+        //         {
+        //             
+        //         }
+        //     }
+        //     
+        //     //Move to free place
+        //     if (toIndex >= itemsList.Count)
+        //     {
+        //         
+        //     }
+        //     //Move to exist item
+        //
+        //
+        //     else if (targetItem.ID == items[toRow, toColumn].ID) //Add to exist item
+        //     {
+        //         if (GetIndex(targetItem, out var index))
+        //         {
+        //
+        //         }
+        //
+        //         var itemFrom = targetItem;
+        //         var itemTo = items[toRow, toColumn];
+        //         if (itemFrom.Count < itemTo.CanAdd) //Add all
+        //         {
+        //             itemTo.Count += itemFrom.Count;
+        //             if (GetIndex(itemFrom, out var indexFrom))
+        //                 items[indexFrom.x, indexFrom.y] = null;
+        //
+        //             return MoveResult.MoveToExist;
+        //         }
+        //         else // Add part
+        //         {
+        //             var canAdd = itemTo.CanAdd;
+        //             itemTo.Count += canAdd;
+        //             itemFrom.Count -= canAdd;
+        //
+        //             return MoveResult.Part;
+        //         }
+        //
+        //         OnStateChanged?.Invoke();
+        //
+        //     }
+        //
+        //     return MoveResult.Fail;
+        // }
         
 
     }

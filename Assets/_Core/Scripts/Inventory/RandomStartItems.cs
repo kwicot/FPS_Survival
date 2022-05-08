@@ -22,7 +22,7 @@ namespace _Core.Scripts.InventorySystem
             }
             var items = randomItemsConfig.GetItems();
             foreach (var item in items)
-                targetInventory.AddItem(item);
+                targetInventory.AddItem(item,out var _);
         }
     }
 }

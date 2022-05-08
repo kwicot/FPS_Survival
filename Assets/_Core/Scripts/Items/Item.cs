@@ -10,8 +10,9 @@ namespace _Core.Scripts.Items
         [SerializeField] protected string id;
         [SerializeField] protected string name;
         [SerializeField] protected float basePrice;
-        [SerializeField] protected int maxCount;
+        [SerializeField] protected bool canStack;
         [SerializeField] protected Sprite image;
+        [SerializeField] private float weight;
         
         [SerializeField] protected ItemCategory category;
 
@@ -20,8 +21,17 @@ namespace _Core.Scripts.Items
         public string ID => id;
         public string Name => name;
         public float BasePrice => basePrice;
-        public int MaxCount => maxCount;
-        public int CanAdd => maxCount - count;
+        public bool CanStack => canStack;
+        public float Weight => weight;
+
+        public float TotalWeight
+        {
+            get
+            {
+                if (canStack == false) return weight;
+                return weight * count;
+            }
+        }
 
         public int Count
         {
@@ -36,15 +46,16 @@ namespace _Core.Scripts.Items
 
         public UnityAction<int> OnCountChanged;
 
-        public object Clone() => new Item(id, name, basePrice,maxCount, image, category);
+        public object Clone() => new Item(id, name, basePrice,canStack, weight, image, category);
 
-        public Item(string id, string name, float basePrice,int maxCount, Sprite image, ItemCategory category,int count =1)
+        public Item(string id, string name, float basePrice,bool canStack,float weight, Sprite image, ItemCategory category,int count =1)
         {
             this.Count = 1;
             this.id = id;
             this.name = name;
             this.basePrice = basePrice;
-            this.maxCount = maxCount;
+            this.canStack = canStack;
+            this.weight = weight;
             this.image = image;
             this.category = category;
         }

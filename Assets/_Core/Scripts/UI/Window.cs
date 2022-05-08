@@ -4,33 +4,29 @@ namespace _Core.Scripts.UI
 {
     public abstract class Window : MonoBehaviour
     {
-        [SerializeField] protected GameObject rootPanel;
         [SerializeField] protected GameObject targetPanel;
-        [SerializeField] protected GameObject[] additionalPanels;
+        [SerializeField] private GameObject rootPanel;
+        
         
         public abstract void Init();
+        public bool IsOpen { get; private set; }
 
         public virtual void Open()
         {
             if(rootPanel) 
-                rootPanel.gameObject.SetActive(true);
-            
+                rootPanel.SetActive(true);
             targetPanel.SetActive(true);
             
-            foreach (var additionalPanel in additionalPanels)
-                additionalPanel.SetActive(true);
+            IsOpen = true;
         }
 
         public virtual void Close()
         {
-            foreach (var additionalPanel in additionalPanels)
-                additionalPanel.SetActive(false);
-            
+            targetPanel.SetActive(false);
             if(rootPanel)
                 rootPanel.SetActive(false);
             
-            targetPanel.SetActive(false);
-            
+            IsOpen = false;
         }
     }
 }

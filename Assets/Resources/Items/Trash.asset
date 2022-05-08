@@ -16,6 +16,7 @@ MonoBehaviour:
     id: 0004
     name: Trash
     basePrice: 7
-    maxCount: 1000
+    canStack: 1
     image: {fileID: 21300000, guid: b36d2ba56a0b0e64b9228707f198f5cd, type: 3}
+    weight: 1
     category: 0

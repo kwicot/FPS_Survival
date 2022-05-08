@@ -1,4 +1,5 @@
 using _Core.Scripts.InventorySystem;
+using _Core.Scripts.Items;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -6,42 +7,63 @@ namespace _Core.Scripts.UI
 {
     public class ItemSlot : MonoBehaviour, IDropHandler
     {
-        private InventoryView view;
+        private InventoryView targetInventoryView;
+        private ItemView currentItem;
         
-        public void Init(InventoryView view)
+        public void Init(InventoryView view, ItemView itemView)
         {
-            this.view = view;
+            this.targetInventoryView = view;
+            if (itemView == null) return;
+            
+            currentItem = itemView;
         }
+        
         
         public void OnDrop(PointerEventData eventData)
         {
             if (eventData.pointerDrag != null)
             {
-                var obj = eventData.pointerDrag;
-                var parent = obj.transform.parent;
-                var itemView = obj.GetComponent<ItemView>();
+                //Get references
+                var itemViewObject = eventData.pointerDrag;
+                var startItemViewParent = itemViewObject.transform.parent;
+                var itemView = itemViewObject.GetComponent<ItemView>();
                 var item = itemView.Item;
+                var startItemViewSlot = itemView.Slot;
+                
                 Debug.Log($"Drop {item.Name}");
-                var itemSlot = itemView.Slot;
-                
-                var moveResult = view.Move(item,this);
 
-                
-                
-                if (moveResult == MoveResult.MoveToEmpty)
-                {
-                    if(itemSlot.view != view)
-                        itemView.ChangeInventory(view);
-                    
-                    itemView.Slot= this;
-                }
-                else if (moveResult == MoveResult.MoveToExist)
-                {
-                    if(itemSlot.view != view)
-                        itemView.ChangeInventory(view);
-                    
-                    Destroy(obj);
-                }
+                // //Inventory not equal
+                // if (targetInventoryView != startItemViewSlot.targetInventoryView)
+                // {
+                //     if (targetInventoryView.AddNewItem(item, this,out var result))
+                //     {
+                //         switch (result)
+                //         {
+                //             //All items was added
+                //             case AddResult.All:
+                //             {
+                //                 Destroy(itemViewObject.gameObject);
+                //                 break;
+                //             }
+                //         }
+                //     }
+                // }
+                // //Inventory equal
+                // else
+                // {
+                //     if (targetInventoryView.Move(item, this, out var result))
+                //     {
+                //         switch (result)
+                //         {
+                //             case MoveResult.MoveToExist:
+                //             case MoveResult.MoveToEmpty:
+                //             {
+                //                 Destroy(itemViewObject.gameObject);
+                //                 break;
+                //             }
+                //         }
+                //     }
+                // }
             }
         }
     }
