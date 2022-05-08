@@ -1,4 +1,4 @@
-using Player.Core;
+using _Core.Scripts.InventorySystem;
 using UnityEngine;
 using UnityEngine.EventSystems;
 

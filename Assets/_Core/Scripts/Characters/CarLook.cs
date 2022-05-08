@@ -1,6 +1,7 @@
 using UnityEngine;
 
-namespace Player.Core
+#pragma warning disable 0108
+namespace _Core.Scripts.Player
 {
     public class CarLook : MonoBehaviour
     {

@@ -5,6 +5,9 @@ namespace Blocks.Core
 {
     public class BaseBlock : UnityEngine.MonoBehaviour
     {
-        [SerializeField] private float health;
+        [SerializeField] protected float health;
+        [SerializeField] protected ItemSO rewardItem;
+        [SerializeField] protected int rewardItemCount;
+        
     }
 }

@@ -1,35 +1,17 @@
-using System;
-using System.Collections.Generic;
-using _Core.Scripts;
 using _Core.Scripts.Items;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Player.Core
+#pragma warning disable 0162
+namespace _Core.Scripts.InventorySystem
 {
-    [Serializable]
-    class StartItem
-    {
-        public ItemSO item;
-        public int count;
-    }
-
-    public enum MoveResult
-    {
-        MoveToEmpty,
-        MoveToExist,
-        Fail,
-        Part
-    }
+    
     public class Inventory : MonoBehaviour, IInteractable
     {
-        [SerializeField] private int rows;
-        [SerializeField] private int columns;
+        [SerializeField] protected int rows;
+        [SerializeField] protected int columns;
 
-        [SerializeField] private bool addStartItems;
-        [SerializeField] private List<StartItem> startItems;
-
-        private Item[,] items;
+        protected Item[,] items;
 
         public UnityAction OnStateChanged;
         public Item[,] Items
@@ -54,26 +36,29 @@ namespace Player.Core
         private void Awake()
         {
             items = new Item[rows, columns];
-            if (addStartItems)
-                AddStartItems();
-        }
-
-        void AddStartItems()
-        {
-            foreach (var startItem in startItems)
-            {
-                var item = startItem.item.Model;
-                item.Count = startItem.count;
-                AddItem(item);
-            }
         }
 
         public bool AddItem(Item item)
         {
+            if (FindItem(item.ID, out var inventoryItem))
+            {
+                var canAdd = inventoryItem.CanAdd;
+                if (canAdd >= item.Count)
+                {
+                    inventoryItem.Count += item.Count;
+                    return true;
+                }
+                else if (canAdd > 0)
+                {
+                    inventoryItem.Count += canAdd;
+                    item.Count -= canAdd;
+                }
+            }
             for (int row = 0; row < rows; row++)
             {
                 for (int column = 0; column < columns; column++)
                 {
+                    
                     if (items[row, column] == null)
                     {
                         items[row, column] = item;
@@ -87,6 +72,7 @@ namespace Player.Core
 
             return false;
         }
+
 
         public bool RemoveItem(Item item)
         {
@@ -109,7 +95,7 @@ namespace Player.Core
             return false;
         }
 
-        bool GetIndex(Item item, out Vector2Int index)
+        protected bool GetIndex(Item item, out Vector2Int index)
         {
             index = Vector2Int.zero;
             if (!ContainsItem(item)) return false;
@@ -126,6 +112,21 @@ namespace Player.Core
                 }
             }
 
+            return false;
+        }
+
+        bool FindItem(string id, out Item item)
+        {
+            foreach (var inventoryItem in items)
+            {
+                if (inventoryItem != null && inventoryItem.ID == id)
+                {
+                    item = inventoryItem;
+                    return true;
+                }
+            }
+
+            item = null;
             return false;
         }
 

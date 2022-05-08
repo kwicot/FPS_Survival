@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+#pragma warning disable 0414
+
 namespace _Core.Scripts.TerrainGeneration
 {
     public class TerrainGenerator : MonoBehaviour

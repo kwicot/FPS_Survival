@@ -1,6 +1,8 @@
+using _Core.Scripts.InventorySystem;
 using _Core.Scripts.Items;
-using Player.Core;
 using UnityEngine;
+
+#pragma warning disable 0472
 
 namespace _Core.Scripts.UI
 {

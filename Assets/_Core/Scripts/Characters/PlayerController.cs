@@ -1,9 +1,9 @@
-using System;
 using _Core.Scripts;
 using _Core.Scripts.Input;
+using _Core.Scripts.InventorySystem;
 using UnityEngine;
 
-namespace Player.Core
+namespace _Core.Scripts.Player
 {
     public class PlayerController : MonoBehaviour
     {

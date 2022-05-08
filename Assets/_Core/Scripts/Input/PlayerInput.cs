@@ -5,6 +5,8 @@ using _Core.Scripts.UI;
 using UnityEngine;
 using UnityEngine.Events;
 
+#pragma warning disable 0414
+
 namespace Player.Core
 {
     public class PlayerInput : InputBase

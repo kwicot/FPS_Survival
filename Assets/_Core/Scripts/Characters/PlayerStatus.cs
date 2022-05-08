@@ -2,7 +2,7 @@ using System;
 using _Core.Scripts;
 using UnityEngine;
 
-namespace Player.Core
+namespace _Core.Scripts.Player
 {
     public class PlayerStatus : MonoBehaviour
     {

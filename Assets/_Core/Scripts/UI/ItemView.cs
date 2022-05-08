@@ -1,5 +1,4 @@
 using _Core.Scripts.Items;
-using Player.Core;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;

@@ -1,5 +1,4 @@
-using System;
-using _Core.Scripts.UI;
+using _Core.Scripts.Player;
 using Player.Core;
 using UnityEngine;
 using UnityEngine.Events;

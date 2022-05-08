@@ -1,5 +1,3 @@
-using UnityEngine;
-using UnityEngine.UI;
 
 namespace _Core.Scripts.UI.InteractWindows
 {

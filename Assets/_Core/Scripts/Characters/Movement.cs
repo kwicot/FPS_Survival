@@ -4,7 +4,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Player.Core
+namespace _Core.Scripts.Player
 {
     [RequireComponent(typeof(CharacterController))]
     public class Movement : MonoBehaviour

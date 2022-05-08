@@ -1,9 +1,8 @@
-using Player.Core;
 using UnityEngine;
 
-namespace _Core.Scripts.Storage
+namespace _Core.Scripts.InventorySystem
 {
-    public class Storage : MonoBehaviour
+    public class StorageInventory : Inventory
     {
         [SerializeField] private Inventory inventory;
 

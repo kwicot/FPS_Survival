@@ -1,5 +1,4 @@
-using System;
-using Player.Core;
+using _Core.Scripts.Player;
 using TMPro;
 using UnityEngine;
 

@@ -1,9 +1,7 @@
-using System;
-using _Core.Scripts.Input;
+using _Core.Scripts.InventorySystem;
+using _Core.Scripts.Player;
 using _Core.Scripts.UI.InteractWindows;
-using Player.Core;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace _Core.Scripts.UI
 {

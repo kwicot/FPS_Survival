@@ -1,4 +1,3 @@
-using Player.Core;
 using UnityEngine;
 
 namespace _Core.Scripts.UI

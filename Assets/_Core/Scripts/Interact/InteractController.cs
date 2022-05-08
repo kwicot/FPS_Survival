@@ -1,6 +1,6 @@
-using System;
+using _Core.Scripts.InventorySystem;
+using _Core.Scripts.Player;
 using _Core.Scripts.UI;
-using Player.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
