@@ -11,8 +11,6 @@ namespace _Core.Scripts.UI
     {
         [SerializeField] private Image itemImage;
         [SerializeField] private TextMeshProUGUI countText;
-        [SerializeField] private GameObject infoPrefab;
-        [SerializeField] private float hoverTimeInfo;
 
         private Item currentItem;
         private InventoryView invetoryView;
@@ -23,15 +21,13 @@ namespace _Core.Scripts.UI
         public ItemSlot Slot { get; set; }
         public Item Item => currentItem;
 
-        private GameObject infoPanel;
+        private ItemInfoPanel infoPanel;
         
-        private bool isMouseHover = false;
-        private float hoverTime = 0;
-        
-        public void Init(Item item,InventoryView inventoryView)
+        public void Init(Item item,InventoryView inventoryView, ItemInfoPanel infoPanel)
         {
             this.invetoryView = inventoryView;
             this.currentItem = item;
+            this.infoPanel = infoPanel;
             itemImage.sprite = item.Image;
             rectTransform = GetComponent<RectTransform>();
             canvasGroup = GetComponent<CanvasGroup>();
@@ -45,24 +41,6 @@ namespace _Core.Scripts.UI
         void UpdateText()
         {
             countText.text = currentItem.Count.ToString();
-        }
-
-        private void Update()
-        {
-            // if (isMouseHover && !infoPanel)
-            // {
-            //     hoverTime += Time.deltaTime;
-            //     if (hoverTime >= hoverTimeInfo)
-            //     {
-            //         infoPanel = Instantiate(infoPrefab, invetoryView.transform);
-            //         infoPanel.GetComponent<ItemInfoPanel>().Init(Item);
-            //         hoverTime = 0;
-            //         isMouseHover = false;
-            //     }
-            // }
-            //
-            // if (infoPanel)
-            //     infoPanel.transform.position = UnityEngine.Input.mousePosition + new Vector3(10, 10, 0);
         }
 
         // public void OnPointerDown(PointerEventData eventData)
@@ -103,8 +81,11 @@ namespace _Core.Scripts.UI
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            Debug.Log("Click");
             if (UnityEngine.Input.GetKey(KeyCode.LeftShift))
                 invetoryView.MoveToAdditional(this);
+            else
+                infoPanel.Init(Item);
         }
 
         // public void OnPointerEnter(PointerEventData eventData)
