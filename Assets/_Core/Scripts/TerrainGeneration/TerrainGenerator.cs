@@ -1,57 +1,50 @@
 using System;
-using System.Collections;
+using _Core.Scripts.TerrainGeneration;
 using UnityEngine;
 
-#pragma warning disable 0414
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
-namespace _Core.Scripts.TerrainGeneration
+public class TerrainGenerator : MonoBehaviour
 {
-    public class TerrainGenerator : MonoBehaviour
+    [SerializeField]private Terrain TerrainMain;
+    [SerializeField] private HeightMapGenerator generator;
+    [SerializeField] private int size = 256;
+    [SerializeField] private int depth = 20;
+    [SerializeField] private int terrainPower;
+    [SerializeField] private float outsideHeight;
+    [SerializeField] private float roughness;
+    [SerializeField] private bool raiseToSecondPower;
+    [SerializeField] private bool normalize = true;
+    [SerializeField] private float baseHeight;
+    [SerializeField] private int smoothCycles;
+    
+    //public PaintTerrain paintTerrain;
+
+    private void Start()
     {
-        [Header("Ohter Components")]
-        [SerializeField] ChunksGenerator chunkGenerator;
+        generator.Init(terrainPower,outsideHeight,roughness,raiseToSecondPower,normalize,baseHeight,smoothCycles);
+        generator.Generate(delegate(float[,] map)
+        {
+            Debug.Log("End");
+            size = (int)Mathf.Pow(2, terrainPower) + 1;
+            TerrainMain.terrainData.heightmapResolution = size + 1;
+            TerrainMain.terrainData.size = new Vector3(size,depth,size);
+            TerrainMain.terrainData.SetHeights(0, 0, map);
+        }, delegate(float arg0)
+        {
+            Debug.Log($"Generation progress {arg0}");
+        } );
         
-        [Header("Noise")]
-        [SerializeField] private int width = 256;
-        [SerializeField] private int height = 256;
-        [SerializeField] private float depth = 20;
-        [SerializeField] private float scale = 20;
-        
-        [SerializeField] private Vector2 offset;
 
+    }
 
-        private void Start()
-        {
-            Init();
-        }
+    void OnValidate()
+    {
+        //paintTerrain.StartPaint();
 
-        void Init()
-        {
-            //chunkGenerator.Generate();
-        }
-
-
-        private float[,] GenerateHights(Vector3 chunkOffset)
-        {
-            float[,] heights = new float[width, height];
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    heights[x, y] = CalculateHeight(x + chunkOffset.x, y + chunkOffset.y);
-                }
-            }
-
-            return heights;
-        }
-
-        private float CalculateHeight(float x, float y)
-        {
-            float xCord = x / width * scale + offset.x;
-            float yCord = y / height * scale + offset.y;
-
-            return Mathf.PerlinNoise(xCord, yCord);
-        }
-
+        // var waterObj = GameObject.Find("Water");
+        // waterObj.transform.position = new Vector3(waterObj.transform.position.x, waterLevel * TerrainMain.terrainData.size.y, waterObj.transform.position.z);
     }
 }
