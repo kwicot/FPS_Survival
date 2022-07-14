@@ -8,31 +8,25 @@ namespace _Core.Scripts.Input
 {
     public class InputManager : MonoBehaviour
     {
-        [SerializeField] private PlayerController playerController;
+        [SerializeField] private KeysBindingData keyBindData;
+
         [SerializeField] private PlayerInput playerInput;
-        [SerializeField] private InventoryInput inventoryInput;
+        [SerializeField] private InterfaceInput interfaceInput;
         [SerializeField] private CarInput carInput;
 
-        [SerializeField] private KeyCode inventoryKey;
-        [SerializeField] private KeyCode craftKey;
-        [SerializeField] private KeyCode questsKey;
-        [SerializeField] private KeyCode skillKey;
-        [SerializeField] private KeyCode mapKey;
+        
 
         public static InputManager Instance;
 
         public PlayerInput PlayerInput => playerInput;
-        public InventoryInput InventoryInput => inventoryInput;
+        public InterfaceInput InterfaceInput => interfaceInput;
 
-        public UnityAction OnInventoryKeyPress;
-        public UnityAction OnCraftKeyPress;
-        public UnityAction OnQuestsKeyPress;
-        public UnityAction OnSkillsKeyPress;
-        public UnityAction OnMapKeyPress;
-        public UnityAction OnCloseWindowPress;
+        public KeysBindingData KeyBindData => keyBindData;
+
+        
 
         private InputBase currentInput;
-
+        
         private void Awake()
         {
             Instance = this;
@@ -47,6 +41,19 @@ namespace _Core.Scripts.Input
             
             //EventManager.OnWindowOpen += delegate { SelectInput(inventoryInput); };
             //EventManager.OnWindowClose += delegate { SelectInput(playerInput); };
+
+            interfaceInput.OnInventoryKeyPress += OnInterfaceOpenKeyPressed;
+            interfaceInput.OnCraftKeyPress += OnInterfaceOpenKeyPressed;
+            interfaceInput.OnMapKeyPress += OnInterfaceOpenKeyPressed;
+            interfaceInput.OnQuestsKeyPress += OnInterfaceOpenKeyPressed;
+            interfaceInput.OnSkillsKeyPress += OnInterfaceOpenKeyPressed;
+            interfaceInput.OnCloseWindowPress += delegate { SelectInput(playerInput); };
+        }
+
+        private void OnInterfaceOpenKeyPressed()
+        {
+            if (currentInput == playerInput)
+                SelectInput(interfaceInput);
         }
 
 
@@ -62,30 +69,6 @@ namespace _Core.Scripts.Input
 
         private void Update()
         {
-            if (UnityEngine.Input.GetKeyDown(inventoryKey))
-            {
-                if (currentInput == inventoryInput)
-                    SelectInput(playerInput);
-                
-                else
-                    SelectInput(inventoryInput);
-                
-                OnInventoryKeyPress?.Invoke();
-            }
-
-
-            if (UnityEngine.Input.GetKeyDown(KeyCode.Escape))
-            {
-                if (currentInput != playerInput)
-                {
-                    SelectInput(playerInput);
-                    OnCloseWindowPress?.Invoke();
-                }
-                else
-                {
-                    //Open menu
-                }
-            }
             
         }
     }

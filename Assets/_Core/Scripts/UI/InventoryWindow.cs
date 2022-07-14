@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using _Core.Scripts.InventorySystem;
 using _Core.Scripts.Items;
+using _Core.Scripts.UI.MainMenu;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,8 +9,10 @@ using UnityEngine.UI;
 
 namespace _Core.Scripts.UI
 {
-    public class InventoryView : GameWindow
+    public class InventoryWindow : WindowBase
     {
+        [SerializeField] private InventoryBase targetInventory;
+        
         [SerializeField] protected GameObject slotPrefab;
         [SerializeField] protected GameObject itemPrefab;
         [SerializeField] protected Transform cellsParent;
@@ -21,62 +24,45 @@ namespace _Core.Scripts.UI
 
         private List<ItemSlot> slots = new List<ItemSlot>();
 
-        private InventoryBase targetInventory;
 
         private void Start()
         {
             
         }
 
-        public override void Init()
-        {
-            
-        }
-
-        public void SetInventory(PlayerInventory target)
+        public void SetInventory(InventoryBase target)
         {
             targetInventory = target;
-            Debug.Log($"Set inventory {targetInventory.gameObject.name} to view {targetPanel.name}");
+            Debug.Log($"Set inventory {targetInventory.gameObject.name} to view {rootPanel.name}");
         }
 
         private void OnInventoryStateChanged()
         {
             if (IsOpen)
-                UpdateSlots();
+                ReloadSlots();
         }
 
-        public override void Open()
+
+        protected override void OnOpen()
         {
-            base.Open();
-            
-            UpdateSlots();
-            targetPanel.SetActive(true);
+            ReloadSlots();
         }
 
-        public override void Close()
+        protected override void OnClose()
         {
-            //Destroy items
-            foreach (var cell in slots)
-                if(cell != null && cell.transform.childCount > 0)
-                    Destroy(cell.transform.GetChild(0).gameObject);
-
-            targetPanel.SetActive(false);
-            infoPanel.Close();
-            
-            base.Close();
+            ClearSlots();
+            //infoPanel.Close();
         }
 
-        protected void UpdateSlots()
+        void ReloadSlots()
         {
-            // var childs = cellsParent.childCount;
-            // for (int i = childs - 1; i >= 0; i--)
-            //     Destroy(cellsParent.GetChild(i).gameObject);
-            if (slots != null)
-            {
-                foreach (var itemSlot in slots)
-                    Destroy(itemSlot.gameObject);
-            }
-            
+            ClearSlots();
+            CreateSlots();
+            UpdateWeightText();
+        }
+
+        void CreateSlots()
+        {
             var items = targetInventory.Items;
 
             slots = new List<ItemSlot>();
@@ -95,7 +81,19 @@ namespace _Core.Scripts.UI
                 slotController.Init(this, itemController);
                 slots.Add(slotController);
             }
+        }
+        void ClearSlots()
+        {
+            if (slots != null)
+            {
+                foreach (var itemSlot in slots)
+                    Destroy(itemSlot.gameObject);
+            }
+            slots.Clear();
+        }
 
+        void UpdateWeightText()
+        {
             if (targetInventory is IWeightBased)
             {
                 var weightBasedInventory = targetInventory as IWeightBased;
@@ -103,17 +101,7 @@ namespace _Core.Scripts.UI
                 currentWeightText.text = weightBasedInventory.Weight.ToString();
                 maxWeightText.text = weightBasedInventory.MaxWeight.ToString();
             }
-            
         }
-
-        public bool AddItem(Item item,out AddResult result)
-        {
-            var isAdd = targetInventory.AddItem(item,out var res);
-            result = res;
-            UpdateSlots();
-            return isAdd;
-        }
-        
 
         public bool Remove(Item item)
         {

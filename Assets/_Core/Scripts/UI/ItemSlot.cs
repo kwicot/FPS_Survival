@@ -7,12 +7,12 @@ namespace _Core.Scripts.UI
 {
     public class ItemSlot : MonoBehaviour, IDropHandler
     {
-        private InventoryView targetInventoryView;
+        private InventoryWindow targetInventoryWindow;
         private ItemView currentItem;
         
-        public void Init(InventoryView view, ItemView itemView)
+        public void Init(InventoryWindow window, ItemView itemView)
         {
-            this.targetInventoryView = view;
+            this.targetInventoryWindow = window;
             if (itemView == null) return;
             
             currentItem = itemView;

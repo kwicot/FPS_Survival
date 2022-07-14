@@ -4,17 +4,22 @@ namespace _Core.Scripts.UI.MainMenu
 {
     public abstract class WindowBase : MonoBehaviour
     {
-        [SerializeField] private GameObject rootPanel;
+        [SerializeField] protected GameObject rootPanel;
+        [SerializeField] private WindowBase additionalWindow;
+        
+        public bool IsOpen { get; set; }
 
         public void Open()
         {
             rootPanel.SetActive(true);
+            additionalWindow?.Open();
             OnOpen();
         }
 
         public void Close()
         {
             OnClose();
+            additionalWindow?.Close();
             rootPanel.SetActive(false);
         }
 

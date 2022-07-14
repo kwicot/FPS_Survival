@@ -13,7 +13,7 @@ namespace _Core.Scripts.UI
         [SerializeField] private TextMeshProUGUI countText;
 
         private Item currentItem;
-        private InventoryView invetoryView;
+        private InventoryWindow invetoryWindow;
 
         private RectTransform rectTransform;
         private CanvasGroup canvasGroup;
@@ -23,9 +23,9 @@ namespace _Core.Scripts.UI
 
         private ItemInfoPanel infoPanel;
         
-        public void Init(Item item,InventoryView inventoryView, ItemInfoPanel infoPanel)
+        public void Init(Item item,InventoryWindow inventoryWindow, ItemInfoPanel infoPanel)
         {
-            this.invetoryView = inventoryView;
+            this.invetoryWindow = inventoryWindow;
             this.currentItem = item;
             this.infoPanel = infoPanel;
             itemImage.sprite = item.Image;

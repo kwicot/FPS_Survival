@@ -13,14 +13,17 @@ namespace Player.Core
     {
         [SerializeField] private bool isWindowsBlockMovement;
         [SerializeField] private float interactHoldTime;
-        [SerializeField] private KeyCode jumpKey;
-        [SerializeField] private KeyCode crouchKey;
-        [SerializeField] private KeyCode sprintKey;
-        [SerializeField] private KeyCode attack1Key;
-        [SerializeField] private KeyCode attack2Key;
-        [SerializeField] private KeyCode reloadKey;
-        [SerializeField] private KeyCode interactKey;
+
         
+        public KeyCode JumpKey => InputManager.Instance.KeyBindData.JumpKey;
+        public KeyCode CrouchKey => InputManager.Instance.KeyBindData.CrouchKey;
+        public KeyCode SprintKey => InputManager.Instance.KeyBindData.SprintKey;
+        public KeyCode Attack1Key => InputManager.Instance.KeyBindData.Attack1Key;
+        public KeyCode Attack2Key => InputManager.Instance.KeyBindData.Attack2Key;
+        public KeyCode ReloadKey => InputManager.Instance.KeyBindData.ReloadKey;
+        public KeyCode InteractKey => InputManager.Instance.KeyBindData.InteractKey;
+        
+
         public UnityAction OnJumpPress;
         public UnityAction OnJumpHold;
         public UnityAction OnJumpRelease;
@@ -64,19 +67,19 @@ namespace Player.Core
 
         void UpdateMovementInput()
         {
-            if (Input.GetKeyDown(jumpKey)) OnJumpPress?.Invoke(); 
-            if (Input.GetKey(jumpKey)) OnJumpHold?.Invoke();
-            if (Input.GetKeyUp(jumpKey)) OnJumpRelease?.Invoke();
+            if (Input.GetKeyDown(JumpKey)) OnJumpPress?.Invoke(); 
+            if (Input.GetKey(JumpKey)) OnJumpHold?.Invoke();
+            if (Input.GetKeyUp(JumpKey)) OnJumpRelease?.Invoke();
             
-            if (Input.GetKeyDown(crouchKey)) OnCrouchPress?.Invoke();
-            if (Input.GetKey(crouchKey)) OnCrouchHold?.Invoke();
-            if (Input.GetKeyUp(crouchKey)) OnCrouchRelease?.Invoke();
+            if (Input.GetKeyDown(CrouchKey)) OnCrouchPress?.Invoke();
+            if (Input.GetKey(CrouchKey)) OnCrouchHold?.Invoke();
+            if (Input.GetKeyUp(CrouchKey)) OnCrouchRelease?.Invoke();
             
-            if (Input.GetKeyDown(sprintKey)) OnSprintPress?.Invoke();
-            if (Input.GetKeyUp(sprintKey)) OnSprintRelease?.Invoke();
+            if (Input.GetKeyDown(SprintKey)) OnSprintPress?.Invoke();
+            if (Input.GetKeyUp(SprintKey)) OnSprintRelease?.Invoke();
 
-            if (Input.GetKeyDown(interactKey)) isInteractHold = true;
-            if (Input.GetKeyUp(interactKey)) isInteractHold = false;
+            if (Input.GetKeyDown(InteractKey)) isInteractHold = true;
+            if (Input.GetKeyUp(InteractKey)) isInteractHold = false;
             
             //Move input
             var horizontal = Input.GetAxis("Horizontal");
@@ -115,14 +118,14 @@ namespace Player.Core
 
         void UpdateInput()
         {
-            if (Input.GetKeyDown(attack1Key)) OnAttack1Press?.Invoke();
-            if (Input.GetKeyUp(attack1Key)) OnAttack1Release?.Invoke();
+            if (Input.GetKeyDown(Attack1Key)) OnAttack1Press?.Invoke();
+            if (Input.GetKeyUp(Attack1Key)) OnAttack1Release?.Invoke();
             
-            if (Input.GetKeyDown(attack2Key)) OnAttack2Press?.Invoke();
-            if (Input.GetKeyUp(attack2Key)) OnAttack2Release?.Invoke();
+            if (Input.GetKeyDown(Attack2Key)) OnAttack2Press?.Invoke();
+            if (Input.GetKeyUp(Attack2Key)) OnAttack2Release?.Invoke();
             
-            if (Input.GetKeyDown(reloadKey)) OnReloadPress?.Invoke();
-            if (Input.GetKeyUp(reloadKey)) OnReloadRelease?.Invoke();
+            if (Input.GetKeyDown(ReloadKey)) OnReloadPress?.Invoke();
+            if (Input.GetKeyUp(ReloadKey)) OnReloadRelease?.Invoke();
             
         }
 

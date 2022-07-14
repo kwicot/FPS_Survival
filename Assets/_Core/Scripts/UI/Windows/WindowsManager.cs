@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using _Core.Scripts.Input;
 using UnityEngine;
 
 namespace _Core.Scripts.UI.MainMenu
@@ -26,6 +27,8 @@ namespace _Core.Scripts.UI.MainMenu
             
             InitializeWindowsMap();
         }
+
+        
 
         void InitializeWindowsMap()
         {
@@ -59,6 +62,17 @@ namespace _Core.Scripts.UI.MainMenu
             currentWindow = windowsHistory.Last();
             currentWindow.Open();
             windowsHistory.RemoveAt(windowsHistory.Count-1);
+        }
+
+        public void CloseWindows()
+        {
+            if (currentWindow)
+            {
+                currentWindow.Close();
+                windowsHistory.Add(currentWindow);
+            }
+            
+            currentWindow = null;
         }
     }
 }
