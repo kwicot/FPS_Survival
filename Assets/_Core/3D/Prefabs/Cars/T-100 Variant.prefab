@@ -143,7 +143,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 404994228998171506, guid: 7546a6aba1b28dc428f242d1f6a1378a, type: 3}
       propertyPath: m_Name
-      value: T-100
+      value: T-100 Variant
       objectReference: {fileID: 0}
     - target: {fileID: 404994229610787400, guid: 7546a6aba1b28dc428f242d1f6a1378a, type: 3}
       propertyPath: m_ConnectedAnchor.x
@@ -210,6 +210,7 @@ MonoBehaviour:
   rcc: {fileID: 8799041554051238401}
   playerInCarPositionTransform: {fileID: 1354019279}
   playerExitPositionTransform: {fileID: 90181319}
+  inventory: {fileID: 2106264580}
 --- !u!114 &2106264580
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,7 +236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a7543b193bf4485ac49f74905cbd9eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetInventory: {fileID: 2106264580}
+  targetPlayerInventory: {fileID: 2106264580}
   startItemsConfig: {fileID: 11400000, guid: 6fd4515ac2d4bc94e925dc93b900805e, type: 2}
 --- !u!4 &8799041554051238463 stripped
 Transform:

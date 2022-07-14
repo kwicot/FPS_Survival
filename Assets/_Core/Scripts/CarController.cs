@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using _Core.Scripts;
+using _Core.Scripts.InventorySystem;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -10,10 +11,13 @@ public class CarController : MonoBehaviour, IInteractable
     
     [SerializeField] private Transform playerInCarPositionTransform;
     [SerializeField] private Transform playerExitPositionTransform;
+    [SerializeField] private InventoryBase inventory;
 
 
     public Vector3 PlayerPosition => playerInCarPositionTransform.position;
     public Vector3 ExitPosition => playerExitPositionTransform.position;
+
+    public InventoryBase Inventory => inventory;
     void Start()
     {
         PlayerExit();

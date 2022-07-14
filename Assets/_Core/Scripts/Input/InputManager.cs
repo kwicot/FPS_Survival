@@ -1,5 +1,6 @@
 using System;
 using _Core.Scripts.Player;
+using _Core.Scripts.UI.Windows;
 using Player.Core;
 using UnityEngine;
 using UnityEngine.Events;
@@ -42,18 +43,9 @@ namespace _Core.Scripts.Input
             //EventManager.OnWindowOpen += delegate { SelectInput(inventoryInput); };
             //EventManager.OnWindowClose += delegate { SelectInput(playerInput); };
 
-            interfaceInput.OnInventoryKeyPress += OnInterfaceOpenKeyPressed;
-            interfaceInput.OnCraftKeyPress += OnInterfaceOpenKeyPressed;
-            interfaceInput.OnMapKeyPress += OnInterfaceOpenKeyPressed;
-            interfaceInput.OnQuestsKeyPress += OnInterfaceOpenKeyPressed;
-            interfaceInput.OnSkillsKeyPress += OnInterfaceOpenKeyPressed;
-            interfaceInput.OnCloseWindowPress += delegate { SelectInput(playerInput); };
-        }
-
-        private void OnInterfaceOpenKeyPressed()
-        {
-            if (currentInput == playerInput)
-                SelectInput(interfaceInput);
+            
+            GameWindowsManager.Instance.OnClose += delegate { SelectInput(playerInput); };
+            GameWindowsManager.Instance.OnOpen += delegate { SelectInput(interfaceInput); };
         }
 
 

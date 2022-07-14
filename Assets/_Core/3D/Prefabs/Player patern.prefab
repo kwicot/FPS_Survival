@@ -1739,7 +1739,7 @@ Transform:
   m_Children:
   - {fileID: 1825045932247837020}
   - {fileID: 1825045932102958576}
-  - {fileID: 1825045932826146643}
+  - {fileID: 4195023024440117874}
   m_Father: {fileID: 1825045932870565539}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1755,8 +1755,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c6d381bd62d4bd3ae3d260665172b71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonsPanel: {fileID: 1825045932031573970}
   playerInventoryWindow: {fileID: 1825045932247837021}
   storageInventoryWindow: {fileID: 2327020821890054649}
+  carInteractWindow: {fileID: 5585363867114733416}
 --- !u!1 &1825045932511163575
 GameObject:
   m_ObjectHideFlags: 0
@@ -2445,7 +2447,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a7543b193bf4485ac49f74905cbd9eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetPlayerInventory: {fileID: 0}
+  targetPlayerInventory: {fileID: 1825045932743560858}
   startItemsConfig: {fileID: 11400000, guid: 520c76c3a7428f644a5087d3ead1e8db, type: 2}
 --- !u!1 &1825045932764575397
 GameObject:
@@ -2640,7 +2642,7 @@ GameObject:
   - component: {fileID: 1825045932826146643}
   - component: {fileID: 1825045932826146642}
   m_Layer: 0
-  m_Name: Interact
+  m_Name: InteractController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2653,12 +2655,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1825045932826146640}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 683.81165, y: 592.2751, z: -704.12054}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1825045932471537400}
+  m_Father: {fileID: 1825045932870565539}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1825045932826146642
@@ -2677,7 +2679,7 @@ MonoBehaviour:
   playerController: {fileID: 1825045932743560859}
   interactLayer:
     serializedVersion: 2
-    m_Bits: 2147483647
+    m_Bits: 16191
   interactText: {fileID: 1825045933462664953}
 --- !u!1 &1825045932870565536
 GameObject:
@@ -2709,6 +2711,7 @@ Transform:
   m_Children:
   - {fileID: 1825045933331499888}
   - {fileID: 1825045932471537400}
+  - {fileID: 1825045932826146643}
   m_Father: {fileID: 1825045933930640033}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7342,6 +7345,52 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Sort
+--- !u!1 &8118467680384698231
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4195023024440117874}
+  - component: {fileID: 5585363867114733416}
+  m_Layer: 0
+  m_Name: Car interact
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4195023024440117874
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8118467680384698231}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1825045932471537400}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5585363867114733416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8118467680384698231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 134517a2f8444c59b7831a3a7f689b52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rootPanel: {fileID: 8309955297191933737}
+  additionalWindow: {fileID: 0}
 --- !u!1 &8309955297106344947
 GameObject:
   m_ObjectHideFlags: 0
@@ -7433,7 +7482,7 @@ GameObject:
   - component: {fileID: 8309955297191933736}
   - component: {fileID: 8309955297191933735}
   m_Layer: 5
-  m_Name: CarInteract
+  m_Name: Car
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7600,9 +7649,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1825045932826146642}
-        m_TargetAssemblyTypeName: _Core.Scripts.InteractController, Assembly-CSharp
-        m_MethodName: EnterInCar
+      - m_Target: {fileID: 5585363867114733416}
+        m_TargetAssemblyTypeName: _Core.Scripts.UI.Windows.CarInteractWindow, Assembly-CSharp
+        m_MethodName: Enter
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7940,9 +7989,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1825045932826146642}
-        m_TargetAssemblyTypeName: _Core.Scripts.InteractController, Assembly-CSharp
-        m_MethodName: ShowCarInventory
+      - m_Target: {fileID: 5585363867114733416}
+        m_TargetAssemblyTypeName: _Core.Scripts.UI.Windows.CarInteractWindow, Assembly-CSharp
+        m_MethodName: OpenInventory
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

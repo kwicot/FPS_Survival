@@ -20,7 +20,6 @@ namespace _Core.Scripts
         
 
         private CarController targetCar;
-        private PlayerInventory targetPlayerInventory;
 
         private void Start()
         {
@@ -51,22 +50,19 @@ namespace _Core.Scripts
                 if (obj.TryGetComponent(out CarController controller))
                 {
                     targetCar = controller;
-                    if (obj.TryGetComponent(out PlayerInventory inventory))
-                        targetPlayerInventory = inventory;
-                    
-                    //gameWindowsManager.ShowCarInteractWindow();
+                    GameWindowsManager.Instance.ShowCarDialogWindow(controller);
                 }
             }
         }
         
         private void OnInteractPress()
         {
-            // if (playerController.Status.InCar)
-            // {
-            //     EventManager.OnExitCar?.Invoke(playerController.Status.currentCar);
-            //     Debug.Log("Exit car");
-            //     return;
-            // }
+            if (playerController.Status.InCar)
+            {
+                EventManager.OnExitCar?.Invoke(playerController.Status.currentCar);
+                Debug.Log("Exit car");
+                return;
+            }
             
             if (GetRayObject(out var obj))
             {
@@ -102,13 +98,6 @@ namespace _Core.Scripts
             EventManager.OnEnterCar?.Invoke(controller);
             //gameWindowsManager.CloseWindows();
             Debug.Log("Enter car");
-        }
-        
-        public void EnterInCar() => EnterInCar(targetCar);
-        
-        public void ShowCarInventory()
-        {
-            //gameWindowsManager.ShowStorageInventory(targetPlayerInventory);
         }
     }
 }
