@@ -2,6 +2,7 @@ using _Core.Scripts.InventorySystem;
 using _Core.Scripts.Player;
 using _Core.Scripts.UI;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace _Core.Scripts
@@ -11,7 +12,7 @@ namespace _Core.Scripts
         [SerializeField] private Camera lookCamera;
         [SerializeField] private float interactDistance;
         [SerializeField] private PlayerController playerController;
-        [SerializeField] private WindowsManager windowsManager;
+        [FormerlySerializedAs("windowsManager")] [SerializeField] private GameWindowsManager gameWindowsManager;
         [SerializeField] private LayerMask interactLayer;
         
         [SerializeField] private Text interactText;
@@ -28,7 +29,7 @@ namespace _Core.Scripts
 
         private void FixedUpdate()
         {
-            if (GetRayObject(out var obj) && windowsManager.IsOpen == false)
+            if (GetRayObject(out var obj) && gameWindowsManager.IsOpen == false)
             {
                 if (obj.TryGetComponent(out IInteractable interactable))
                     interactText.enabled = true;
@@ -49,7 +50,7 @@ namespace _Core.Scripts
                     if (obj.TryGetComponent(out Inventory inventory))
                         targetInventory = inventory;
                     
-                    windowsManager.ShowCarInteractWindow();
+                    gameWindowsManager.ShowCarInteractWindow();
                 }
             }
         }
@@ -73,7 +74,7 @@ namespace _Core.Scripts
                 
                 
                 if(obj.TryGetComponent(out Inventory inv))
-                    windowsManager.ShowStorageInventory(inv);
+                    gameWindowsManager.ShowStorageInventory(inv);
             }
         }
 
@@ -94,7 +95,7 @@ namespace _Core.Scripts
         public void EnterInCar(CarController controller)
         {
             EventManager.OnEnterCar?.Invoke(controller);
-            windowsManager.CloseWindows();
+            gameWindowsManager.CloseWindows();
             Debug.Log("Enter car");
         }
 
@@ -102,7 +103,7 @@ namespace _Core.Scripts
 
         public void ShowCarInventory()
         {
-            windowsManager.ShowStorageInventory(targetInventory);
+            gameWindowsManager.ShowStorageInventory(targetInventory);
         }
     }
 }

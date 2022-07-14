@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace _Core.Scripts.UI
 {
-    public class InventoryView : Window
+    public class InventoryView : GameWindow
     {
         [SerializeField] protected GameObject slotPrefab;
         [SerializeField] protected GameObject itemPrefab;
@@ -18,6 +18,8 @@ namespace _Core.Scripts.UI
         
         [SerializeField] private Text currentWeightText;
         [SerializeField] private Text maxWeightText;
+
+        [SerializeField] private ItemInfoPanel infoPanel;
 
         protected Inventory targetInventory;
         
@@ -64,6 +66,7 @@ namespace _Core.Scripts.UI
                     Destroy(cell.transform.GetChild(0).gameObject);
 
             targetPanel.SetActive(false);
+            infoPanel.Close();
             
             base.Close();
         }
@@ -92,7 +95,7 @@ namespace _Core.Scripts.UI
                 var itemController = itemObject.GetComponent<ItemView>();
                 
                 //Init item
-                itemController.Init(items[index],this);
+                itemController.Init(items[index],this,infoPanel);
                 //Init slot
                 slotController.Init(this, itemController);
                 slots.Add(slotController);

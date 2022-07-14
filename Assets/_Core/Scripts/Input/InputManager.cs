@@ -1,3 +1,4 @@
+using System;
 using _Core.Scripts.Player;
 using Player.Core;
 using UnityEngine;
@@ -18,6 +19,8 @@ namespace _Core.Scripts.Input
         [SerializeField] private KeyCode skillKey;
         [SerializeField] private KeyCode mapKey;
 
+        public static InputManager Instance;
+
         public PlayerInput PlayerInput => playerInput;
         public InventoryInput InventoryInput => inventoryInput;
 
@@ -29,6 +32,12 @@ namespace _Core.Scripts.Input
         public UnityAction OnCloseWindowPress;
 
         private InputBase currentInput;
+
+        private void Awake()
+        {
+            Instance = this;
+        }
+
         private void Start()
         {
             SelectInput(playerInput);

@@ -7,6 +7,7 @@ namespace _Core.Scripts.UI
 {
     public class ItemInfoPanel : MonoBehaviour
     {
+        [SerializeField] private GameObject panel;
         [SerializeField] private Text nameText;
         [SerializeField] private Text descriptionText;
         [SerializeField] private Text weightText;
@@ -16,6 +17,8 @@ namespace _Core.Scripts.UI
 
         public void Init(Item item)
         {
+            panel.SetActive(true);
+            
             nameText.text = item.Name;
             descriptionText.text = "Some description";
             weightText.text = item.Weight.ToString();
@@ -29,7 +32,11 @@ namespace _Core.Scripts.UI
                 stackableText.text = "Non Stackable";
                 totalWeightText.text = "";
             }
+        }
 
+        public void Close()
+        {
+            panel.SetActive(false);
         }
     }
 }

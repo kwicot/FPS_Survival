@@ -31,39 +31,6 @@ namespace _Core.Scripts.UI
                 var startItemViewSlot = itemView.Slot;
                 
                 Debug.Log($"Drop {item.Name}");
-
-                // //Inventory not equal
-                // if (targetInventoryView != startItemViewSlot.targetInventoryView)
-                // {
-                //     if (targetInventoryView.AddNewItem(item, this,out var result))
-                //     {
-                //         switch (result)
-                //         {
-                //             //All items was added
-                //             case AddResult.All:
-                //             {
-                //                 Destroy(itemViewObject.gameObject);
-                //                 break;
-                //             }
-                //         }
-                //     }
-                // }
-                // //Inventory equal
-                // else
-                // {
-                //     if (targetInventoryView.Move(item, this, out var result))
-                //     {
-                //         switch (result)
-                //         {
-                //             case MoveResult.MoveToExist:
-                //             case MoveResult.MoveToEmpty:
-                //             {
-                //                 Destroy(itemViewObject.gameObject);
-                //                 break;
-                //             }
-                //         }
-                //     }
-                // }
             }
         }
     }

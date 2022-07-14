@@ -20,7 +20,7 @@ namespace _Core.Scripts
 
         public static UnityAction OnStartSprint;
         public static UnityAction OnStopSprint;
-
+        
 
         private void Awake()
         {

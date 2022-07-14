@@ -13,8 +13,7 @@ namespace _Core.Scripts.Items
         [SerializeField] protected bool canStack;
         [SerializeField] protected Sprite image;
         [SerializeField] private float weight;
-        
-        [SerializeField] protected ItemCategory category;
+        [SerializeField] private GameObject prefab;
 
         protected int count;
         
@@ -43,12 +42,13 @@ namespace _Core.Scripts.Items
             }
         }
         public Sprite Image => image;
+        public GameObject Prefab => prefab;
 
         public UnityAction<int> OnCountChanged;
 
-        public object Clone() => new Item(id, name, basePrice,canStack, weight, image, category);
+        public object Clone() => new Item(id, name, basePrice,canStack, weight, image);
 
-        public Item(string id, string name, float basePrice,bool canStack,float weight, Sprite image, ItemCategory category,int count =1)
+        public Item(string id, string name, float basePrice,bool canStack,float weight, Sprite image, int count =1)
         {
             this.Count = 1;
             this.id = id;
@@ -57,7 +57,6 @@ namespace _Core.Scripts.Items
             this.canStack = canStack;
             this.weight = weight;
             this.image = image;
-            this.category = category;
         }
     }
 }
