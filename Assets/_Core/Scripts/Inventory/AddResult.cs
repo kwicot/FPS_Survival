@@ -4,6 +4,7 @@ namespace _Core.Scripts.InventorySystem
     {
         All,
         Part,
-        Fail
+        Fail,
+        AdditionalInventoryIsNull
     }
 }

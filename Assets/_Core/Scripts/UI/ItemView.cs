@@ -1,13 +1,15 @@
 using System;
+using System.Collections;
 using _Core.Scripts.Items;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace _Core.Scripts.UI
 {
-    public class ItemView : MonoBehaviour, IPointerClickHandler//, IPointerEnterHandler, IPointerExitHandler//IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
+    public class ItemView : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler//, IPointerEnterHandler, IPointerExitHandler//IPointerDownHandler, IEndDragHandler
     {
         [SerializeField] private Image itemImage;
         [SerializeField] private TextMeshProUGUI countText;
@@ -22,6 +24,9 @@ namespace _Core.Scripts.UI
         public Item Item => currentItem;
 
         private ItemInfoPanel infoPanel;
+
+        private float timeFromFirstClick;
+        private int clicksCount = 0;
         
         public void Init(Item item,InventoryWindow inventoryWindow, ItemInfoPanel infoPanel)
         {
@@ -43,14 +48,57 @@ namespace _Core.Scripts.UI
             countText.text = currentItem.Count.ToString();
         }
 
-        public void ResetPosition()
+        private void Update()
+        {
+            if (clicksCount > 0)
+                timeFromFirstClick += Time.deltaTime;
+
+            if (clicksCount >= 2)
+            {
+                timeFromFirstClick = 0;
+                clicksCount = 0;
+                ProcessDoubleClick();
+            }
+            if (clicksCount == 1 && timeFromFirstClick >= 0.3f)
+            {
+                timeFromFirstClick = 0;
+                clicksCount = 0;
+                ProcessClick();
+            }
+        }
+
+        public void ChangeSlot(ItemSlot newSlot)
+        {
+            transform.SetParent(newSlot.transform);
+            transform.localPosition = Vector3.zero;
+        }
+
+
+        void ProcessClick()
+        {
+        }
+
+        void ProcessDoubleClick()
+        {
+            Debug.Log("Double click");
+            if (invetoryWindow.MoveItemToAdditionalInventory(Item, out var result))
+            {
+            }
+                Debug.Log(result);
+        }
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            clicksCount++;
+        }
+
+        public void OnBeginDrag(PointerEventData eventData)
         {
             
         }
-        
-        public void OnPointerClick(PointerEventData eventData)
+
+        public void OnDrag(PointerEventData eventData)
         {
-            Debug.Log("Click");
+            
         }
     }
 }

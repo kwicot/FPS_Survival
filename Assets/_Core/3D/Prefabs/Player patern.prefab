@@ -1439,6 +1439,7 @@ MonoBehaviour:
   rootPanel: {fileID: 1825045931828515158}
   additionalWindow: {fileID: 0}
   targetInventory: {fileID: 1825045932743560858}
+  additionalInventory: {fileID: 0}
   slotPrefab: {fileID: 1351261413820431809, guid: ccead96a0daf5ec42a0898ec2d52cb63, type: 3}
   itemPrefab: {fileID: 579170182995335865, guid: 560c1c6e3411ba04884ec21c1ef10e5c, type: 3}
   cellsParent: {fileID: 5709405422902684135}
@@ -6590,6 +6591,7 @@ MonoBehaviour:
   rootPanel: {fileID: 2614884861985408184}
   additionalWindow: {fileID: 6541276697941116490}
   targetInventory: {fileID: 0}
+  additionalInventory: {fileID: 1825045932743560858}
   slotPrefab: {fileID: 1351261413820431809, guid: ccead96a0daf5ec42a0898ec2d52cb63, type: 3}
   itemPrefab: {fileID: 579170182995335865, guid: 560c1c6e3411ba04884ec21c1ef10e5c, type: 3}
   cellsParent: {fileID: 9166581034350532209}
@@ -6947,6 +6949,7 @@ MonoBehaviour:
   rootPanel: {fileID: 3255639857843244935}
   additionalWindow: {fileID: 0}
   targetInventory: {fileID: 1825045932743560858}
+  additionalInventory: {fileID: 0}
   slotPrefab: {fileID: 1351261413820431809, guid: ccead96a0daf5ec42a0898ec2d52cb63, type: 3}
   itemPrefab: {fileID: 579170182995335865, guid: 560c1c6e3411ba04884ec21c1ef10e5c, type: 3}
   cellsParent: {fileID: 7237035485104380323}

@@ -48,6 +48,7 @@ namespace _Core.Scripts.UI.Windows
         public void OpenInventory() => OpenWindow(playerInventoryWindow);
         public void OpenStorageInventory(InventoryBase inventory)
         { 
+            playerInventoryWindow.SetAdditionalInventory(inventory);
             storageInventoryWindow.SetInventory(inventory);
             OpenWindow(storageInventoryWindow);
         }
@@ -74,6 +75,9 @@ namespace _Core.Scripts.UI.Windows
         {
             if(currentWindow)
                 currentWindow.Close();
+            
+            playerInventoryWindow.SetAdditionalInventory(null);
+            storageInventoryWindow.SetInventory(null);
 
             currentWindow = null;
             buttonsPanel.SetActive(false);

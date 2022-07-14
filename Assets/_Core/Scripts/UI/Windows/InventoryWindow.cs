@@ -12,6 +12,7 @@ namespace _Core.Scripts.UI
     public class InventoryWindow : WindowBase
     {
         [SerializeField] private InventoryBase targetInventory;
+        [SerializeField] private InventoryBase additionalInventory;
         
         [SerializeField] protected GameObject slotPrefab;
         [SerializeField] protected GameObject itemPrefab;
@@ -27,60 +28,86 @@ namespace _Core.Scripts.UI
 
         private void Start()
         {
-            
+            if(targetInventory)
+                targetInventory.OnStateChanged += ReloadSlots;
         }
 
-        public void SetInventory(InventoryBase target)
+
+        public bool MoveItemToAdditionalInventory(Item item,out AddResult result)
         {
-            targetInventory = target;
-            Debug.Log($"Set inventory {targetInventory.gameObject.name} to view {rootPanel.name}");
+            result = AddResult.AdditionalInventoryIsNull;
+            return additionalInventory && additionalInventory.AddItem(item, out result);
         }
-
-        private void OnInventoryStateChanged()
+        public bool AddItem(Item item,out AddResult result)
         {
-            if (IsOpen)
-                ReloadSlots();
+            return targetInventory.AddItem(item,out result);
         }
 
-
+        public bool Remove(Item item)
+        {
+            return targetInventory.RemoveItem(item);
+        }
+        
         protected override void OnOpen()
         {
             ReloadSlots();
         }
-
         protected override void OnClose()
         {
             ClearSlots();
             //infoPanel.Close();
         }
 
+        public void SetInventory(InventoryBase target)
+        {
+            targetInventory = target;
+            if(targetInventory)
+                targetInventory.OnStateChanged += ReloadSlots;
+
+            //Debug.Log($"Set inventory {targetInventory.gameObject.name} to view {rootPanel.name}");
+        }
+        public void SetAdditionalInventory(InventoryBase inventory)
+        {
+            additionalInventory = inventory;
+        }
+        private void OnInventoryStateChanged()
+        {
+            if (IsOpen)
+                ReloadSlots();
+        }
         void ReloadSlots()
         {
             ClearSlots();
-            CreateSlots();
+            InitializeSlots();
             UpdateWeightText();
         }
-
-        void CreateSlots()
+        void InitializeSlots()
         {
             var items = targetInventory.Items;
-
             slots = new List<ItemSlot>();
+            
             for (int index = 0; index < items.Count; index++)
             {
-                //Create slot
-                var slotObject = Instantiate(slotPrefab, cellsParent);
-                var slotController = slotObject.GetComponent<ItemSlot>();
-                //Create item
-                var itemObject = Instantiate(itemPrefab, slotObject.transform);
-                var itemController = itemObject.GetComponent<ItemView>();
-                
-                //Init item
-                itemController.Init(items[index],this,infoPanel);
-                //Init slot
-                slotController.Init(this, itemController);
-                slots.Add(slotController);
+                var slot = CreateSlot();
+                CreateItemView(slot,items[index]);
             }
+
+            CreateSlot();
+        }
+        void CreateItemView(GameObject slot,Item item)
+        {
+
+            var itemObject = Instantiate(itemPrefab, slot.transform);
+            var itemController = itemObject.GetComponent<ItemView>();
+            itemController.Init(item,this,infoPanel);
+        }
+        GameObject CreateSlot()
+        {
+            var slotObject = Instantiate(slotPrefab, cellsParent);
+            var slotController = slotObject.GetComponent<ItemSlot>();
+            slotController.Init(this);
+            slots.Add(slotController);
+            return slotObject;
         }
         void ClearSlots()
         {
@@ -91,7 +118,6 @@ namespace _Core.Scripts.UI
             }
             slots.Clear();
         }
-
         void UpdateWeightText()
         {
             if (targetInventory is IWeightBased)
@@ -102,13 +128,6 @@ namespace _Core.Scripts.UI
                 maxWeightText.text = weightBasedInventory.MaxWeight.ToString();
             }
         }
-
-        public bool Remove(Item item)
-        {
-            return targetInventory.RemoveItem(item);
-        }
-        
-
         bool GetSlotIndex(ItemSlot slot, out int index)
         {
                 for (int i = 0; i < slots.Count; i++)
