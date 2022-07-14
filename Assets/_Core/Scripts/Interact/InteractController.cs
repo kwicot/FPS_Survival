@@ -19,7 +19,7 @@ namespace _Core.Scripts
         
 
         private CarController targetCar;
-        private Inventory targetInventory;
+        private PlayerInventory targetPlayerInventory;
 
         private void Start()
         {
@@ -47,8 +47,8 @@ namespace _Core.Scripts
                 if (obj.TryGetComponent(out CarController controller))
                 {
                     targetCar = controller;
-                    if (obj.TryGetComponent(out Inventory inventory))
-                        targetInventory = inventory;
+                    if (obj.TryGetComponent(out PlayerInventory inventory))
+                        targetPlayerInventory = inventory;
                     
                     gameWindowsManager.ShowCarInteractWindow();
                 }
@@ -73,7 +73,7 @@ namespace _Core.Scripts
                 }
                 
                 
-                if(obj.TryGetComponent(out Inventory inv))
+                if(obj.TryGetComponent(out PlayerInventory inv))
                     gameWindowsManager.ShowStorageInventory(inv);
             }
         }
@@ -103,7 +103,7 @@ namespace _Core.Scripts
 
         public void ShowCarInventory()
         {
-            gameWindowsManager.ShowStorageInventory(targetInventory);
+            gameWindowsManager.ShowStorageInventory(targetPlayerInventory);
         }
     }
 }

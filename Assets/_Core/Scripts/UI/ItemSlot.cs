@@ -25,10 +25,8 @@ namespace _Core.Scripts.UI
             {
                 //Get references
                 var itemViewObject = eventData.pointerDrag;
-                var startItemViewParent = itemViewObject.transform.parent;
                 var itemView = itemViewObject.GetComponent<ItemView>();
                 var item = itemView.Item;
-                var startItemViewSlot = itemView.Slot;
                 
                 Debug.Log($"Drop {item.Name}");
             }

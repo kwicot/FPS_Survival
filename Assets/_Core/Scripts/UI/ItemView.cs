@@ -43,14 +43,14 @@ namespace _Core.Scripts.UI
             countText.text = currentItem.Count.ToString();
         }
 
+        public void ResetPosition()
+        {
+            
+        }
         
         public void OnPointerClick(PointerEventData eventData)
         {
             Debug.Log("Click");
-            if (UnityEngine.Input.GetKey(KeyCode.LeftShift))
-                invetoryView.MoveToAdditional(this);
-            else
-                infoPanel.Init(Item);
         }
     }
 }

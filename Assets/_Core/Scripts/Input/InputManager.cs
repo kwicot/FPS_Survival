@@ -45,8 +45,8 @@ namespace _Core.Scripts.Input
             //playerInput.OnInteractPress += delegate { SelectInput(inventoryInput); };
             //playerInput.OnInteractPress += delegate { SelectInput(inventoryInput); };
             
-            EventManager.OnWindowOpen += delegate { SelectInput(inventoryInput); };
-            EventManager.OnWindowClose += delegate { SelectInput(playerInput); };
+            //EventManager.OnWindowOpen += delegate { SelectInput(inventoryInput); };
+            //EventManager.OnWindowClose += delegate { SelectInput(playerInput); };
         }
 
 
@@ -65,15 +65,12 @@ namespace _Core.Scripts.Input
             if (UnityEngine.Input.GetKeyDown(inventoryKey))
             {
                 if (currentInput == inventoryInput)
-                {
                     SelectInput(playerInput);
-                    OnInventoryKeyPress?.Invoke();
-                }
+                
                 else
-                {
-                    OnInventoryKeyPress?.Invoke();
                     SelectInput(inventoryInput);
-                }
+                
+                OnInventoryKeyPress?.Invoke();
             }
 
 

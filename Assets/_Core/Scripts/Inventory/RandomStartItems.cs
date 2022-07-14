@@ -5,12 +5,12 @@ namespace _Core.Scripts.InventorySystem
 {
     public class RandomStartItems : MonoBehaviour
     {
-        [SerializeField] private Inventory targetInventory;
+        [SerializeField] private PlayerInventory targetPlayerInventory;
         [SerializeField] private RandomItemsConfig randomItemsConfig;
 
         private void Start()
         {
-            if(!targetInventory)
+            if(!targetPlayerInventory)
             {
                 Debug.LogWarning($"Target inventory is null on {gameObject.name}");
                 return;
@@ -22,7 +22,7 @@ namespace _Core.Scripts.InventorySystem
             }
             var items = randomItemsConfig.GetItems();
             foreach (var item in items)
-                targetInventory.AddItem(item,out var _);
+                targetPlayerInventory.AddItem(item,out var _);
         }
     }
 }
