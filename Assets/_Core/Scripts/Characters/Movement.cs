@@ -1,6 +1,3 @@
-using System;
-using _Core.Scripts;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -37,6 +34,7 @@ namespace _Core.Scripts.Player
         public bool isGrounded => Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         public bool isSprint => speed == sprintSpeed;
         public bool isCrouch => controller.height == crouchHeight;
+        
 
         public UnityAction OnSprint;
         public UnityAction OnJump;
@@ -47,7 +45,9 @@ namespace _Core.Scripts.Player
             controller = GetComponent<CharacterController>();
             
             playerController.Input.PlayerInput.OnJumpPress += Jump;
+            playerController.Input.PlayerInput.OnJumpHold += JumpHold;
             playerController.Input.PlayerInput.OnCrouchPress += StartCrouch;
+            playerController.Input.PlayerInput.OnCrouchHold += OnCrouchHold;
             playerController.Input.PlayerInput.OnCrouchRelease += StopCrouch;
             playerController.Input.PlayerInput.OnSprintPress += StartSprint;
             playerController.Input.PlayerInput.OnSprintRelease += StopSprint;
@@ -56,6 +56,8 @@ namespace _Core.Scripts.Player
 
             speed = moveSpeed;
         }
+
+
 
         private void Move(float horizontal, float vertical)
         {
@@ -90,8 +92,15 @@ namespace _Core.Scripts.Player
             EventManager.OnStopCrouch?.Invoke();
         }
 
+        private void OnCrouchHold()
+        {
+            if (playerController.Status.IsFlyMode)
+                velocity.y = -speed;
+        }
+        
         private void StartCrouch()
         {
+            if(playerController.Status.IsFlyMode) return;
             if(isSprint) return;
             
             controller.height = crouchHeight;
@@ -102,6 +111,7 @@ namespace _Core.Scripts.Player
 
         private void Jump()
         {
+            if(playerController.Status.IsFlyMode) return;            
             if(!playerController.Status.CanJump) return;
             if(!isGrounded) return;
             if(isCrouch) return;
@@ -109,20 +119,31 @@ namespace _Core.Scripts.Player
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             OnJump?.Invoke();
         }
+        
+        private void JumpHold()
+        {
+            if (playerController.Status.IsFlyMode)
+                velocity.y = speed;
+        }
 
         private void Update()
         {
-            if (isGrounded && velocity.y < 0)
-                velocity.y = -2f;
-            
-            if(isSprint && playerController.Status.Stamina <= 0)
-                StopSprint();
-            
-            velocity.y += gravity * Time.deltaTime;
+            if (!playerController.Status.IsFlyMode)
+            {
+
+                if (isGrounded && velocity.y < 0)
+                    velocity.y = -2f;
+
+                if (isSprint && playerController.Status.Stamina <= 0)
+                    StopSprint();
+
+                velocity.y += gravity * Time.deltaTime;
+            }
+
             controller.Move(velocity * Time.deltaTime);
-            
-            if(isSprint) OnSprint?.Invoke();
+
+            if (isSprint) OnSprint?.Invoke();
         }
-        
+
     }
 }

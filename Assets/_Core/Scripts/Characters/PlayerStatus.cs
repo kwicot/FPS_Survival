@@ -1,6 +1,7 @@
 using System;
 using _Core.Scripts;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace _Core.Scripts.Player
 {
@@ -19,6 +20,8 @@ namespace _Core.Scripts.Player
         [SerializeField] private float staminaBaseRegenSpeed;
         [SerializeField] private float healthBaseRegenSpeed;
 
+        private bool isFlyMode;
+
         public float Stamina { get; private set; }
         public float Health { get; private set; }
 
@@ -30,8 +33,23 @@ namespace _Core.Scripts.Player
         public bool CanJump => Stamina > jumpBaseUseStamina;
         
         public bool InCar { get; set; }
-        
+        public bool IsBuildMode { get; set; }
+        public bool IsFreeBuild { get; set; }
+
+        public bool IsFlyMode
+        {
+            get => isFlyMode;
+            set
+            {
+                isFlyMode = value;
+                OnFlyModeChanged?.Invoke(value);
+            }
+        }
+
         public CarController currentCar { get; set; }
+
+        public UnityEvent<bool> OnFlyModeChanged = new UnityEvent<bool>(); 
+        
 
         public enum PlayerWindow
         {

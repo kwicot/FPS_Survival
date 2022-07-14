@@ -1,6 +1,6 @@
 namespace _Core.Scripts.UI
 {
-    public class StorageItemsView : Window
+    public class StorageItemsView : GameWindow
     {
         public override void Init()
         {

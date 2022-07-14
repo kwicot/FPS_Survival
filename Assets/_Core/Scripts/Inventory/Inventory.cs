@@ -59,11 +59,11 @@ namespace _Core.Scripts.InventorySystem
 
         public bool AddItem(Item newItem, out AddResult addResult)
         {
-            Debug.Log($"max weight {MaxWeight}. Free weight {FreeWeight}. newItem weight {newItem.Weight}. newItem total weight {newItem.TotalWeight}");
+            //Debug.Log($"max weight {MaxWeight}. Free weight {FreeWeight}. newItem weight {newItem.Weight}. newItem total weight {newItem.TotalWeight}");
             if (FreeWeight < newItem.Weight)
             {
                 addResult = AddResult.Fail;
-                Debug.Log($"Cant add {newItem.Name}");
+                //Debug.Log($"Cant add {newItem.Name}");
                 return false;
             }
             //Unstackable item
@@ -73,13 +73,13 @@ namespace _Core.Scripts.InventorySystem
                 {
                     itemsList.Add(newItem);
                     addResult = AddResult.All;
-                    Debug.Log($"Add item {newItem.Name}");
+                    //Debug.Log($"Add item {newItem.Name}");
                     OnStateChanged?.Invoke();
                     return true;
                 }
 
                 addResult = AddResult.Fail;
-                Debug.Log($"Cant add item {newItem.Name}");
+                //Debug.Log($"Cant add item {newItem.Name}");
                 return false;
             }
             //Stackable item
@@ -97,7 +97,7 @@ namespace _Core.Scripts.InventorySystem
                         itemsList.Add(newItem);
 
                     addResult = AddResult.All;
-                    Debug.Log($"Add item {newItem.Name}");
+                    //Debug.Log($"Add item {newItem.Name}");
                     OnStateChanged?.Invoke();
                     return true;
                 }
@@ -127,7 +127,7 @@ namespace _Core.Scripts.InventorySystem
                     }
                     newItem.Count -= canAdd;
                     addResult = AddResult.Part;
-                    Debug.Log($"Add item {newItem.Name}");
+                    //Debug.Log($"Add item {newItem.Name}");
                     OnStateChanged?.Invoke();
                     return true;
                 }
@@ -162,7 +162,7 @@ namespace _Core.Scripts.InventorySystem
             if (GetIndex(item, out int index))
             {
                 itemsList.RemoveAt(index);
-                Debug.Log($"Removed {item.Name}");
+                //Debug.Log($"Removed {item.Name}");
                 return true;
             }
 

@@ -7,7 +7,6 @@ namespace _Core.Scripts.Player
 {
     public class PlayerController : MonoBehaviour
     {
-        [SerializeField] private InputManager input;
         [SerializeField] private PlayerStatus status;
         [SerializeField] private Movement movement;
         [SerializeField] private Inventory inventory;
@@ -16,10 +15,13 @@ namespace _Core.Scripts.Player
         [SerializeField] private CarLook carCamera;
         [SerializeField] private CharacterController characterController;
         
+        private InputManager input => InputManager.Instance;
+        
         public InputManager Input => input;
         public PlayerStatus Status => status;
         public Movement Movement => movement;
         public Inventory Inventory => inventory;
+        public PlayerLook PlayerLook => playerCamera;
 
         private void Start()
         {

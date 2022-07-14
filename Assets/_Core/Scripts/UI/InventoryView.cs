@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace _Core.Scripts.UI
 {
-    public class InventoryView : Window
+    public class InventoryView : GameWindow
     {
         [SerializeField] protected GameObject slotPrefab;
         [SerializeField] protected GameObject itemPrefab;

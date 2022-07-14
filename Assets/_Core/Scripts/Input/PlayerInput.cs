@@ -22,9 +22,11 @@ namespace Player.Core
         [SerializeField] private KeyCode interactKey;
         
         public UnityAction OnJumpPress;
+        public UnityAction OnJumpHold;
         public UnityAction OnJumpRelease;
         
         public UnityAction OnCrouchPress;
+        public UnityAction OnCrouchHold;
         public UnityAction OnCrouchRelease;
         
         public UnityAction OnSprintPress;
@@ -63,9 +65,11 @@ namespace Player.Core
         void UpdateMovementInput()
         {
             if (Input.GetKeyDown(jumpKey)) OnJumpPress?.Invoke(); 
+            if (Input.GetKey(jumpKey)) OnJumpHold?.Invoke();
             if (Input.GetKeyUp(jumpKey)) OnJumpRelease?.Invoke();
             
             if (Input.GetKeyDown(crouchKey)) OnCrouchPress?.Invoke();
+            if (Input.GetKey(crouchKey)) OnCrouchHold?.Invoke();
             if (Input.GetKeyUp(crouchKey)) OnCrouchRelease?.Invoke();
             
             if (Input.GetKeyDown(sprintKey)) OnSprintPress?.Invoke();
@@ -92,7 +96,7 @@ namespace Player.Core
                 if (interactTime > interactHoldTime)
                 {
                     isInteractHold = false;
-                    Debug.Log("Interact hold");
+                    //Debug.Log("Interact hold");
                     OnInteractHold?.Invoke();
                 }
             }
@@ -101,7 +105,7 @@ namespace Player.Core
             {
                 if (interactTime < interactHoldTime)
                 {
-                    Debug.Log("Interact press");
+                    //Debug.Log("Interact press");
                     OnInteractPress?.Invoke();
                 }
                 interactTime = 0;
@@ -119,6 +123,7 @@ namespace Player.Core
             
             if (Input.GetKeyDown(reloadKey)) OnReloadPress?.Invoke();
             if (Input.GetKeyUp(reloadKey)) OnReloadRelease?.Invoke();
+            
         }
 
 

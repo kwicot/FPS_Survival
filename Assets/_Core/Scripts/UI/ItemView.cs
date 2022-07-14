@@ -43,42 +43,7 @@ namespace _Core.Scripts.UI
             countText.text = currentItem.Count.ToString();
         }
 
-        // public void OnPointerDown(PointerEventData eventData)
-        // {
-        //     
-        // }
-        //
-        // public void OnBeginDrag(PointerEventData eventData)
-        // {
-        //     Debug.Log("OnBeginDrag");
-        //     
-        //     canvasGroup.blocksRaycasts = false;
-        //     canvasGroup.alpha = .6f;
-        // }
-        //
-        // public void OnEndDrag(PointerEventData eventData)
-        // {
-        //     transform.SetParent(Slot.transform);
-        //     transform.localPosition = Vector3.zero;
-        //
-        //     
-        //     canvasGroup.blocksRaycasts = true;
-        //     canvasGroup.alpha = 1;
-        //     
-        //     UpdateText();
-        // }
-        //
-        // public void OnDrag(PointerEventData eventData)
-        // {
-        //     rectTransform.anchoredPosition += eventData.delta;
-        // }
-        //
-        // public void ChangeInventory(InventoryView inventory)
-        // {
-        //     invetoryView.Remove(currentItem);
-        //     this.invetoryView = inventory;
-        // }
-
+        
         public void OnPointerClick(PointerEventData eventData)
         {
             Debug.Log("Click");
@@ -87,18 +52,5 @@ namespace _Core.Scripts.UI
             else
                 infoPanel.Init(Item);
         }
-
-        // public void OnPointerEnter(PointerEventData eventData)
-        // {
-        //     hoverTime = 0;
-        //     isMouseHover = true;
-        // }
-        //
-        // public void OnPointerExit(PointerEventData eventData)
-        // {
-        //     isMouseHover = false;
-        //     if (infoPanel)
-        //         Destroy(infoPanel);
-        // }
     }
 }
