@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
+using _Core.Scripts.InventorySystem;
 using _Core.Scripts.Items;
+using _Core.Scripts.UI.Windows;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -81,11 +83,18 @@ namespace _Core.Scripts.UI
         void ProcessDoubleClick()
         {
             Debug.Log("Double click");
-            if (invetoryWindow.MoveItemToAdditionalInventory(Item, out var result))
+            if (invetoryWindow is StorageInventoryWindow)
             {
-            }
+                if ((invetoryWindow as StorageInventoryWindow).MoveToAdditional(Item, out var result))
+                {
+                    if (result == AddResult.All)
+                        invetoryWindow.Remove(Item);
+                }
+
                 Debug.Log(result);
+            }
         }
+
         public void OnPointerClick(PointerEventData eventData)
         {
             clicksCount++;

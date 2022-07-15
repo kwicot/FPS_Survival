@@ -1439,13 +1439,12 @@ MonoBehaviour:
   rootPanel: {fileID: 1825045931828515158}
   additionalWindow: {fileID: 0}
   targetInventory: {fileID: 1825045932743560858}
-  additionalInventory: {fileID: 0}
   slotPrefab: {fileID: 1351261413820431809, guid: ccead96a0daf5ec42a0898ec2d52cb63, type: 3}
   itemPrefab: {fileID: 579170182995335865, guid: 560c1c6e3411ba04884ec21c1ef10e5c, type: 3}
   cellsParent: {fileID: 5709405422902684135}
   currentWeightText: {fileID: 3762600387399928354}
   maxWeightText: {fileID: 2987141352982563120}
-  infoPanel: {fileID: 0}
+  infoPanel: {fileID: 5282494433737338975}
 --- !u!114 &5282494433737338975
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1757,8 +1756,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonsPanel: {fileID: 1825045932031573970}
-  playerInventoryWindow: {fileID: 1825045932247837021}
-  storageInventoryWindow: {fileID: 2327020821890054649}
+  inventoryWindow: {fileID: 1825045932247837021}
+  storageInventoryWindow: {fileID: 2328336236548645154}
   carInteractWindow: {fileID: 5585363867114733416}
 --- !u!1 &1825045932511163575
 GameObject:
@@ -6553,7 +6552,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 14813219354804657}
-  - component: {fileID: 2327020821890054649}
+  - component: {fileID: 2328336236548645154}
   m_Layer: 0
   m_Name: Storage
   m_TagString: Untagged
@@ -6576,7 +6575,7 @@ Transform:
   m_Father: {fileID: 1825045932102958576}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2327020821890054649
+--- !u!114 &2328336236548645154
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6585,19 +6584,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 6581773017064309245}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b7969ae425f47218d69fbed93b60106, type: 3}
+  m_Script: {fileID: 11500000, guid: 42dd2c6e3e5f4374a8ab1995480da7c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   rootPanel: {fileID: 2614884861985408184}
-  additionalWindow: {fileID: 6541276697941116490}
+  additionalWindow: {fileID: 3102515611432956977}
   targetInventory: {fileID: 0}
-  additionalInventory: {fileID: 1825045932743560858}
   slotPrefab: {fileID: 1351261413820431809, guid: ccead96a0daf5ec42a0898ec2d52cb63, type: 3}
   itemPrefab: {fileID: 579170182995335865, guid: 560c1c6e3411ba04884ec21c1ef10e5c, type: 3}
   cellsParent: {fileID: 9166581034350532209}
   currentWeightText: {fileID: 2994456083072169751}
   maxWeightText: {fileID: 7324994053197326750}
   infoPanel: {fileID: 446162784193412837}
+  secondInventoryWindow: {fileID: 3102515611432956977}
 --- !u!1 &6820072412861464116
 GameObject:
   m_ObjectHideFlags: 0
@@ -6910,7 +6909,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9131486491272640999}
-  - component: {fileID: 6541276697941116490}
+  - component: {fileID: 3102515611432956977}
   - component: {fileID: 446162784193412837}
   m_Layer: 0
   m_Name: Player
@@ -6934,7 +6933,7 @@ Transform:
   m_Father: {fileID: 1825045932102958576}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6541276697941116490
+--- !u!114 &3102515611432956977
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6943,19 +6942,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 7073879490053315715}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b7969ae425f47218d69fbed93b60106, type: 3}
+  m_Script: {fileID: 11500000, guid: 42dd2c6e3e5f4374a8ab1995480da7c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   rootPanel: {fileID: 3255639857843244935}
   additionalWindow: {fileID: 0}
   targetInventory: {fileID: 1825045932743560858}
-  additionalInventory: {fileID: 0}
   slotPrefab: {fileID: 1351261413820431809, guid: ccead96a0daf5ec42a0898ec2d52cb63, type: 3}
   itemPrefab: {fileID: 579170182995335865, guid: 560c1c6e3411ba04884ec21c1ef10e5c, type: 3}
   cellsParent: {fileID: 7237035485104380323}
   currentWeightText: {fileID: 7237271924312224359}
   maxWeightText: {fileID: 1692559912420589168}
   infoPanel: {fileID: 446162784193412837}
+  secondInventoryWindow: {fileID: 2328336236548645154}
 --- !u!114 &446162784193412837
 MonoBehaviour:
   m_ObjectHideFlags: 0

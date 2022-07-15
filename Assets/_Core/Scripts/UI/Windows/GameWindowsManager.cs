@@ -10,8 +10,8 @@ namespace _Core.Scripts.UI.Windows
     public class GameWindowsManager : MonoBehaviour
     {
         [SerializeField] private GameObject buttonsPanel;
-        [SerializeField] private InventoryWindow playerInventoryWindow;
-        [SerializeField] private InventoryWindow storageInventoryWindow;
+        [SerializeField] private InventoryWindow inventoryWindow;
+        [SerializeField] private StorageInventoryWindow storageInventoryWindow;
         [SerializeField] private CarInteractWindow carInteractWindow;
 
         private WindowBase currentWindow;
@@ -38,17 +38,17 @@ namespace _Core.Scripts.UI.Windows
 
         private void OnInventoryKeyPressed()
         {
-            if(currentWindow == playerInventoryWindow)
+            if(currentWindow == inventoryWindow)
                 CloseWindow();
             else
                 OpenInventory();
                 
         }
 
-        public void OpenInventory() => OpenWindow(playerInventoryWindow);
+        public void OpenInventory() => OpenWindow(inventoryWindow);
         public void OpenStorageInventory(InventoryBase inventory)
         { 
-            playerInventoryWindow.SetAdditionalInventory(inventory);
+            //playerInventoryWindow.SetAdditionalInventory(inventory);
             storageInventoryWindow.SetInventory(inventory);
             OpenWindow(storageInventoryWindow);
         }
@@ -76,8 +76,8 @@ namespace _Core.Scripts.UI.Windows
             if(currentWindow)
                 currentWindow.Close();
             
-            playerInventoryWindow.SetAdditionalInventory(null);
-            storageInventoryWindow.SetInventory(null);
+            //playerInventoryWindow.SetAdditionalInventory(null);
+            //storageInventoryWindow.SetWindows(null);
 
             currentWindow = null;
             buttonsPanel.SetActive(false);

@@ -12,15 +12,19 @@ namespace _Core.Scripts.UI.MainMenu
         public void Open()
         {
             rootPanel.SetActive(true);
-            additionalWindow?.Open();
+            IsOpen = true;
             OnOpen();
+            additionalWindow?.Open();
         }
 
         public void Close()
         {
+            IsOpen = false;
+            
             OnClose();
-            additionalWindow?.Close();
             rootPanel.SetActive(false);
+            additionalWindow?.Close();
+            
         }
 
         public void Back()

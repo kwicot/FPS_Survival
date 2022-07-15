@@ -59,6 +59,7 @@ namespace _Core.Scripts.InventorySystem
             {
                 itemsList.RemoveAt(index);
                 //Debug.Log($"Removed {item.Name}");
+                OnStateChanged?.Invoke();
                 return true;
             }
 

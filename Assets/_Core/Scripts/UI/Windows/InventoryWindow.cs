@@ -11,19 +11,18 @@ namespace _Core.Scripts.UI
 {
     public class InventoryWindow : WindowBase
     {
-        [SerializeField] private InventoryBase targetInventory;
-        [SerializeField] private InventoryBase additionalInventory;
+        [SerializeField] protected InventoryBase targetInventory;
         
         [SerializeField] protected GameObject slotPrefab;
         [SerializeField] protected GameObject itemPrefab;
         [SerializeField] protected Transform cellsParent;
 
-        [SerializeField] private Text currentWeightText;
-        [SerializeField] private Text maxWeightText;
+        [SerializeField] protected Text currentWeightText;
+        [SerializeField] protected Text maxWeightText;
 
-        [SerializeField] private ItemInfoPanel infoPanel;
+        [SerializeField] protected ItemInfoPanel infoPanel;
 
-        private List<ItemSlot> slots = new List<ItemSlot>();
+        protected List<ItemSlot> slots = new List<ItemSlot>();
 
 
         private void Start()
@@ -33,11 +32,6 @@ namespace _Core.Scripts.UI
         }
 
 
-        public bool MoveItemToAdditionalInventory(Item item,out AddResult result)
-        {
-            result = AddResult.AdditionalInventoryIsNull;
-            return additionalInventory && additionalInventory.AddItem(item, out result);
-        }
         public bool AddItem(Item item,out AddResult result)
         {
             return targetInventory.AddItem(item,out result);
@@ -66,16 +60,7 @@ namespace _Core.Scripts.UI
 
             //Debug.Log($"Set inventory {targetInventory.gameObject.name} to view {rootPanel.name}");
         }
-        public void SetAdditionalInventory(InventoryBase inventory)
-        {
-            additionalInventory = inventory;
-        }
-        private void OnInventoryStateChanged()
-        {
-            if (IsOpen)
-                ReloadSlots();
-        }
-        void ReloadSlots()
+        protected void ReloadSlots()
         {
             ClearSlots();
             InitializeSlots();
