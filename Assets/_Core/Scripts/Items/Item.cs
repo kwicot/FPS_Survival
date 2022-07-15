@@ -11,6 +11,7 @@ namespace _Core.Scripts.Items
         [SerializeField] protected string name;
         [SerializeField] protected float basePrice;
         [SerializeField] protected bool canStack;
+        [SerializeField] protected bool canGrab;
         [SerializeField] protected Sprite image;
         [SerializeField] private float weight;
         [SerializeField] private GameObject prefab;
@@ -21,6 +22,7 @@ namespace _Core.Scripts.Items
         public string Name => name;
         public float BasePrice => basePrice;
         public bool CanStack => canStack;
+        public bool CanGrab => canGrab;
         public float Weight => weight;
 
         public float TotalWeight

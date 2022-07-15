@@ -37,12 +37,12 @@ namespace _Core.Scripts.InventorySystem
 
         public override void AddItem(Item newItem)
         {
-            Debug.Log($"max weight {MaxWeight}. newItem weight {newItem.Weight}. newItem total weight {newItem.TotalWeight}");
+            //Debug.Log($"max weight {MaxWeight}. newItem weight {newItem.Weight}. newItem total weight {newItem.TotalWeight}");
             //Unstackable item
             if (newItem.CanStack == false)
             {
                     itemsList.Add(newItem);
-                    Debug.Log($"Add item {newItem.Name}");
+                    //Debug.Log($"Add item {newItem.Name}");
                     OnStateChanged?.Invoke();
                     return ;
             }
@@ -58,7 +58,7 @@ namespace _Core.Scripts.InventorySystem
                     else
                         itemsList.Add(newItem);
 
-                    Debug.Log($"Add item {newItem.Name}");
+                    //Debug.Log($"Add item {newItem.Name}");
                     OnStateChanged?.Invoke();
                     return;
             }

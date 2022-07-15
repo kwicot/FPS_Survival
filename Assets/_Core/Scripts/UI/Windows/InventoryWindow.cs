@@ -22,7 +22,8 @@ namespace _Core.Scripts.UI
 
         [SerializeField] protected ItemInfoPanel infoPanel;
 
-        protected List<ItemSlot> slots = new List<ItemSlot>();
+        protected List<InventoryItemSlot> slots = new List<InventoryItemSlot>();
+        public InventoryBase TargetInventory => targetInventory;
 
 
         private void Start()
@@ -75,7 +76,7 @@ namespace _Core.Scripts.UI
         void InitializeSlots()
         {
             var items = targetInventory.Items;
-            slots = new List<ItemSlot>();
+            slots = new List<InventoryItemSlot>();
             
             for (int index = 0; index < items.Count; index++)
             {
@@ -95,7 +96,8 @@ namespace _Core.Scripts.UI
         GameObject CreateSlot()
         {
             var slotObject = Instantiate(slotPrefab, cellsParent);
-            var slotController = slotObject.GetComponent<ItemSlot>();
+            var slotController = slotObject.GetComponent<InventoryItemSlot>();
+            slotObject.name = $"Slot_{slots.Count}";
             slotController.Init(this);
             slots.Add(slotController);
             return slotObject;
@@ -119,7 +121,7 @@ namespace _Core.Scripts.UI
                 maxWeightText.text = weightBasedInventory.MaxWeight.ToString();
             }
         }
-        bool GetSlotIndex(ItemSlot slot, out int index)
+        bool GetSlotIndex(InventoryItemSlot slot, out int index)
         {
                 for (int i = 0; i < slots.Count; i++)
                 {

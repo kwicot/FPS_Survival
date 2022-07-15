@@ -27,6 +27,11 @@ namespace _Core.Scripts.InventorySystem
 
         public virtual void AddItem(Item newItem)
         {
+            foreach (var item in itemsList)
+                if (item == newItem) 
+                    return;
+            
+            
             if (newItem.CanStack == false)
             {
                     itemsList.Add(newItem);

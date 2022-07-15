@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 namespace _Core.Scripts.UI
 {
-    public class ItemView : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler//, IPointerEnterHandler, IPointerExitHandler//IPointerDownHandler, IEndDragHandler
+    public class ItemView : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler//, IPointerEnterHandler, IPointerExitHandler//IPointerDownHandler, 
     {
         [SerializeField] private Image itemImage;
         [SerializeField] private TextMeshProUGUI countText;
@@ -22,7 +22,7 @@ namespace _Core.Scripts.UI
         private RectTransform rectTransform;
         private CanvasGroup canvasGroup;
 
-        public ItemSlot Slot { get; set; }
+        public InventoryItemSlot Slot { get; set; }
         public Item Item => currentItem;
 
         private ItemInfoPanel infoPanel;
@@ -38,7 +38,7 @@ namespace _Core.Scripts.UI
             itemImage.sprite = item.Image;
             rectTransform = GetComponent<RectTransform>();
             canvasGroup = GetComponent<CanvasGroup>();
-            Slot = transform.parent.GetComponent<ItemSlot>();
+            Slot = transform.parent.GetComponent<InventoryItemSlot>();
             
             item.OnCountChanged += delegate(int arg0) { UpdateText(); };
             UpdateText();
@@ -69,7 +69,7 @@ namespace _Core.Scripts.UI
             }
         }
 
-        public void ChangeSlot(ItemSlot newSlot)
+        public void ChangeSlot(InventoryItemSlot newSlot)
         {
             transform.SetParent(newSlot.transform);
             transform.localPosition = Vector3.zero;
@@ -98,12 +98,19 @@ namespace _Core.Scripts.UI
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            
+            offset = eventData.position - (Vector2)transform.position;
         }
 
+
+        private Vector2 offset;
         public void OnDrag(PointerEventData eventData)
         {
-            
+            transform.position = eventData.position + offset;
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            transform.localPosition = Vector3.zero;
         }
     }
 }
