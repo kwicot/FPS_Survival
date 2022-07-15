@@ -38,7 +38,11 @@ namespace _Core.Scripts.Player
 
         public UnityAction OnSprint;
         public UnityAction OnJump;
-        
+
+        float Speed => speed / playerController.Inventory.Overweight;
+
+        private float JumpHeight => jumpHeight / playerController.Inventory.Overweight;
+
 
         private void Start()
         {
@@ -62,7 +66,7 @@ namespace _Core.Scripts.Player
         private void Move(float horizontal, float vertical)
         {
             Vector3 move = transform.right * horizontal + transform.forward * vertical;
-            controller.Move(move * speed * Time.deltaTime);
+            controller.Move(move * Speed * Time.deltaTime);
         }
 
         private void StopSprint()
@@ -116,7 +120,7 @@ namespace _Core.Scripts.Player
             if(!isGrounded) return;
             if(isCrouch) return;
 
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            velocity.y = Mathf.Sqrt(JumpHeight * -2f * gravity);
             OnJump?.Invoke();
         }
         
@@ -137,7 +141,7 @@ namespace _Core.Scripts.Player
                 if (isSprint && playerController.Status.Stamina <= 0)
                     StopSprint();
 
-                velocity.y += gravity * Time.deltaTime;
+                velocity.y += gravity * Time.deltaTime * playerController.Inventory.Overweight;
             }
 
             controller.Move(velocity * Time.deltaTime);

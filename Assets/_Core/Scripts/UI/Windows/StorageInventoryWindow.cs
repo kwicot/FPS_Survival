@@ -9,9 +9,9 @@ namespace _Core.Scripts.UI.Windows
     {
         [SerializeField] private StorageInventoryWindow secondInventoryWindow;
 
-        public bool MoveToAdditional(Item item, out AddResult result)
+        public bool MoveToAdditional(Item item)
         {
-            return secondInventoryWindow.AddItem(item, out result);
+            return secondInventoryWindow.AddItem(item);
         }
 
         protected override void OnOpen()

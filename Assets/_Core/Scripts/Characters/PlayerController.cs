@@ -9,7 +9,8 @@ namespace _Core.Scripts.Player
     {
         [SerializeField] private PlayerStatus status;
         [SerializeField] private Movement movement;
-        [SerializeField] private PlayerInventory playerInventory;
+        [SerializeField] private StorageInventory inventory;
+        [SerializeField] private PlayerToolBar toolBar;
         
         [SerializeField] private PlayerLook playerCamera;
         [SerializeField] private CarLook carCamera;
@@ -20,8 +21,9 @@ namespace _Core.Scripts.Player
         public InputManager Input => input;
         public PlayerStatus Status => status;
         public Movement Movement => movement;
-        public PlayerInventory PlayerInventory => playerInventory;
+        public StorageInventory Inventory => inventory;
         public PlayerLook PlayerLook => playerCamera;
+        public PlayerToolBar ToolBar => toolBar;
 
         private void Start()
         {

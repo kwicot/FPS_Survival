@@ -83,12 +83,12 @@ namespace _Core.Scripts.Player
 
         private void OnJump()
         {
-            Stamina -= jumpBaseUseStamina;
+            Stamina -= jumpBaseUseStamina * playerController.Inventory.Overweight;
         }
 
         private void OnSprint()
         {
-            Stamina -= sprintBaseUseStamina * Time.deltaTime;
+            Stamina -= sprintBaseUseStamina * Time.deltaTime * playerController.Inventory.Overweight;
         }
 
         private void Update()
@@ -98,17 +98,12 @@ namespace _Core.Scripts.Player
 
         void Regen()
         {
-            if (Stamina < MaxStamina)
-            {
-                Stamina += staminaBaseRegenSpeed * Time.deltaTime;
+                Stamina += staminaBaseRegenSpeed * Time.deltaTime / playerController.Inventory.Overweight;
                 if (Stamina > MaxStamina) Stamina = MaxStamina;
-            }
+                if (Stamina < 0) Stamina = 0;
 
-            if (Health < MaxHealth)
-            {
                 Health += healthBaseRegenSpeed * Time.deltaTime;
                 if (Health > maxBaseHealth) Health = MaxHealth;
-            }
         }
 
         

@@ -82,16 +82,12 @@ namespace _Core.Scripts.UI
 
         void ProcessDoubleClick()
         {
-            Debug.Log("Double click");
             if (invetoryWindow is StorageInventoryWindow)
             {
-                if ((invetoryWindow as StorageInventoryWindow).MoveToAdditional(Item, out var result))
+                if ((invetoryWindow as StorageInventoryWindow).MoveToAdditional(Item))
                 {
-                    if (result == AddResult.All)
                         invetoryWindow.Remove(Item);
                 }
-
-                Debug.Log(result);
             }
         }
 

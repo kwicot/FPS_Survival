@@ -24,16 +24,14 @@ namespace _Core.Scripts.InventorySystem
         {
             itemsList = new List<Item>();
         }
-        
-        public virtual bool AddItem(Item newItem, out AddResult addResult)
+
+        public virtual void AddItem(Item newItem)
         {
             if (newItem.CanStack == false)
             {
                     itemsList.Add(newItem);
-                    addResult = AddResult.All;
                     //Debug.Log($"Add item {newItem.Name}");
                     OnStateChanged?.Invoke();
-                    return true;
             }
             else
             {
@@ -45,12 +43,9 @@ namespace _Core.Scripts.InventorySystem
                     else
                         itemsList.Add(newItem);
 
-                    addResult = AddResult.All;
                     //Debug.Log($"Add item {newItem.Name}");
                     OnStateChanged?.Invoke();
-                    return true;
             }
-            
         }
         
         public bool RemoveItem(Item item)

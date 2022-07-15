@@ -5,12 +5,12 @@ namespace _Core.Scripts.InventorySystem
 {
     public class ConfiguredStartItems : MonoBehaviour
     {
-        [SerializeField] private PlayerInventory targetPlayerInventory;
+        [SerializeField] private StorageInventory targetStorageInventory;
         [SerializeField] private StartItemsConfig startItemsConfig;
 
         private void Start()
         {
-            if(!targetPlayerInventory)
+            if(!targetStorageInventory)
             {
                 Debug.LogWarning($"Target inventory is null on {gameObject.name}");
                 return;
@@ -23,7 +23,7 @@ namespace _Core.Scripts.InventorySystem
 
             var items = startItemsConfig.GetItems();
             foreach (var item in items)
-                targetPlayerInventory.AddItem(item, out var _);
+                targetStorageInventory.AddItem(item);
 
         }
     }

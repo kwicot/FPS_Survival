@@ -32,9 +32,15 @@ namespace _Core.Scripts.UI
         }
 
 
-        public bool AddItem(Item item,out AddResult result)
+        public bool AddItem(Item item)
         {
-            return targetInventory.AddItem(item,out result);
+            if (targetInventory)
+            {
+                targetInventory.AddItem(item);
+                return true;
+            }
+            else
+                return false;
         }
 
         public bool Remove(Item item)

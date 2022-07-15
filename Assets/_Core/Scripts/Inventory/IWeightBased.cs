@@ -4,6 +4,6 @@ namespace _Core.Scripts.InventorySystem
     {
         public float MaxWeight { get; }
         public float Weight { get; }
-        public float FreeWeight { get; }
+        public float Overweight { get; }
     }
 }
