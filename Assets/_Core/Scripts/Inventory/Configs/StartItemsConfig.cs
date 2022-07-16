@@ -8,12 +8,20 @@ namespace _Core.Scripts.InventorySystem.Configs
     [CreateAssetMenu(fileName = "StartItemsConfig_", menuName = "Inventory/Storage/Start items config", order = 0)]
     public class StartItemsConfig : ScriptableObject
     {
-        [SerializeField] private List<StartItem> startItems;
+        [SerializeField] private List<StartItem<ItemSO>> startItems;
+        [SerializeField] private List<StartItem<WeaponItemSO>> startWeapons;
 
         public List<Item> GetItems()
         {
             var items = new List<Item>();
             foreach (var startItem in startItems)
+            {
+                var item = startItem.itemSO.Model as Item;
+                item.Count = startItem.count;
+                items.Add(item);
+            }
+
+            foreach (var startItem in startWeapons)
             {
                 var item = startItem.itemSO.Model as Item;
                 item.Count = startItem.count;

@@ -1,4 +1,5 @@
 using _Core.Scripts.InventorySystem;
+using _Core.Scripts.Items;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -15,15 +16,27 @@ namespace _Core.Scripts.UI
             this.toolBar = toolBar;
             this.slotIndex = slotIndex;
         }
-        
-        public void OnDrop(PointerEventData eventData)
+
+        protected override void ProcessDroppedItem(ItemViewBase itemView)
         {
-            if (eventData.pointerDrag != null)
+            Debug.Log($"Dropped {itemView.Item.Name}");
+            var item = itemView.Item;
+
+            if (item is WeaponItem)
             {
-                var itemViewObject = eventData.pointerDrag;
-                //var itemView = 
+                Debug.Log($"Its weapon item. Current item is {CurrentItem}");
+                if (CurrentItem)
+                {
+                    Debug.Log("Slot have item");
+                    if (toolBar.MoveToInventory(slotIndex))
+                    {
+                        Debug.Log("Success moved");
+                        toolBar.AddItem(item, slotIndex);
+                    }
+                }
+                else
+                    toolBar.AddItem(item, slotIndex);
             }
         }
-        
     }
 }

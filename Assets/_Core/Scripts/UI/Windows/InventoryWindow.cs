@@ -84,7 +84,7 @@ namespace _Core.Scripts.UI
                 CreateItemView(slot,items[index]);
             }
 
-            CreateSlot();
+            //CreateSlot();
         }
         void CreateItemView(GameObject slot,Item item)
         {

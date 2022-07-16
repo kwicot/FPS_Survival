@@ -79,6 +79,22 @@ namespace _Core.Scripts.InventorySystem
 
             return false;
         }
+        public bool MoveToInventory(int slotIndex)
+        {
+            if (Items[slotIndex] != null)
+            {
+                PlayerInventory.AddItem(Items[slotIndex]);
+                Items[slotIndex] = null;
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool RemoveOnInventory(Item item)
+        {
+    return               PlayerInventory.RemoveItem(item);
+        }
 
     }
 }

@@ -12,8 +12,8 @@ namespace _Core.Scripts.Items
         [SerializeField] protected float basePrice;
         [SerializeField] protected bool canStack;
         [SerializeField] protected Sprite image;
-        [SerializeField] private float weight;
-        [SerializeField] private GameObject prefab;
+        [SerializeField] protected float weight;
+        [SerializeField] protected GameObject prefab;
 
         protected int count;
         

@@ -9,16 +9,22 @@ namespace _Core.Scripts.Items
         [SerializeField] private float baseDamage;
         [SerializeField] AmmoType ammoType;
 
-        public override object Clone(bool copyCount = false)
-        {
-            var clone = base.Clone() as WeaponItem;
-            clone.baseDamage = baseDamage;
-            clone.ammoType = ammoType;
-            return clone;
-        }
+        public override object Clone(bool copyCount = false) => new WeaponItem(id, name, basePrice,canStack,baseDamage,ammoType, weight, image, copyCount ? count : 1);
 
-        public WeaponItem(string id, string name, float basePrice, bool canStack,bool canGrab, float weight, Sprite image, int count = 1) : base(id, name, basePrice, canStack, weight, image, count)
+        public WeaponItem(
+            string id,
+            string name,
+            float basePrice,
+            bool canStack,
+            float baseDamage,
+            AmmoType ammoType,
+            float weight,
+            Sprite image,
+            int count = 1)
+            : base(id, name, basePrice, canStack, weight, image, count)
         {
+            this.baseDamage = baseDamage;
+            this.ammoType = ammoType;
         }
     }
 }

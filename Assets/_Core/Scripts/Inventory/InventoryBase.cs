@@ -27,16 +27,17 @@ namespace _Core.Scripts.InventorySystem
 
         public virtual void AddItem(Item newItem)
         {
-            Debug.Log($"Add item {newItem.Name}. Count {newItem.Count}");
+            //Debug.Log($"Add item {newItem.Name}. Count {newItem.Count}");
 
             if (newItem.CanStack == false)
             {
                 for (int i = 0; i < newItem.Count; i++)
                 {
-                    var item = newItem.Clone() as Item; 
+                    var item = newItem.Clone() as Item;
                     itemsList.Add(item);
                     //Debug.Log($"Add item {newItem.Name}");
                 }
+
                 OnStateChanged?.Invoke();
             }
             else

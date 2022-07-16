@@ -12,6 +12,8 @@ namespace _Core.Scripts.UI
         
         protected Item currentItem;
         protected InventoryBase rootInventory;
+
+        private CanvasGroup canvasGroup;
         
         private float timeFromFirstClick;
         private int clicksCount = 0;
@@ -25,7 +27,7 @@ namespace _Core.Scripts.UI
             
             
             itemImage.sprite = item.Image;
-
+            canvasGroup = GetComponent<CanvasGroup>();
         }
         
         private void Update()
@@ -57,6 +59,7 @@ namespace _Core.Scripts.UI
         public void OnBeginDrag(PointerEventData eventData)
         {
             offset = eventData.position - (Vector2)transform.position;
+            canvasGroup.blocksRaycasts = false;
         }
         private Vector2 offset;
         public void OnDrag(PointerEventData eventData)
@@ -66,6 +69,7 @@ namespace _Core.Scripts.UI
         public void OnEndDrag(PointerEventData eventData)
         {
             transform.localPosition = Vector3.zero;
+            canvasGroup.blocksRaycasts = true;
         }
     }
 }

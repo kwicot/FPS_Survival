@@ -37,12 +37,10 @@ namespace _Core.Scripts.UI
                 {
                     var obj = Instantiate(itemViewPrefab, slots[i].transform);
                     var itemView = obj.GetComponent<ToolbarItemView>();
-                    itemView.Initialize(toolBar.PlayerInventory,item);
+                    itemView.Initialize(toolBar.PlayerInventory,this,item);
                 }
             }
         }
-
-
         void CreateSlots()
         {
             for (int i = 0; i < slots.Length; i++) 
@@ -51,7 +49,6 @@ namespace _Core.Scripts.UI
                 slots[i] = slotObject;
             }
         }
-
         GameObject CreateSlot(int index)
         {
             var obj = Instantiate(slotPrefab, slotsParent);
@@ -70,6 +67,44 @@ namespace _Core.Scripts.UI
                 if(slot)
                     Destroy(slot.gameObject);
             }
+        }
+
+        public bool MoveToInventory(int slotIndex)
+        {
+            var res = toolBar.MoveToInventory(slotIndex);
+            ReloadSlots();
+            return res;
+        }
+        public bool MoveToInventory(Item item)
+        {
+            for (int i = 0; i < toolBar.Items.Length; i++)
+            {
+                var toolBarItem = toolBar.Items[i];
+                if (toolBarItem == item)
+                {
+                    var res = toolBar.MoveToInventory(i);
+                    if (res) res = RemoveItem(i);
+                    ReloadSlots();
+                    return res;
+                }
+            }
+
+            return false;
+
+        }
+        public bool RemoveItem(int slotIndex)
+        {
+            var res = toolBar.RemoveItem(slotIndex);
+            ReloadSlots();
+            return res;
+        }
+
+        public bool AddItem(Item item, int index)
+        {
+            var res = toolBar.AddItem(item, index);
+            if (res) toolBar.RemoveOnInventory(item);
+                ReloadSlots();
+            return res;
         }
     }
 }

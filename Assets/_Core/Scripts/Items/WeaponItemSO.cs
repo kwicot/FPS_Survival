@@ -3,10 +3,10 @@ using UnityEngine;
 namespace _Core.Scripts.Items
 {
     [CreateAssetMenu(fileName = "New WeaponItem", menuName = "Items/Weapon", order = 0)]
-    public class WeaponItemSO : ItemSO
+    public class WeaponItemSO : ScriptableObject
     {
-        [SerializeField] protected Item model;
+        [SerializeField] protected WeaponItem model;
 
-        public override object Model => model.Clone();
+        public object Model => model.Clone();
     }
 }
