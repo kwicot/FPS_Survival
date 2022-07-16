@@ -17,3 +17,8 @@ MonoBehaviour:
     count: 100
   - itemSO: {fileID: 11400000, guid: 6d11175c05f62b14a86986caecccf5f3, type: 2}
     count: 100
+  startWeapons:
+  - itemSO: {fileID: 11400000, guid: 1c1af4f6544a591408cf556fe0b11c46, type: 2}
+    count: 1
+  - itemSO: {fileID: 11400000, guid: 004c52cf0f8bb884d98130c89ece3726, type: 2}
+    count: 2
