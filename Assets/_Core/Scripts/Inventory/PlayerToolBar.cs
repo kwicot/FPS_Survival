@@ -10,16 +10,16 @@ namespace _Core.Scripts.InventorySystem
     public class PlayerToolBar : MonoBehaviour
     {
         [SerializeField] private PlayerController playerController;
-        private StorageInventory playerInventory => playerController.Inventory;
+        public StorageInventory PlayerInventory => playerController.Inventory;
 
-        private Item[] items;
+        public Item[] Items { get; private set; } = new Item[8];
 
         public float Weight
         {
             get
             {
                 float weight = 0;
-                foreach (var item in items)
+                foreach (var item in Items)
                 {
                     if (item != null)
                         weight += item.Weight;
@@ -29,29 +29,26 @@ namespace _Core.Scripts.InventorySystem
             }
         }
         
+        
 
-        private void Start()
-        {
-            items = new Item[8];
-        }
 
         public bool AddItem(Item item, int index)
         {
-            if (items[index] != null) return false;
+            if (Items[index] != null) return false;
             else
             {
-                items[index] = item;
+                Items[index] = item;
                 return true;
             }
         }
 
         public bool AddItem(Item item)
         {
-            for (int i = 0; i < items.Length; i++)
+            for (int i = 0; i < Items.Length; i++)
             {
-                if (items[i] == null)
+                if (Items[i] == null)
                 {
-                    items[i] = item;
+                    Items[i] = item;
                     return true;
                 }
             }
@@ -61,11 +58,11 @@ namespace _Core.Scripts.InventorySystem
 
         public bool RemoveItem(Item item)
         {
-            for (int i = 0; i < items.Length; i++)
+            for (int i = 0; i < Items.Length; i++)
             {
-                if (items[i] == item)
+                if (Items[i] == item)
                 {
-                    items[i] = null;
+                    Items[i] = null;
                     return true;
                 }
             }
@@ -74,9 +71,9 @@ namespace _Core.Scripts.InventorySystem
         }
         public bool RemoveItem(int index)
         {
-            if (items[index] != null)
+            if (Items[index] != null)
             {
-                items[index] = null;
+                Items[index] = null;
                 return true;
             }
 

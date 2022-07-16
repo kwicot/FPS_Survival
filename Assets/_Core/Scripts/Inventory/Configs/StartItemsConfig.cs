@@ -15,7 +15,7 @@ namespace _Core.Scripts.InventorySystem.Configs
             var items = new List<Item>();
             foreach (var startItem in startItems)
             {
-                var item = startItem.itemSO.Model;
+                var item = startItem.itemSO.Model as Item;
                 item.Count = startItem.count;
                 items.Add(item);
             }

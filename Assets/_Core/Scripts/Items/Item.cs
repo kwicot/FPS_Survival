@@ -5,13 +5,12 @@ using UnityEngine.Events;
 namespace _Core.Scripts.Items
 {
     [Serializable]
-    public class Item : ICloneable
+    public class Item
     {
         [SerializeField] protected string id;
         [SerializeField] protected string name;
         [SerializeField] protected float basePrice;
         [SerializeField] protected bool canStack;
-        [SerializeField] protected bool canGrab;
         [SerializeField] protected Sprite image;
         [SerializeField] private float weight;
         [SerializeField] private GameObject prefab;
@@ -22,7 +21,6 @@ namespace _Core.Scripts.Items
         public string Name => name;
         public float BasePrice => basePrice;
         public bool CanStack => canStack;
-        public bool CanGrab => canGrab;
         public float Weight => weight;
 
         public float TotalWeight
@@ -48,11 +46,11 @@ namespace _Core.Scripts.Items
 
         public UnityAction<int> OnCountChanged;
 
-        public object Clone() => new Item(id, name, basePrice,canStack, weight, image);
+        public virtual object Clone(bool copyCount = false) => new Item(id, name, basePrice,canStack, weight, image, copyCount ? count : 1);
 
-        public Item(string id, string name, float basePrice,bool canStack,float weight, Sprite image, int count =1)
+        public Item(string id, string name, float basePrice,bool canStack,float weight, Sprite image, int count)
         {
-            this.Count = 1;
+            this.count = count;
             this.id = id;
             this.name = name;
             this.basePrice = basePrice;

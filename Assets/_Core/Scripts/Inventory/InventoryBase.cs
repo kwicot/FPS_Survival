@@ -27,32 +27,36 @@ namespace _Core.Scripts.InventorySystem
 
         public virtual void AddItem(Item newItem)
         {
-            foreach (var item in itemsList)
-                if (item == newItem) 
-                    return;
-            
-            
+            Debug.Log($"Add item {newItem.Name}. Count {newItem.Count}");
+
             if (newItem.CanStack == false)
             {
-                    itemsList.Add(newItem);
+                for (int i = 0; i < newItem.Count; i++)
+                {
+                    var item = newItem.Clone() as Item; 
+                    itemsList.Add(item);
                     //Debug.Log($"Add item {newItem.Name}");
-                    OnStateChanged?.Invoke();
+                }
+                OnStateChanged?.Invoke();
             }
             else
             {
                     //Add to exist item model
                     if (GetItem(newItem.ID, out var inventoryItem))
+                    {
                         inventoryItem.Count += newItem.Count;
-                    
+                    }
                     //Add new item model
                     else
+                    {
                         itemsList.Add(newItem);
+                    }
 
                     //Debug.Log($"Add item {newItem.Name}");
                     OnStateChanged?.Invoke();
             }
         }
-        
+
         public bool RemoveItem(Item item)
         {
             if (GetIndex(item, out int index))

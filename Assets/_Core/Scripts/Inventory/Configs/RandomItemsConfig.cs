@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using _Core.Scripts.InventorySystem.Models;
 using _Core.Scripts.Items;
+using _Core.Scripts.UI;
 using UnityEngine;
 
 namespace _Core.Scripts.InventorySystem.Configs
@@ -32,7 +33,7 @@ namespace _Core.Scripts.InventorySystem.Configs
             {
                 var count = randomItem.Change;
                 for (int i = 0; i < count; i++)
-                    list.Add(randomItem.ItemSo.Model);
+                    list.Add(randomItem.ItemSo.Model as Item);
             }
             return list;
         }
@@ -91,7 +92,8 @@ namespace _Core.Scripts.InventorySystem.Configs
         {
             foreach (var randomItem in randomItems)
             {
-                if (randomItem.ItemSo.Model.ID == item.ID)
+                
+                if ((randomItem.ItemSo.Model as Item).ID == item.ID)
                 {
                     min = randomItem.MinCount;
                     max = randomItem.MaxCount;

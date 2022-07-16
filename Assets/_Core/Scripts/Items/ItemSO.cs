@@ -2,11 +2,11 @@ using UnityEngine;
 
 namespace _Core.Scripts.Items
 {
-    [CreateAssetMenu(menuName = "Items", fileName = "New Item")]
+    [CreateAssetMenu(fileName = "New Item", menuName = "Items/Item")]
     public class ItemSO : ScriptableObject
     {
-        [SerializeField] private Item model;
+        [SerializeField] protected Item model;
         
-        public Item Model => model.Clone() as Item;
+        public virtual object Model => model.Clone();
     }
 }

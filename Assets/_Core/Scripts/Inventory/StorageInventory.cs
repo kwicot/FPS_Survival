@@ -35,34 +35,5 @@ namespace _Core.Scripts.InventorySystem
             }
         }
 
-        public override void AddItem(Item newItem)
-        {
-            //Debug.Log($"max weight {MaxWeight}. newItem weight {newItem.Weight}. newItem total weight {newItem.TotalWeight}");
-            //Unstackable item
-            if (newItem.CanStack == false)
-            {
-                    itemsList.Add(newItem);
-                    //Debug.Log($"Add item {newItem.Name}");
-                    OnStateChanged?.Invoke();
-                    return ;
-            }
-            //Stackable item
-            else
-            {
-                //Can add all items
-                    //Add to exist item model
-                    if (GetItem(newItem.ID, out var inventoryItem))
-                        inventoryItem.Count += newItem.Count;
-                    
-                    //Add new item model
-                    else
-                        itemsList.Add(newItem);
-
-                    //Debug.Log($"Add item {newItem.Name}");
-                    OnStateChanged?.Invoke();
-                    return;
-            }
-            
-        }
     }
 }

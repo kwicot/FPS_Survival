@@ -4,14 +4,16 @@ using UnityEngine.EventSystems;
 
 namespace _Core.Scripts.UI
 {
-    public class ToolbarItemSlot : MonoBehaviour, IDropHandler
+    public class ToolbarItemSlot : ItemSlotBase
     {
         [SerializeField] private int slotIndex;
-        private PlayerToolBar toolBar;
+        private ToolBarView toolBar;
 
-        public void Init(PlayerToolBar toolBar)
+        public void Initialize(InventoryBase rootInventory,ToolBarView toolBar,int slotIndex)
         {
+            base.Initialize(rootInventory);
             this.toolBar = toolBar;
+            this.slotIndex = slotIndex;
         }
         
         public void OnDrop(PointerEventData eventData)
@@ -19,7 +21,7 @@ namespace _Core.Scripts.UI
             if (eventData.pointerDrag != null)
             {
                 var itemViewObject = eventData.pointerDrag;
-                var itemView = 
+                //var itemView = 
             }
         }
         

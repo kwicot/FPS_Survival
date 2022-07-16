@@ -22,7 +22,7 @@ namespace _Core.Scripts.UI
 
         [SerializeField] protected ItemInfoPanel infoPanel;
 
-        protected List<InventoryItemSlot> slots = new List<InventoryItemSlot>();
+        protected List<ItemSlotBase> slots = new List<ItemSlotBase>();
         public InventoryBase TargetInventory => targetInventory;
 
 
@@ -76,7 +76,7 @@ namespace _Core.Scripts.UI
         void InitializeSlots()
         {
             var items = targetInventory.Items;
-            slots = new List<InventoryItemSlot>();
+            slots = new List<ItemSlotBase>();
             
             for (int index = 0; index < items.Count; index++)
             {
@@ -90,15 +90,15 @@ namespace _Core.Scripts.UI
         {
 
             var itemObject = Instantiate(itemPrefab, slot.transform);
-            var itemController = itemObject.GetComponent<ItemView>();
-            itemController.Init(item,this,infoPanel);
+            var itemController = itemObject.GetComponent<PlayerItemView>();
+            itemController.Initialize(targetInventory,item,this,infoPanel);
         }
         GameObject CreateSlot()
         {
             var slotObject = Instantiate(slotPrefab, cellsParent);
-            var slotController = slotObject.GetComponent<InventoryItemSlot>();
+            var slotController = slotObject.GetComponent<ItemSlotBase>();
             slotObject.name = $"Slot_{slots.Count}";
-            slotController.Init(this);
+            slotController.Initialize(targetInventory);
             slots.Add(slotController);
             return slotObject;
         }
@@ -121,11 +121,11 @@ namespace _Core.Scripts.UI
                 maxWeightText.text = weightBasedInventory.MaxWeight.ToString();
             }
         }
-        bool GetSlotIndex(InventoryItemSlot slot, out int index)
+        bool GetSlotIndex(ItemSlotBase slotBase, out int index)
         {
                 for (int i = 0; i < slots.Count; i++)
                 {
-                    if (slots[i] == slot)
+                    if (slots[i] == slotBase)
                     {
                         index = i;
                         return true;
