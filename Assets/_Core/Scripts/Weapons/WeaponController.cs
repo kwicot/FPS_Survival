@@ -15,6 +15,11 @@ namespace _Core.Scripts.Weapons
             Debug.Log($"velocity {velocity}");
         }
 
+        protected override void Initialize()
+        {
+            
+        }
+
         protected override void LeftMousePress()
         {
             

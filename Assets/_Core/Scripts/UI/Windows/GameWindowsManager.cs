@@ -13,6 +13,7 @@ namespace _Core.Scripts.UI.Windows
         [SerializeField] private InventoryWindow inventoryWindow;
         [SerializeField] private StorageInventoryWindow storageInventoryWindow;
         [SerializeField] private CarInteractWindow carInteractWindow;
+        [SerializeField] private BuildMenuWindow buildMenuWindow;
 
         private WindowBase currentWindow;
 
@@ -46,6 +47,7 @@ namespace _Core.Scripts.UI.Windows
         }
 
         public void OpenInventory() => OpenWindow(inventoryWindow);
+        public void OpenBuildMenu() => OpenWindow(buildMenuWindow);
         public void OpenStorageInventory(InventoryBase inventory)
         { 
             //playerInventoryWindow.SetAdditionalInventory(inventory);
@@ -58,6 +60,7 @@ namespace _Core.Scripts.UI.Windows
             carInteractWindow.SetCarController(carController);
             OpenWindow(carInteractWindow);
         }
+
 
         void OpenWindow(WindowBase window)
         {

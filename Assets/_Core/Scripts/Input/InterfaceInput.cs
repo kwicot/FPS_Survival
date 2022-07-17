@@ -10,6 +10,7 @@ namespace _Core.Scripts.Input
 
         public KeyCode InventoryKey => InputManager.Instance.KeyBindData.OpenInventoryKey;
         public KeyCode TakeAllKey => InputManager.Instance.KeyBindData.TakeAllItemsKey;
+        public KeyCode OpenBuildMenukey => InputManager.Instance.KeyBindData.OpenBuildMenuKey;
 
         
         public UnityAction OnTakeAllKeyPress;
@@ -19,12 +20,15 @@ namespace _Core.Scripts.Input
         public UnityAction OnQuestsKeyPress;
         public UnityAction OnSkillsKeyPress;
         public UnityAction OnMapKeyPress;
-        public UnityAction OnCloseWindowPress;
 
+        public UnityAction OnOpenBuildMenuKeyPress;
+
+        public UnityAction OnCloseWindowPress;
 
         private void Update()
         {
             if(UnityEngine.Input.GetKeyDown(InventoryKey)) OnInventoryKeyPress?.Invoke();
+            if(UnityEngine.Input.GetKeyDown(OpenBuildMenukey)) OnOpenBuildMenuKeyPress?.Invoke(); 
                 
                 
                 

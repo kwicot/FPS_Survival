@@ -34,18 +34,15 @@ namespace _Core.Scripts.Build
                 }
             }
         }
-
-        public void SelectBlock(int index)
-        {
-            isBuildMode = true;
-            phantomObject = Instantiate(blocksHolder.Blocks[index]);
-        }
-
+        // public void SelectBlock(int index)
+        // {
+        //     isBuildMode = true;
+        //     phantomObject = Instantiate(blocksHolder.Blocks[index]);
+        // }
         void DrawPhantom(Vector3 position)
         {
             phantomObject.transform.position = Vector3Int.RoundToInt(Vector3.positiveInfinity);
         }
-
         void PlaceFullBlock(Vector3 position)
         {
             if (playerController.Status.IsFreeBuild)
@@ -53,13 +50,10 @@ namespace _Core.Scripts.Build
                 
             }
         }
-
         public void Place()
         {
             
         }
-        
-
         public void Destroy()
         {
             

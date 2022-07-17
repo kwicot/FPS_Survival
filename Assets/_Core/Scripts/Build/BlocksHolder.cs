@@ -6,7 +6,6 @@ namespace _Core.Scripts.Build
     public class BlocksHolder : ScriptableObject
     {
         [SerializeField] private GameObject[] blocks;
-
-        public GameObject[] Blocks => blocks;
+        public GameObject[] AllBlocks => blocks;
     }
 }

@@ -10,16 +10,25 @@ namespace _Core.Scripts.Weapons
         [SerializeField] protected Animator animator;
         protected PlayerController playerController;
 
-        private void Awake()
+        private void Start()
         {
             animationController = GetComponent<AnimationControllerBase>();
             playerController = GetComponentInParent<PlayerController>();
-
-            playerController.Input.PlayerInput.OnAttack1Press += LeftMousePress;
-            playerController.Input.PlayerInput.OnAttack1Release += LeftMouseRelease;
-            playerController.Input.PlayerInput.OnAttack2Press += RightMousePress;
-            playerController.Input.PlayerInput.OnAttack2Release += RightMouseRelease;
+            
+            Initialize();
         }
+
+        protected abstract void Initialize();
+        
+
+        private void OnDestroy()
+        {
+            playerController.Input.PlayerInput.OnAttack1Press -= LeftMousePress;
+            playerController.Input.PlayerInput.OnAttack1Release -= LeftMouseRelease;
+            playerController.Input.PlayerInput.OnAttack2Press -= RightMousePress;
+            playerController.Input.PlayerInput.OnAttack2Release -= RightMouseRelease;
+        }
+
         protected abstract void LeftMousePress();
         protected abstract void LeftMouseRelease();
         protected abstract void RightMousePress();

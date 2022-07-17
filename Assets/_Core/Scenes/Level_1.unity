@@ -10352,6 +10352,7 @@ MonoBehaviour:
   inventoryWindow: {fileID: 1825045933427803046}
   storageInventoryWindow: {fileID: 2328336237804243929}
   carInteractWindow: {fileID: 5585363867279021459}
+  buildMenuWindow: {fileID: 0}
 --- !u!114 &1003307051831987917
 MonoBehaviour:
   m_ObjectHideFlags: 0

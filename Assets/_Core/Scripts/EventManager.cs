@@ -23,6 +23,7 @@ namespace _Core.Scripts
         public static UnityAction OnStopSprint;
 
         public static UnityAction<WeaponItem> OnItemSelected;
+        public static UnityAction<string> OnBlockSelected;
 
 
         private void Awake()

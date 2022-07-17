@@ -21,6 +21,9 @@ namespace _Core.Scripts.Input
         [SerializeField] private KeyCode openSkillsKey;
         [SerializeField] private KeyCode openMapKey;
         [SerializeField] private KeyCode takeAllItemsKey;
+        [SerializeField] private KeyCode openBuildMenuKey;
+        [SerializeField] private KeyCode openDebugMenuKey;
+
 
         public KeyCode JumpKey => jumpKey;
         public KeyCode CrouchKey => crouchKey;
@@ -36,5 +39,7 @@ namespace _Core.Scripts.Input
         public KeyCode OpenSkillsKey => openSkillsKey;
         public KeyCode OpenMapKey => openMapKey;
         public KeyCode TakeAllItemsKey => takeAllItemsKey;
+        public KeyCode OpenBuildMenuKey => openBuildMenuKey;
+        public KeyCode OpenDebugMenuKey => openDebugMenuKey;
     }
 }
