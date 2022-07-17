@@ -89,3 +89,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce305f9b6fe74090ac33137272b43a8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotIndex: 0
+  normalColor: {r: 1, g: 1, b: 1, a: 0.39215687}
+  selectedColor: {r: 0.4433962, g: 0.4433962, b: 0.4433962, a: 0.39215687}

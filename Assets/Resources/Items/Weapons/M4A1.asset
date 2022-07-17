@@ -20,5 +20,6 @@ MonoBehaviour:
     image: {fileID: 21300000, guid: d26b3389f035a6245b30b6eff3383699, type: 3}
     weight: 10
     prefab: {fileID: 0}
+    weaponConfig: {fileID: 11400000, guid: 9a46437faca1f43479145b15338008f3, type: 2}
     baseDamage: 10
     ammoType: 1

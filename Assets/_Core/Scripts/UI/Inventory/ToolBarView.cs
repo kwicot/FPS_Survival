@@ -18,6 +18,7 @@ namespace _Core.Scripts.UI
         private void Start()
         {
             ReloadSlots();
+            EventManager.OnItemSelected += delegate(WeaponItem arg0) { ReloadSlots(); };
         }
 
         void ReloadSlots()
@@ -55,7 +56,7 @@ namespace _Core.Scripts.UI
                 var slot = obj.GetComponent<ToolbarItemSlot>();
 
                 obj.transform.name = $"ToolbarSlot_{index}";
-                slot.Initialize(toolBar.PlayerInventory,this,index);
+                slot.Initialize(toolBar.PlayerInventory,this,index,toolBar.SelectedSlot == index);
                 
             return obj;
         }

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -29,6 +30,7 @@ namespace _Core.Scripts.Player
         private CharacterController controller;
         private Vector3 velocity;
         private float speed;
+        private Vector3 positionOnLastFrame;
         
         
         public bool isGrounded => Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
@@ -42,6 +44,8 @@ namespace _Core.Scripts.Player
         float Speed => speed / playerController.Inventory.Overweight;
 
         private float JumpHeight => jumpHeight / playerController.Inventory.Overweight;
+
+        public float Velocity { get ; private set; }
 
 
         private void Start()

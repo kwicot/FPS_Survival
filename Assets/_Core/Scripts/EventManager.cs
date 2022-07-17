@@ -1,4 +1,5 @@
 using System;
+using _Core.Scripts.Items;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -20,7 +21,9 @@ namespace _Core.Scripts
 
         public static UnityAction OnStartSprint;
         public static UnityAction OnStopSprint;
-        
+
+        public static UnityAction<WeaponItem> OnItemSelected;
+
 
         private void Awake()
         {

@@ -28,8 +28,25 @@ namespace _Core.Scripts.InventorySystem
                 return weight;
             }
         }
-        
-        
+        public int SelectedSlot { get; private set; }
+
+        private void Update()
+        {
+            if(UnityEngine.Input.GetKeyDown(KeyCode.Alpha1)) Select(0);
+            if(UnityEngine.Input.GetKeyDown(KeyCode.Alpha2)) Select(1);
+            if(UnityEngine.Input.GetKeyDown(KeyCode.Alpha3)) Select(2);
+            if(UnityEngine.Input.GetKeyDown(KeyCode.Alpha4)) Select(3);
+            if(UnityEngine.Input.GetKeyDown(KeyCode.Alpha5)) Select(4);
+            if(UnityEngine.Input.GetKeyDown(KeyCode.Alpha6)) Select(5);
+            if(UnityEngine.Input.GetKeyDown(KeyCode.Alpha7)) Select(6);
+            if(UnityEngine.Input.GetKeyDown(KeyCode.Alpha8)) Select(7);
+        }
+
+        void Select(int index)
+        {
+            SelectedSlot = index;
+            EventManager.OnItemSelected?.Invoke(Items[index] as WeaponItem);
+        }
 
 
         public bool AddItem(Item item, int index)
@@ -41,7 +58,6 @@ namespace _Core.Scripts.InventorySystem
                 return true;
             }
         }
-
         public bool AddItem(Item item)
         {
             for (int i = 0; i < Items.Length; i++)
@@ -55,7 +71,6 @@ namespace _Core.Scripts.InventorySystem
 
             return false;
         }
-
         public bool RemoveItem(Item item)
         {
             for (int i = 0; i < Items.Length; i++)
@@ -90,7 +105,6 @@ namespace _Core.Scripts.InventorySystem
 
             return false;
         }
-
         public bool RemoveOnInventory(Item item)
         {
     return               PlayerInventory.RemoveItem(item);

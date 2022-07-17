@@ -2,19 +2,27 @@ using _Core.Scripts.InventorySystem;
 using _Core.Scripts.Items;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace _Core.Scripts.UI
 {
     public class ToolbarItemSlot : ItemSlotBase
     {
         [SerializeField] private int slotIndex;
+        [SerializeField] private Color normalColor;
+        [SerializeField] private Color selectedColor;
         private ToolBarView toolBar;
 
-        public void Initialize(InventoryBase rootInventory,ToolBarView toolBar,int slotIndex)
+        public void Initialize(InventoryBase rootInventory,ToolBarView toolBar,int slotIndex,bool isSelected)
         {
             base.Initialize(rootInventory);
             this.toolBar = toolBar;
             this.slotIndex = slotIndex;
+
+            if (isSelected)
+                GetComponent<Image>().color = selectedColor;
+            else
+                GetComponent<Image>().color = normalColor;
         }
 
         protected override void ProcessDroppedItem(ItemViewBase itemView)
