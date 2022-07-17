@@ -64,6 +64,10 @@ namespace _Core.Scripts
                 {
                     var valueColor = heightMapTexture.GetPixel(x, y);
                     var height = (valueColor.r + valueColor.g + valueColor.b) / 3;
+
+                    
+
+
                     heightMap[x, y] = height;
                 }
 

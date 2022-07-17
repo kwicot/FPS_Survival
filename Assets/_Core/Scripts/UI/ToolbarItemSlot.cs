@@ -19,7 +19,7 @@ namespace _Core.Scripts.UI
             if (eventData.pointerDrag != null)
             {
                 var itemViewObject = eventData.pointerDrag;
-                var itemView = 
+                //var itemView = 
             }
         }
         
