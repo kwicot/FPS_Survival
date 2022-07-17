@@ -114,3 +114,5 @@ MonoBehaviour:
   name: "\u041A\u0438\u0440\u043F\u0438\u0447"
   startHealth: 100
   itemsToBuild: []
+  sprite: {fileID: 0}
+  cellSize: 0

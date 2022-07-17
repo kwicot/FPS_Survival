@@ -1,4 +1,5 @@
 using System;
+using _Core.Scripts.Input;
 using _Core.Scripts.Items;
 using _Core.Scripts.UI.Windows;
 using UnityEngine;
@@ -12,8 +13,9 @@ namespace _Core.Scripts.Weapons
         
         protected override void Initialize()
         {
-            playerController.Input.InterfaceInput.OnOpenBuildMenuKeyPress += OpenBuildMenu;
             EventManager.OnBlockSelected += OnSelectblock;
+            InputManager.Instance.InterfaceInput.OnBuildMenuKeyPress += OpenBuildMenu;
+
         }
 
         private void OnSelectblock(string arg0)

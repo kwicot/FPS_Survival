@@ -14,6 +14,7 @@ namespace _Core.Scripts.UI.Windows
         [SerializeField] private StorageInventoryWindow storageInventoryWindow;
         [SerializeField] private CarInteractWindow carInteractWindow;
         [SerializeField] private BuildMenuWindow buildMenuWindow;
+        [SerializeField] private DebugWindow debugWindow;
 
         private WindowBase currentWindow;
 
@@ -35,6 +36,8 @@ namespace _Core.Scripts.UI.Windows
             InputManager.Instance.InterfaceInput.OnInventoryKeyPress += OnInventoryKeyPressed;
 
             EventManager.OnEnterCar += delegate(CarController arg0) { CloseWindow(); };
+            InputManager.Instance.InterfaceInput.OnDebugMenuKeyPress += OpenDebugWindow;
+
         }
 
         private void OnInventoryKeyPressed()
@@ -47,7 +50,22 @@ namespace _Core.Scripts.UI.Windows
         }
 
         public void OpenInventory() => OpenWindow(inventoryWindow);
-        public void OpenBuildMenu() => OpenWindow(buildMenuWindow);
+
+        public void OpenDebugWindow()
+        {
+            if(currentWindow == debugWindow)
+                CloseWindow();
+            else
+                OpenWindow(debugWindow);
+        }
+
+        public void OpenBuildMenu()
+        {
+            if(currentWindow == buildMenuWindow)
+                CloseWindow();
+            else
+                OpenWindow(buildMenuWindow);   
+        }
         public void OpenStorageInventory(InventoryBase inventory)
         { 
             //playerInventoryWindow.SetAdditionalInventory(inventory);

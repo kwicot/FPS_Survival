@@ -11,13 +11,14 @@ namespace Blocks.Core
         [SerializeField] protected float startHealth;
         [SerializeField] protected BlockItem[] itemsToBuild;
         [SerializeField] protected Sprite sprite;
+        [SerializeField] private float cellSize;
 
         private BlockItem[] currentItems;
         private float currentHealth;
 
         public string ID => id;
         public string Name => name;
-
         public Sprite Sprite => sprite;
+        public float CellSize => cellSize;
     }
 }

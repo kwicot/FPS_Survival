@@ -53,7 +53,7 @@ namespace _Core.Scripts.Player
             controller = GetComponent<CharacterController>();
             
             playerController.Input.PlayerInput.OnJumpPress += Jump;
-            playerController.Input.PlayerInput.OnJumpHold += JumpHold;
+            playerController.Input.PlayerInput.OnJumpRelease += JumpHoldRelease;
             playerController.Input.PlayerInput.OnCrouchPress += StartCrouch;
             playerController.Input.PlayerInput.OnCrouchHold += OnCrouchHold;
             playerController.Input.PlayerInput.OnCrouchRelease += StopCrouch;
@@ -65,6 +65,7 @@ namespace _Core.Scripts.Player
             speed = moveSpeed;
         }
 
+        
 
 
         private void Move(float horizontal, float vertical)
@@ -92,6 +93,11 @@ namespace _Core.Scripts.Player
 
         private void StopCrouch()
         {
+            if (playerController.Status.IsFlyMode)
+            {
+                velocity.y = 0;
+                return;
+            }
             if(!isCrouch) return;
             
             controller.height = normalHeight;
@@ -119,7 +125,11 @@ namespace _Core.Scripts.Player
 
         private void Jump()
         {
-            if(playerController.Status.IsFlyMode) return;            
+            if (playerController.Status.IsFlyMode)
+            {
+                velocity.y = speed;
+                return;
+            }          
             if(!playerController.Status.CanJump) return;
             if(!isGrounded) return;
             if(isCrouch) return;
@@ -128,10 +138,10 @@ namespace _Core.Scripts.Player
             OnJump?.Invoke();
         }
         
-        private void JumpHold()
+        private void JumpHoldRelease()
         {
             if (playerController.Status.IsFlyMode)
-                velocity.y = speed;
+                velocity.y = 0;
         }
 
         private void Update()

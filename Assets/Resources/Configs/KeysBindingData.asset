@@ -25,3 +25,5 @@ MonoBehaviour:
   openSkillsKey: 46
   openMapKey: 46
   takeAllItemsKey: 114
+  openBuildMenuKey: 113
+  openDebugMenuKey: 112

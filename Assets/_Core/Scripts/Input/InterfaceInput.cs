@@ -10,7 +10,8 @@ namespace _Core.Scripts.Input
 
         public KeyCode InventoryKey => InputManager.Instance.KeyBindData.OpenInventoryKey;
         public KeyCode TakeAllKey => InputManager.Instance.KeyBindData.TakeAllItemsKey;
-        public KeyCode OpenBuildMenukey => InputManager.Instance.KeyBindData.OpenBuildMenuKey;
+        public KeyCode BuildMenukey => InputManager.Instance.KeyBindData.OpenBuildMenuKey;
+        public KeyCode DebugMenuKey => InputManager.Instance.KeyBindData.OpenDebugMenuKey;
 
         
         public UnityAction OnTakeAllKeyPress;
@@ -21,17 +22,19 @@ namespace _Core.Scripts.Input
         public UnityAction OnSkillsKeyPress;
         public UnityAction OnMapKeyPress;
 
-        public UnityAction OnOpenBuildMenuKeyPress;
+        public UnityAction OnBuildMenuKeyPress;
+        public UnityAction OnDebugMenuKeyPress;
 
         public UnityAction OnCloseWindowPress;
 
         private void Update()
         {
             if(UnityEngine.Input.GetKeyDown(InventoryKey)) OnInventoryKeyPress?.Invoke();
-            if(UnityEngine.Input.GetKeyDown(OpenBuildMenukey)) OnOpenBuildMenuKeyPress?.Invoke(); 
-                
-                
-                
+            if(UnityEngine.Input.GetKeyDown(BuildMenukey)) OnBuildMenuKeyPress?.Invoke(); 
+            if(UnityEngine.Input.GetKeyDown(DebugMenuKey)) OnDebugMenuKeyPress?.Invoke();
+
+
+
             if(!IsEnable) return;
             
             if(UnityEngine.Input.GetKeyDown(KeyCode.Escape)) OnCloseWindowPress?.Invoke();
