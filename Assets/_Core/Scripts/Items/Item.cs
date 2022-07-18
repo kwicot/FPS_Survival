@@ -13,7 +13,6 @@ namespace _Core.Scripts.Items
         [SerializeField] protected bool canStack;
         [SerializeField] protected Sprite image;
         [SerializeField] protected float weight;
-        [SerializeField] protected GameObject prefab;
 
         protected int count;
         
@@ -42,7 +41,6 @@ namespace _Core.Scripts.Items
             }
         }
         public Sprite Image => image;
-        public GameObject Prefab => prefab;
 
         public UnityAction<int> OnCountChanged;
 

@@ -39,5 +39,10 @@ namespace _Core.Scripts.Weapons
         {
             
         }
+
+        protected override void ReloadPressed()
+        {
+            
+        }
     }
 }

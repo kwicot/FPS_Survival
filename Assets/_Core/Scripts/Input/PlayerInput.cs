@@ -118,7 +118,11 @@ namespace Player.Core
 
         void UpdateInput()
         {
-            if (Input.GetKeyDown(Attack1Key)) OnAttack1Press?.Invoke();
+            if (Input.GetKeyDown(Attack1Key))
+            {
+                Debug.Log("Mouse 0 pressed");
+                OnAttack1Press?.Invoke();
+            }
             if (Input.GetKeyUp(Attack1Key)) OnAttack1Release?.Invoke();
             
             if (Input.GetKeyDown(Attack2Key)) OnAttack2Press?.Invoke();

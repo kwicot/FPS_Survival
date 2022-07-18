@@ -1,5 +1,6 @@
 using System;
 using _Core.Scripts.Items;
+using _Core.Scripts.Weapons;
 using UnityEngine;
 
 namespace _Core.Scripts.Player
@@ -7,6 +8,7 @@ namespace _Core.Scripts.Player
     public class HandItemsController : MonoBehaviour
     {
         [SerializeField] private Transform prefabsParent;
+        [SerializeField] private PlayerController playerController;
 
         private WeaponItem currentItem;
         private GameObject currentPrefab;

@@ -92,8 +92,9 @@ namespace _Core.Scripts.UI.Windows
             buttonsPanel.SetActive(true);
         }
 
-        private void CloseWindow()
+        public void CloseWindow()
         {
+            Debug.Log("Close");
             if(currentWindow)
                 currentWindow.Close();
             

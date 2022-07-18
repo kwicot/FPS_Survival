@@ -39,11 +39,12 @@ namespace _Core.Scripts.UI.Windows
                 string blockName = blockScript.Name;
                 Sprite blockSprite = blockScript.Sprite;
                 bool isSelected = selectedBlock == blockName;
+                string blockId = blockScript.ID;
 
                 cell.Init(blockSprite,blockName, isSelected, delegate
                 {
-                    SelectBlock(blockName);
-                    Close();
+                    SelectBlock(blockId);
+                    GameWindowsManager.Instance.CloseWindow();
                 });
             }
         }
