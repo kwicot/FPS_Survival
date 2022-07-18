@@ -13,6 +13,7 @@ namespace _Core.Scripts.Weapons
     public class BuilderController : ItemControllerBase
     {
         [SerializeField] private BlocksHolder blocksHolder;
+        [SerializeField] private LayerMask raycastLayer;
         private Dictionary<string, GameObject> blocksMap => blocksHolder.BlockMap;
 
         private GameObject currentBlock;
@@ -45,7 +46,7 @@ namespace _Core.Scripts.Weapons
             {
                 if (GetHit(out var position))
                 {
-                    currentBlock.transform.position = Vector3Int.RoundToInt(position);
+                    currentBlock.transform.position = position;
                     currentBlock.transform.rotation = rotations[currentRotation];
                 }
             }
@@ -91,24 +92,28 @@ namespace _Core.Scripts.Weapons
         {
             var ray = new Ray(playerController.PlayerLook.transform.position,
                 playerController.PlayerLook.transform.forward);
-            var hits = (Physics.RaycastAll(ray));
-            foreach (var raycastHit in hits)
+
+            Debug.DrawRay(ray.origin,ray.direction,Color.red);
+            if (Physics.Raycast(ray, out var hit, raycastLayer))
             {
-                if (raycastHit.transform.CompareTag("Terrain"))
+                if (hit.transform.TryGetComponent(out BaseBlock block))
                 {
-                    var pos = raycastHit.point + (raycastHit.normal / 2);
+                    Debug.Log($"Hit in {hit.transform.name}");
+                    //Debug.Log("Its block");
+                    var pos = hit.transform.position + hit.normal;
                     position = Vector3Int.RoundToInt(pos);
                     return true;
                 }
-
-                if (raycastHit.transform.TryGetComponent(out BaseBlock block))
+                else if (hit.transform.CompareTag("Terrain"))
                 {
-                    var pos = raycastHit.transform.position + raycastHit.normal;
+                    //Debug.Log("Its terrain");
+                    var pos = hit.point;
                     position = Vector3Int.RoundToInt(pos);
                     return true;
                 }
             }
 
+            //Debug.Log($"No need hits. Other hits {hits.Length}");
             position = Vector3.zero;
             return false;
         }

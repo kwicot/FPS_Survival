@@ -1845,13 +1845,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animationController: {fileID: 0}
   animator: {fileID: 7364567164581669810}
+  playerController: {fileID: 0}
   blocksHolder: {fileID: 11400000, guid: 311007c747e903d40804b7aa8c8bf344, type: 2}
-  ignoreRaycastLayer:
+  raycastLayer:
     serializedVersion: 2
-    m_Bits: 4
-  blockLayer:
-    serializedVersion: 2
-    m_Bits: 16384
+    m_Bits: 16392
 --- !u!1 &7451077429616226674
 GameObject:
   m_ObjectHideFlags: 0
