@@ -1,3 +1,4 @@
+using System;
 using _Core.Scripts.Items;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -11,7 +12,7 @@ namespace Blocks.Core
         [SerializeField] protected float startHealth;
         [SerializeField] protected BlockItem[] itemsToBuild;
         [SerializeField] protected Sprite sprite;
-        [SerializeField] private float cellSize;
+        [SerializeField] private BuildCellSize cellStep;
 
         private BlockItem[] currentItems;
         private float currentHealth;
@@ -19,6 +20,14 @@ namespace Blocks.Core
         public string ID => id;
         public string Name => name;
         public Sprite Sprite => sprite;
-        public float CellSize => cellSize;
+        public BuildCellSize CellSizeDevide => cellStep;
+
+    }
+
+    public enum BuildCellSize
+    {
+        normal = 1,
+        small = 2,
+        verySmall = 4
     }
 }

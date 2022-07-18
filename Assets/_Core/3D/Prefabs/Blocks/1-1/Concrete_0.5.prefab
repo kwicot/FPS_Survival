@@ -110,9 +110,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3da866fc798f70458d2dc1093418950, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 401
+  id: 4
   name: "\u0411\u0435\u0442\u043E\u043D 1\\2"
   startHealth: 100
   itemsToBuild: []
   sprite: {fileID: 0}
-  cellSize: 0
+  cellStep: 1

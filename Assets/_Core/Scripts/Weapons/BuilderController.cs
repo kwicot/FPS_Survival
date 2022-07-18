@@ -99,15 +99,23 @@ namespace _Core.Scripts.Weapons
                 {
                     Debug.Log($"Hit in {hit.transform.name}");
                     //Debug.Log("Its block");
-                    var pos = hit.transform.position + hit.normal;
-                    position = Vector3Int.RoundToInt(pos);
+                    var curBlockScript = currentBlock.GetComponent<BaseBlock>();
+                    var hitBlockScript = hit.transform.GetComponent<BaseBlock>();
+                    Vector3 pos;
+
+                    if (curBlockScript.CellSizeDevide != hitBlockScript.CellSizeDevide)
+                        pos = hit.point + (hit.normal * (currentBlock.transform.localScale.x - 0.05f));
+                    else
+                        pos = hit.transform.position + (hit.normal * currentBlock.transform.localScale.x);
+
+                    position = Round(pos, currentBlock.GetComponent<BaseBlock>().CellSizeDevide);
                     return true;
                 }
                 else if (hit.transform.CompareTag("Terrain"))
                 {
                     //Debug.Log("Its terrain");
-                    var pos = hit.point;
-                    position = Vector3Int.RoundToInt(pos);
+                    var pos = hit.point + hit.normal;
+                    position = Round(pos, currentBlock.GetComponent<BaseBlock>().CellSizeDevide);
                     return true;
                 }
             }
@@ -141,6 +149,77 @@ namespace _Core.Scripts.Weapons
             component = default(T);
             return false;
         }
+
+        Vector3 Round(Vector3 origin, BuildCellSize cellSizeDevide)
+        {
+            var x = Round(origin.x, cellSizeDevide);
+            var y = Round(origin.y, cellSizeDevide);
+            var z = Round(origin.z, cellSizeDevide);
+
+            return new Vector3(x, y, z);
+        }
+
+        float Round(float origin, BuildCellSize cellSizeDevide)
+        {
+            float res;
+            float difference;
+            float ost;
+            var inverse = origin < 0;
+
+            origin = Mathf.Abs(origin);
+            
+            switch (cellSizeDevide)
+            {
+                case BuildCellSize.normal:
+                    
+                    difference = origin % 1;
+                    ost = 1 - difference;
+                    if (difference < 0.5f)
+                        res = origin - difference;
+                    else
+                        res = origin + ost;
+
+                        break;
+                
+                case BuildCellSize.small: 
+                    
+                    difference = origin % 0.5f;
+                    ost = 0.5f - difference;
+
+                    if (difference <= 0.5f)
+                        res = origin - difference;
+                    else
+                        res = origin + ost;
+
+                    
+                    res += 0.25f;
+                    
+                    Debug.Log($"Origin {origin} dif {difference} res {res}");
+                    break;
+                case BuildCellSize.verySmall:
+                    
+                    difference = origin % 0.25f;
+                    ost = 0.25f - difference;
+
+                    if (difference <= 0.25f)
+                        res = origin - difference;
+                    else
+                        res = origin + ost;
+
+                    
+                    res += 0.125f;
+                    
+                    Debug.Log($"Origin {origin} dif {difference} res {res}");
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(cellSizeDevide), cellSizeDevide, null);
+            }
+            //var res = (float)Math.Round(origin * cellSizeDevide, MidpointRounding.AwayFromZero) / cellSizeDevide;
+            if (inverse)
+                res *= -1;
+            return res;
+        }
+
         private void OpenBuildMenu()
         {
             GameWindowsManager.Instance.OpenBuildMenu();
