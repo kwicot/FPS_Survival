@@ -44,7 +44,7 @@ namespace _Core.Scripts.Weapons
         {
             if (currentBlock)
             {
-                if (GetHit(out var position))
+                if (GetHit(out Vector3 position))
                 {
                     currentBlock.transform.position = position;
                     currentBlock.transform.rotation = rotations[currentRotation];
@@ -63,9 +63,11 @@ namespace _Core.Scripts.Weapons
 
         void RemoveBlock()
         {
-            
-            
-            
+            if (GetHit(out RaycastHit hit))
+            {
+                if(hit.transform.TryGetComponent(out BaseBlock block))
+                    Destroy(block.gameObject);
+            }
         }
         
         private void OnSelectBlock(string blockId)
@@ -90,11 +92,8 @@ namespace _Core.Scripts.Weapons
         }
         bool GetHit(out Vector3 position)
         {
-            var ray = new Ray(playerController.PlayerLook.transform.position,
-                playerController.PlayerLook.transform.forward);
-
-            Debug.DrawRay(ray.origin,ray.direction,Color.red);
-            if (Physics.Raycast(ray, out var hit, raycastLayer))
+            
+            if (GetHit(out RaycastHit hit))
             {
                 if (hit.transform.TryGetComponent(out BaseBlock block))
                 {
@@ -115,6 +114,31 @@ namespace _Core.Scripts.Weapons
 
             //Debug.Log($"No need hits. Other hits {hits.Length}");
             position = Vector3.zero;
+            return false;
+        }
+        bool GetHit(out RaycastHit hit)
+        {
+            var ray = new Ray(playerController.PlayerLook.transform.position,
+                playerController.PlayerLook.transform.forward);
+
+            Debug.DrawRay(ray.origin,ray.direction,Color.red);
+            if (Physics.Raycast(ray, out hit, raycastLayer))
+                    return true;
+            return false;
+        }
+        bool GetHit<T>(out T component)
+        {
+            var ray = new Ray(playerController.PlayerLook.transform.position,
+                playerController.PlayerLook.transform.forward);
+
+            Debug.DrawRay(ray.origin,ray.direction,Color.red);
+            if (Physics.Raycast(ray, out var hit, raycastLayer))
+            {
+                if(hit.transform.TryGetComponent(out component))
+                    return true;
+            }
+
+            component = default(T);
             return false;
         }
         private void OpenBuildMenu()
