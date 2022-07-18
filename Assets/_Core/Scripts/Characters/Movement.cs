@@ -162,6 +162,23 @@ namespace _Core.Scripts.Player
 
             if (isSprint) OnSprint?.Invoke();
         }
+        
+        #region Debug
+
+        public void ChangeBaseSpeed(float value)
+        {
+            moveSpeed = value;
+            sprintSpeed = value * 1.6666f;
+            
+            speed = moveSpeed;
+        }
+
+        public void ChangeBaseJumpForce(float value)
+        {
+            jumpHeight = value;
+        }
+
+        #endregion
 
     }
 }

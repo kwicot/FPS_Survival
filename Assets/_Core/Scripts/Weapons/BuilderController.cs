@@ -101,7 +101,7 @@ namespace _Core.Scripts.Weapons
                     return true;
                 }
 
-                if (raycastHit.transform.GetComponent<BaseBlock>())
+                if (raycastHit.transform.TryGetComponent(out BaseBlock block))
                 {
                     var pos = raycastHit.transform.position + raycastHit.normal;
                     position = Vector3Int.RoundToInt(pos);
