@@ -1846,7 +1846,7 @@ MonoBehaviour:
   animationController: {fileID: 0}
   animator: {fileID: 7364567164581669810}
   playerController: {fileID: 0}
-  blocksHolder: {fileID: 11400000, guid: 311007c747e903d40804b7aa8c8bf344, type: 2}
+  buildConfig: {fileID: 11400000, guid: a487ce1184cfd6c4fa2dfce20da49e21, type: 2}
   raycastLayer:
     serializedVersion: 2
     m_Bits: 16392

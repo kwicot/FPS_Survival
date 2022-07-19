@@ -57,7 +57,6 @@ namespace _Core.Scripts.InventorySystem
                     OnStateChanged?.Invoke();
             }
         }
-
         public bool RemoveItem(Item item)
         {
             if (GetIndex(item, out int index))
@@ -70,6 +69,7 @@ namespace _Core.Scripts.InventorySystem
 
             return false;
         }
+        
         public bool ContainsItem(Item targetItem)
         {
             foreach (var item in itemsList)
@@ -77,6 +77,17 @@ namespace _Core.Scripts.InventorySystem
                     return true;
             
             return false;
+        }
+        public bool ContainsItem(Item targetItem, out int count)
+        {
+            count = 0;
+            foreach (var item in itemsList)
+            {
+                if (targetItem == item)
+                    count += item.Count;
+            }
+
+            return count > 0;
         }
         protected bool GetIndex(Item targetItem, out int index)
         {
@@ -94,7 +105,6 @@ namespace _Core.Scripts.InventorySystem
 
             return false;
         }
-        
         protected bool GetItem(Item targetItem, out Item inventoryItem)
         {
             foreach (var item in itemsList)

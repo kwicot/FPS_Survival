@@ -1,4 +1,5 @@
 using System;
+using _Core.Scripts.Build;
 using _Core.Scripts.Player;
 using _Core.Scripts.UI.MainMenu;
 using UnityEngine;
@@ -8,6 +9,7 @@ namespace _Core.Scripts.UI
     public class DebugWindow : WindowBase
     {
         [SerializeField] private PlayerController playerController;
+        [SerializeField] private BuildConfig buildConfig;
 
         public void ChangeFlyMode(bool value)
         {
@@ -16,7 +18,7 @@ namespace _Core.Scripts.UI
 
         public void ChangeBuildMode(bool value)
         {
-            playerController.Status.IsFreeBuild = value;
+            buildConfig.IsFreeBuild = value;
         }
 
         public void ChangePlayerSpeed(string value)

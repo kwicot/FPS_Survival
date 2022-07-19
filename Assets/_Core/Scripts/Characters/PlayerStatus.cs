@@ -34,8 +34,6 @@ namespace _Core.Scripts.Player
         
         public bool InCar { get; set; }
         public bool IsBuildMode { get; set; }
-        public bool IsFreeBuild { get; set; }
-
         public bool IsFlyMode
         {
             get => isFlyMode;

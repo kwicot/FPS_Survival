@@ -7,10 +7,11 @@ namespace Blocks.Core
     [Serializable]
     public class BlockItem
     {
-        [SerializeField] private ItemSO itemModel;
+        [SerializeField] private ItemSO itemSo;
         [SerializeField] private int count;
 
-        public ItemSO Model => itemModel;
+        public ItemSO ItemSO => itemSo;
+        public string ItemID => (itemSo.Model as Item)?.ID;
         public int Count
         {
             get => count;

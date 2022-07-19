@@ -6,34 +6,26 @@ using _Core.Scripts.Input;
 using _Core.Scripts.Items;
 using _Core.Scripts.UI.Windows;
 using Blocks.Core;
+using UnityEditor;
 using UnityEngine;
 
 namespace _Core.Scripts.Weapons
 {
     public class BuilderController : ItemControllerBase
     {
-        [SerializeField] private BlocksHolder blocksHolder;
+        [SerializeField] private BuildConfig buildConfig;
         [SerializeField] private LayerMask raycastLayer;
-        private Dictionary<string, GameObject> blocksMap => blocksHolder.BlockMap;
+        private Dictionary<string, GameObject> blocksMap => buildConfig.Blocks.BlockMap;
 
         private GameObject currentBlock;
+        private GameObject raycastBlock;
+        
+        private BaseBlock currentBlockScript;
+        private BaseBlock raycastBlockScript = default;
+        
         private int currentRotation;
 
-        private Quaternion[] rotations = new[]
-        {
-            Quaternion.Euler(0, 0, 0),
-            Quaternion.Euler(90, 0, 0),
-            Quaternion.Euler(180, 0, 0),
-            Quaternion.Euler(270, 0, 0),
-            Quaternion.Euler(0, 0, 0),
-            Quaternion.Euler(0, 90, 0),
-            Quaternion.Euler(0, 180, 0),
-            Quaternion.Euler(0, 270, 0),
-            Quaternion.Euler(0, 0, 0),
-            Quaternion.Euler(0, 0, 90),
-            Quaternion.Euler(0, 0, 180),
-            Quaternion.Euler(0, 0, 270)
-        };
+       
         protected override void Initialize()
         {
             EventManager.OnBlockSelected += OnSelectBlock;
@@ -56,9 +48,38 @@ namespace _Core.Scripts.Weapons
         {
             if (currentBlock)
             {
-                var obj = Instantiate(currentBlock, currentBlock.transform.position, currentBlock.transform.rotation);
-                obj.GetComponent<Collider>().enabled = true;
+                var obj = Instantiate(currentBlock, currentBlock.transform.position, currentBlock.transform.rotation); 
+                var blockScript = obj.GetComponent<BaseBlock>();
+                FillBlock(blockScript);
             }
+        }
+
+        private void FillBlock(BaseBlock block)
+        {
+            var needItems = block.ItemsForBuild;
+            var haveItems = new List<Item>();
+            bool isFillComplete = false;
+            if (buildConfig.IsFreeBuild)
+            {
+                foreach (var needItem in needItems)
+                {
+                    var item = needItem.ItemSO.Model as Item;
+                    item.Count = needItem.Count;
+                    haveItems.Add(item);
+                }
+
+                isFillComplete = block.Fill(haveItems);
+            }
+            else if (buildConfig.IsFill)
+            {
+                
+            }
+            else
+            {
+
+            }
+
+            Debug.Log($"Fill complete is {isFillComplete}");
         }
 
         void RemoveBlock()
@@ -69,7 +90,6 @@ namespace _Core.Scripts.Weapons
                     Destroy(block.gameObject);
             }
         }
-        
         private void OnSelectBlock(string blockId)
         {
             if(currentBlock)
@@ -83,39 +103,47 @@ namespace _Core.Scripts.Weapons
             }
 
             currentBlock = Instantiate(prefab);
-            currentBlock.GetComponent<Collider>().enabled = false;
+            currentBlockScript = currentBlock.GetComponent<BaseBlock>();
+            currentBlockScript.Collider.enabled = false;
         }
         GameObject GetPrefab(string id)
         {
             blocksMap.TryGetValue(id, out var block);
             return block ? block : null;
         }
+
+        #region Raycast
+
         bool GetHit(out Vector3 position)
         {
             
             if (GetHit(out RaycastHit hit))
             {
-                if (hit.transform.TryGetComponent(out BaseBlock block))
+                if (hit.transform.gameObject != raycastBlock)
+                {
+                    raycastBlock = hit.transform.gameObject;
+                    raycastBlockScript = raycastBlock.GetComponent<BaseBlock>();
+                }
+                if (raycastBlockScript != null) 
                 {
                     Debug.Log($"Hit in {hit.transform.name}");
                     //Debug.Log("Its block");
-                    var curBlockScript = currentBlock.GetComponent<BaseBlock>();
                     var hitBlockScript = hit.transform.GetComponent<BaseBlock>();
                     Vector3 pos;
 
-                    if (curBlockScript.CellSizeDevide != hitBlockScript.CellSizeDevide)
+                    if (buildConfig.CurrentCellSize != hitBlockScript.CurrentCellSize)
                         pos = hit.point + (hit.normal * (currentBlock.transform.localScale.x - 0.05f));
                     else
                         pos = hit.transform.position + (hit.normal * currentBlock.transform.localScale.x);
 
-                    position = Round(pos, currentBlock.GetComponent<BaseBlock>().CellSizeDevide);
+                    position = Round(pos);
                     return true;
                 }
                 else if (hit.transform.CompareTag("Terrain"))
                 {
                     //Debug.Log("Its terrain");
                     var pos = hit.point + hit.normal;
-                    position = Round(pos, currentBlock.GetComponent<BaseBlock>().CellSizeDevide);
+                    position = Round(pos);
                     return true;
                 }
             }
@@ -149,17 +177,20 @@ namespace _Core.Scripts.Weapons
             component = default(T);
             return false;
         }
+        
+        #endregion
 
-        Vector3 Round(Vector3 origin, BuildCellSize cellSizeDevide)
+        #region Math
+        
+        Vector3 Round(Vector3 origin)
         {
-            var x = Round(origin.x, cellSizeDevide);
-            var y = Round(origin.y, cellSizeDevide);
-            var z = Round(origin.z, cellSizeDevide);
+            var x = Round(origin.x);
+            var y = Round(origin.y);
+            var z = Round(origin.z);
 
             return new Vector3(x, y, z);
         }
-
-        float Round(float origin, BuildCellSize cellSizeDevide)
+        float Round(float origin)
         {
             float res;
             float difference;
@@ -168,7 +199,7 @@ namespace _Core.Scripts.Weapons
 
             origin = Mathf.Abs(origin);
             
-            switch (cellSizeDevide)
+            switch (buildConfig.CurrentCellSize)
             {
                 case BuildCellSize.normal:
                     
@@ -179,7 +210,7 @@ namespace _Core.Scripts.Weapons
                     else
                         res = origin + ost;
 
-                        break;
+                    break;
                 
                 case BuildCellSize.small: 
                     
@@ -212,13 +243,85 @@ namespace _Core.Scripts.Weapons
                     Debug.Log($"Origin {origin} dif {difference} res {res}");
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(cellSizeDevide), cellSizeDevide, null);
+                    throw null;
             }
             //var res = (float)Math.Round(origin * cellSizeDevide, MidpointRounding.AwayFromZero) / cellSizeDevide;
             if (inverse)
                 res *= -1;
             return res;
         }
+        
+         private Quaternion[] rotations = new[]
+        {
+            Quaternion.Euler(0, 0, 0),
+            Quaternion.Euler(0, 0, 90),
+            Quaternion.Euler(0, 0, 180),
+            Quaternion.Euler(0, 0, 270),
+            Quaternion.Euler(0, 90, 0),
+            Quaternion.Euler(0, 90, 90),
+            Quaternion.Euler(0, 90, 180),
+            Quaternion.Euler(0, 90, 270),
+            Quaternion.Euler(0, 180, 0),
+            Quaternion.Euler(0, 180, 90),
+            Quaternion.Euler(0, 180, 180),
+            Quaternion.Euler(0, 180, 270),
+            Quaternion.Euler(0, 270, 0),
+            Quaternion.Euler(0, 270, 90),
+            Quaternion.Euler(0, 270, 180),
+            Quaternion.Euler(0, 270, 270),
+            Quaternion.Euler(90, 0, 0),
+            Quaternion.Euler(90, 0, 90),
+            Quaternion.Euler(90, 0, 180),
+            Quaternion.Euler(90, 0, 270),
+            Quaternion.Euler(90, 90, 0),
+            Quaternion.Euler(90, 90, 90),
+            Quaternion.Euler(90, 90, 180),
+            Quaternion.Euler(90, 90, 270),
+            Quaternion.Euler(90, 180, 0),
+            Quaternion.Euler(90, 180, 90),
+            Quaternion.Euler(90, 180, 180),
+            Quaternion.Euler(90, 180, 270),
+            Quaternion.Euler(90, 270, 0),
+            Quaternion.Euler(90, 270, 90),
+            Quaternion.Euler(90, 270, 180),
+            Quaternion.Euler(90, 270, 270),
+            Quaternion.Euler(180, 0, 0),
+            Quaternion.Euler(180, 0, 90),
+            Quaternion.Euler(180, 0, 180),
+            Quaternion.Euler(180, 0, 270),
+            Quaternion.Euler(180, 90, 0),
+            Quaternion.Euler(180, 90, 90),
+            Quaternion.Euler(180, 90, 180),
+            Quaternion.Euler(180, 90, 270),
+            Quaternion.Euler(180, 180, 0),
+            Quaternion.Euler(180, 180, 90),
+            Quaternion.Euler(180, 180, 180),
+            Quaternion.Euler(180, 180, 270),
+            Quaternion.Euler(180, 270, 0),
+            Quaternion.Euler(180, 270, 90),
+            Quaternion.Euler(180, 270, 180),
+            Quaternion.Euler(180, 270, 270),
+            Quaternion.Euler(270, 0, 0),
+            Quaternion.Euler(270, 0, 90),
+            Quaternion.Euler(270, 0, 180),
+            Quaternion.Euler(270, 0, 270),
+            Quaternion.Euler(270, 90, 0),
+            Quaternion.Euler(270, 90, 90),
+            Quaternion.Euler(270, 90, 180),
+            Quaternion.Euler(270, 90, 270),
+            Quaternion.Euler(270, 180, 0),
+            Quaternion.Euler(270, 180, 90),
+            Quaternion.Euler(270, 180, 180),
+            Quaternion.Euler(270, 180, 270),
+            Quaternion.Euler(270, 270, 0),
+            Quaternion.Euler(270, 270, 90),
+            Quaternion.Euler(270, 270, 180),
+            Quaternion.Euler(270, 270, 270),
+        };
+        
+        #endregion
+
+        #region EventCallBacks
 
         private void OpenBuildMenu()
         {
@@ -234,5 +337,9 @@ namespace _Core.Scripts.Weapons
             if (currentRotation == rotations.Length)
                 currentRotation = 0;
         }
+        
+        #endregion
+
+       
     }
 }

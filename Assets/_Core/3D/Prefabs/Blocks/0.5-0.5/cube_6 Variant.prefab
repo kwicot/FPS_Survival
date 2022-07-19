@@ -1,0 +1,112 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &841619986597691114
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 09a4bd4103b80854ebb0fdf1db73d60f, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 09a4bd4103b80854ebb0fdf1db73d60f, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 09a4bd4103b80854ebb0fdf1db73d60f, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 09a4bd4103b80854ebb0fdf1db73d60f, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 09a4bd4103b80854ebb0fdf1db73d60f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -5.268138
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 09a4bd4103b80854ebb0fdf1db73d60f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 97.774
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 09a4bd4103b80854ebb0fdf1db73d60f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3.4201894
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 09a4bd4103b80854ebb0fdf1db73d60f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 09a4bd4103b80854ebb0fdf1db73d60f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 09a4bd4103b80854ebb0fdf1db73d60f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 09a4bd4103b80854ebb0fdf1db73d60f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 09a4bd4103b80854ebb0fdf1db73d60f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 09a4bd4103b80854ebb0fdf1db73d60f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 09a4bd4103b80854ebb0fdf1db73d60f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 09a4bd4103b80854ebb0fdf1db73d60f, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 09a4bd4103b80854ebb0fdf1db73d60f, type: 3}
+      propertyPath: m_Name
+      value: cube_6 Variant
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 09a4bd4103b80854ebb0fdf1db73d60f, type: 3}
+--- !u!1 &535753785990644667 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 09a4bd4103b80854ebb0fdf1db73d60f, type: 3}
+  m_PrefabInstance: {fileID: 841619986597691114}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &2073934771887646023
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535753785990644667}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5495902117074765545, guid: 09a4bd4103b80854ebb0fdf1db73d60f, type: 3}
+--- !u!114 &3360536662623034394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535753785990644667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3da866fc798f70458d2dc1093418950, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 5018
+  name: "\u0421\u043A\u043E\u0441 3"
+  startHealth: 0
+  itemsToBuild: []
+  sprite: {fileID: 0}
+  cellStep: 2

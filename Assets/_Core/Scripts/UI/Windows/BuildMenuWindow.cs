@@ -9,7 +9,7 @@ namespace _Core.Scripts.UI.Windows
 {
     public class BuildMenuWindow : WindowBase
     {
-        [SerializeField] private BlocksHolder blocksHolder;
+        [SerializeField] private BuildConfig buildConfig;
         [SerializeField] private GameObject cellPrefab;
         [SerializeField] private Transform cellParent;
 
@@ -28,7 +28,7 @@ namespace _Core.Scripts.UI.Windows
         {
             ClearPanel();
 
-            var blocks = blocksHolder.AllBlocks;
+            var blocks = buildConfig.Blocks.AllBlocks;
             for (int i = 0; i < blocks.Length; i++)
             {
                 GameObject blockPrefab = blocks[i];
