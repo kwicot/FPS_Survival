@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Windows;
 
@@ -26,17 +27,17 @@ namespace _Core.Scripts
         IEnumerator CreateTerrains()
         {
             Debug.Log("Start create terrains");
-            int size = 1024;
+            int size = 256;
             
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 32; i++)
             {
-                for (int j = 0; j < 4; j++)
+                for (int j = 0; j < 32; j++)
                 {
                     var map = new float[size, size];
                     
                     for (int x = 0; x < size; x++)
                         for (int y = 0; y < size; y++)
-                            map[x, y] = heightMap[y + i * size, x + j * 1024];
+                            map[x, y] = heightMap[y + i * size, x + j * size];
                     
                     var terrainData = new TerrainData();
                     terrainData.heightmapResolution = size + 1;
@@ -44,6 +45,9 @@ namespace _Core.Scripts
                     terrainData.SetHeights(0,0,map);
                     var terrain = Terrain.CreateTerrainGameObject(terrainData);
                     terrain.transform.position = new Vector3(i * size, 100, j * size);
+                    
+                    AssetDatabase.CreateAsset(terrainData,$"Assets/TerrainData/Terrain_{i}_{j}.asset");
+                    
                     yield return null;
                 }
             }
